@@ -1,8 +1,7 @@
 ---
-
 - name: Testing IDS Ruleset
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'ids_ruleset'
+      target: ids_ruleset
 
   tasks:
     - name: Listing
@@ -22,7 +21,7 @@
 
     - name: Adding 1 - failing because of non-existing ruleset
       ansibleguy.opnsense.ids_ruleset:
-        name: 'DOES-NOT-EXIST'
+        name: DOES-NOT-EXIST
         enabled: true
       register: opn_fail1
       failed_when: not opn_fail1.failed
@@ -30,14 +29,14 @@
     - name: Enabling 1 (used by other tests)
       ansibleguy.opnsense.ids_ruleset:
         name: "{{ item }}"
-        timeout: 60  # download
+        timeout: 60 # download
       loop:
-        - 'ET open/drop'
-        - 'OPNsense-App-detect/test'
+        - ET open/drop
+        - OPNsense-App-detect/test
 
     - name: Enabling 2
       ansibleguy.opnsense.ids_ruleset:
-        name: 'ET open/compromised'
+        name: ET open/compromised
       register: opn1
       failed_when: >
         opn1.failed or
@@ -45,7 +44,7 @@
 
     - name: Enabling 2 - nothing changed
       ansibleguy.opnsense.ids_ruleset:
-        name: 'ET open/compromised'
+        name: ET open/compromised
       register: opn3
       failed_when: >
         opn3.failed or
@@ -54,7 +53,7 @@
 
     - name: Disabling 2
       ansibleguy.opnsense.ids_ruleset:
-        name: 'ET open/compromised'
+        name: ET open/compromised
         enabled: false
       register: opn2
       failed_when: >

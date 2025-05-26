@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Savepoints
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     ansibleguy.opnsense.savepoint:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -12,20 +11,20 @@
   tasks:
     - name: Canceling filter savepoint rollback - does not exist
       ansibleguy.opnsense.savepoint:
-        action: 'cancel_rollback'
-        controller: 'filter'
-        revision: 'non-existent'
+        action: cancel_rollback
+        controller: filter
+        revision: non-existent
 
     - name: Reverting filter savepoint - does not exist
       ansibleguy.opnsense.savepoint:
-        action: 'revert'
-        controller: 'filter'
-        revision: 'non-existent'
+        action: revert
+        controller: filter
+        revision: non-existent
 
     - name: Creating filter savepoint
       ansibleguy.opnsense.savepoint:
-        action: 'create'
-        controller: 'filter'
+        action: create
+        controller: filter
       register: opn1
       failed_when: >
         opn1.failed or
@@ -35,22 +34,22 @@
 
     - name: Applying filter savepoint
       ansibleguy.opnsense.savepoint:
-        action: 'apply'
-        controller: 'filter'
+        action: apply
+        controller: filter
         revision: "{{ opn1.revision }}"
       when: not ansible_check_mode
 
     - name: Canceling filter savepoint rollback
       ansibleguy.opnsense.savepoint:
-        action: 'cancel'
-        controller: 'filter'
+        action: cancel
+        controller: filter
         revision: "{{ opn1.revision }}"
       when: not ansible_check_mode
 
     - name: Creating filter savepoint - to be reverted
       ansibleguy.opnsense.savepoint:
-        action: 'create'
-        controller: 'filter'
+        action: create
+        controller: filter
       register: opn2
       failed_when: >
         opn2.failed or
@@ -60,22 +59,22 @@
 
     - name: Applying filter savepoint - to be reverted
       ansibleguy.opnsense.savepoint:
-        action: 'apply'
-        controller: 'filter'
+        action: apply
+        controller: filter
         revision: "{{ opn2.revision }}"
       when: not ansible_check_mode
 
     - name: Reverting filter savepoint
       ansibleguy.opnsense.savepoint:
-        action: 'revert'
-        controller: 'filter'
+        action: revert
+        controller: filter
         revision: "{{ opn2.revision }}"
       when: not ansible_check_mode
 
     - name: Creating source-nat savepoint
       ansibleguy.opnsense.savepoint:
-        action: 'create'
-        controller: 'source_nat'
+        action: create
+        controller: source_nat
       register: opn4
       failed_when: >
         opn4.failed or
@@ -85,14 +84,14 @@
 
     - name: Applying source-nat savepoint
       ansibleguy.opnsense.savepoint:
-        action: 'apply'
-        controller: 'source_nat'
+        action: apply
+        controller: source_nat
         revision: "{{ opn4.revision }}"
       when: not ansible_check_mode
 
     - name: Canceling source-nat savepoint rollback
       ansibleguy.opnsense.savepoint:
-        action: 'cancel_rollback'
-        controller: 'source_nat'
+        action: cancel_rollback
+        controller: source_nat
         revision: "{{ opn4.revision }}"
       when: not ansible_check_mode

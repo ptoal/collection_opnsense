@@ -1,8 +1,7 @@
 ---
-
 - name: Testing VXLAN interfaces
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'interface_vxlan'
+      target: interface_vxlan
 
   tasks:
     - name: Listing
@@ -23,7 +22,7 @@
     - name: Removing - does not exist
       ansibleguy.opnsense.interface_vxlan:
         id: 100
-        state: 'absent'
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -32,8 +31,8 @@
     - name: Adding 1 - failing because of invalid interface (server-side)
       ansibleguy.opnsense.interface_vxlan:
         id: 100
-        local: '192.168.0.1'
-        interface: 'invalid'
+        local: 192.168.0.1
+        interface: invalid
       register: opn_fail1
       failed_when: not opn_fail1.failed
       when: not ansible_check_mode
@@ -47,34 +46,34 @@
     - name: Adding 1 - failing because of invalid local-ip
       ansibleguy.opnsense.interface_vxlan:
         id: 100
-        local: '192.168.0.1000'
-        interface: 'lan'
+        local: 192.168.0.1000
+        interface: lan
       register: opn_fail4
       failed_when: not opn_fail4.failed
 
     - name: Adding 1 - failing because of invalid remote-ip
       ansibleguy.opnsense.interface_vxlan:
         id: 100
-        local: '192.168.0.1'
-        remote: '192.168.1.1000'
-        interface: 'lan'
+        local: 192.168.0.1
+        remote: 192.168.1.1000
+        interface: lan
       register: opn_fail5
       failed_when: not opn_fail5.failed
 
     - name: Adding 1 - failing because of invalid group-ip
       ansibleguy.opnsense.interface_vxlan:
         id: 100
-        local: '192.168.0.1'
-        group: '192.168.1.1000'
-        interface: 'lan'
+        local: 192.168.0.1
+        group: 192.168.1.1000
+        interface: lan
       register: opn_fail6
       failed_when: not opn_fail6.failed
 
     - name: Adding 1 - failing because of missing remote-address/mc-group (server-side)
       ansibleguy.opnsense.interface_vxlan:
         id: 100
-        local: '192.168.0.1'
-        interface: 'lan'
+        local: 192.168.0.1
+        interface: lan
       register: opn_fail7
       failed_when: not opn_fail7.failed
       when: not ansible_check_mode
@@ -82,9 +81,9 @@
     - name: Adding 1 - failing because interface & remote-address are set (server-side)
       ansibleguy.opnsense.interface_vxlan:
         id: 100
-        local: '192.168.0.1'
-        remote: '192.168.2.1'
-        interface: 'lan'
+        local: 192.168.0.1
+        remote: 192.168.2.1
+        interface: lan
       register: opn_fail8
       failed_when: not opn_fail8.failed
       when: not ansible_check_mode
@@ -92,8 +91,8 @@
     - name: Adding 1
       ansibleguy.opnsense.interface_vxlan:
         id: 100
-        local: '192.168.0.1'
-        remote: '192.168.2.1'
+        local: 192.168.0.1
+        remote: 192.168.2.1
       register: opn1
       failed_when: >
         opn1.failed or
@@ -102,9 +101,9 @@
     - name: Adding 2
       ansibleguy.opnsense.interface_vxlan:
         id: 101
-        local: '192.168.1.1'
-        group: '192.168.3.1'
-        interface: 'lan'
+        local: 192.168.1.1
+        group: 192.168.3.1
+        interface: lan
       register: opn5
       failed_when: >
         opn5.failed or
@@ -113,9 +112,9 @@
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.interface_vxlan:
         id: 101
-        local: '192.168.1.1'
-        group: '192.168.3.1'
-        interface: 'lan'
+        local: 192.168.1.1
+        group: 192.168.3.1
+        interface: lan
       register: opn6
       diff: true
       when: not ansible_check_mode
@@ -123,10 +122,10 @@
     - name: Removing 2
       ansibleguy.opnsense.interface_vxlan:
         id: 101
-        local: '192.168.1.1'
-        group: '192.168.3.1'
-        interface: 'lan'
-        state: 'absent'
+        local: 192.168.1.1
+        group: 192.168.3.1
+        interface: lan
+        state: absent
       register: opn7
       failed_when: >
         opn7.failed or
@@ -144,7 +143,7 @@
     - name: Cleanup
       ansibleguy.opnsense.interface_vxlan:
         id: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
         - 100
         - 101

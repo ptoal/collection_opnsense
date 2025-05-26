@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Monit service
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'monit_service'
+      target: monit_service
 
   vars:
     default_svc_count: 4
@@ -25,8 +24,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.monit_service:
-        name: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_1
+        state: absent
       register: opn1
       failed_when: >
         opn1.failed or
@@ -34,32 +33,32 @@
 
     - name: Adding 1 - failing because of unsupported type
       ansibleguy.opnsense.monit_service:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
       register: opn12
       failed_when: not opn12.failed
 
     - name: Adding 1 - failing because of missing type-arguments
       ansibleguy.opnsense.monit_service:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         type: "{{ item }}"
       register: opn11
       failed_when: not opn11.failed
       loop:
-        - 'network'  # address or interface
-        - 'host'  # address
+        - network # address or interface
+        - host # address
 
     - name: Adding 1 - failing because of invalid address-ip
       ansibleguy.opnsense.monit_service:
-        name: 'ANSIBLE_TEST_1_1'
-        type: 'network'
-        address: '192.168-INVALID-IP'
+        name: ANSIBLE_TEST_1_1
+        type: network
+        address: 192.168-INVALID-IP
       register: opn14
       failed_when: not opn14.failed
 
     - name: Adding 1
       ansibleguy.opnsense.monit_service:
-        name: 'ANSIBLE_TEST_1_1'
-        type: 'custom'
+        name: ANSIBLE_TEST_1_1
+        type: custom
       register: opn4
       failed_when: >
         opn4.failed or
@@ -67,8 +66,8 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.monit_service:
-        name: 'ANSIBLE_TEST_1_1'
-        type: 'custom'
+        name: ANSIBLE_TEST_1_1
+        type: custom
         enabled: false
       register: opn6
       failed_when: >
@@ -78,8 +77,8 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.monit_service:
-        name: 'ANSIBLE_TEST_1_1'
-        type: 'custom'
+        name: ANSIBLE_TEST_1_1
+        type: custom
         enabled: false
       register: opn9
       failed_when: >
@@ -89,8 +88,8 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.monit_service:
-        name: 'ANSIBLE_TEST_1_1'
-        type: 'custom'
+        name: ANSIBLE_TEST_1_1
+        type: custom
       register: opn7
       failed_when: >
         opn7.failed or
@@ -99,10 +98,10 @@
 
     - name: Adding 2
       ansibleguy.opnsense.monit_service:
-        name: 'ANSIBLE_TEST_1_2'
-        type: 'network'
-        address: '192.168.0.1'
-        description: 'test1'
+        name: ANSIBLE_TEST_1_2
+        type: network
+        address: 192.168.0.1
+        description: test1
       register: opn5
       failed_when: >
         opn5.failed or
@@ -110,10 +109,10 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.monit_service:
-        name: 'ANSIBLE_TEST_1_2'
-        type: 'network'
-        address: '192.168.0.1'
-        description: 'test1'
+        name: ANSIBLE_TEST_1_2
+        type: network
+        address: 192.168.0.1
+        description: test1
       register: opn13
       failed_when: >
         opn13.failed or
@@ -122,8 +121,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.monit_service:
-        name: 'ANSIBLE_TEST_1_2'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_2
+        state: absent
       register: opn8
       failed_when: >
         opn8.failed or
@@ -140,17 +139,17 @@
 
     - name: Adding dummy test
       ansibleguy.opnsense.monit_test:
-        name: 'ANSIBLE_TEST_2_1'
-        condition: 'memory usage is greater than 90%'
-        type: 'SystemResource'
+        name: ANSIBLE_TEST_2_1
+        condition: memory usage is greater than 90%
+        type: SystemResource
       when: not ansible_check_mode
 
     - name: Adding 3 - linking test
       ansibleguy.opnsense.monit_service:
-        name: 'ANSIBLE_TEST_1_3'
-        type: 'system'
-        tests: ['ANSIBLE_TEST_2_1']
-        depends: ['ANSIBLE_TEST_1_1']
+        name: ANSIBLE_TEST_1_3
+        type: system
+        tests: [ANSIBLE_TEST_2_1]
+        depends: [ANSIBLE_TEST_1_1]
       register: opn15
       failed_when: >
         opn15.failed or
@@ -159,10 +158,10 @@
 
     - name: Changing 3 - nothing changed
       ansibleguy.opnsense.monit_service:
-        name: 'ANSIBLE_TEST_1_3'
-        type: 'system'
-        tests: ['ANSIBLE_TEST_2_1']
-        depends: ['ANSIBLE_TEST_1_1']
+        name: ANSIBLE_TEST_1_3
+        type: system
+        tests: [ANSIBLE_TEST_2_1]
+        depends: [ANSIBLE_TEST_1_1]
       register: opn16
       failed_when: >
         opn16.failed or
@@ -171,9 +170,9 @@
 
     - name: Adding 4 - linking dependency
       ansibleguy.opnsense.monit_service:
-        name: 'ANSIBLE_TEST_1_4'
-        type: 'custom'
-        depends: ['ANSIBLE_TEST_1_1']
+        name: ANSIBLE_TEST_1_4
+        type: custom
+        depends: [ANSIBLE_TEST_1_1]
       register: opn17
       failed_when: >
         opn17.failed or
@@ -182,9 +181,9 @@
 
     - name: Changing 4 - nothing changed
       ansibleguy.opnsense.monit_service:
-        name: 'ANSIBLE_TEST_1_4'
-        type: 'custom'
-        depends: ['ANSIBLE_TEST_1_1']
+        name: ANSIBLE_TEST_1_4
+        type: custom
+        depends: [ANSIBLE_TEST_1_1]
       register: opn18
       failed_when: >
         opn18.failed or
@@ -194,18 +193,18 @@
     - name: Cleanup
       ansibleguy.opnsense.monit_service:
         name: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
-        - 'ANSIBLE_TEST_1_3'
-        - 'ANSIBLE_TEST_1_4'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
+        - ANSIBLE_TEST_1_3
+        - ANSIBLE_TEST_1_4
       when: not ansible_check_mode
 
     - name: Cleanup test
       ansibleguy.opnsense.monit_test:
-        name: 'ANSIBLE_TEST_2_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_2_1
+        state: absent
       when: not ansible_check_mode
 
     - name: Listing

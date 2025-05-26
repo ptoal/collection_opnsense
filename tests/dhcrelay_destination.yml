@@ -1,10 +1,9 @@
 ---
-
 # todo: test default matching
 
 - name: Testing DHCRelay Destination
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -12,7 +11,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'dhcrelay_destination'
+      target: dhcrelay_destination
 
   tasks:
     - name: Listing
@@ -24,8 +23,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.dhcrelay_destination:
-        name: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_1
+        state: absent
         reload: false
       register: opn2
       failed_when: >
@@ -34,21 +33,21 @@
 
     - name: Adding - failing because of invalid values
       ansibleguy.opnsense.dhcrelay_destination:
-        name: 'ANSIBLE_TEST_1_1'
-        server: '{{ item }}'
+        name: ANSIBLE_TEST_1_1
+        server: "{{ item }}"
         reload: false
       register: opn_fail1
       failed_when: not opn_fail1.failed
       loop:
-        - ['dhcp']
-        - ['172.0.0']
+        - [dhcp]
+        - [172.0.0]
       when: not ansible_check_mode
 
     - name: Adding 1
       ansibleguy.opnsense.dhcrelay_destination:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         server:
-          - '192.168.254.254'
+          - 192.168.254.254
       register: opn3
       failed_when: >
         opn3.failed or
@@ -56,10 +55,10 @@
 
     - name: Adding 2
       ansibleguy.opnsense.dhcrelay_destination:
-        name: 'ANSIBLE_TEST_1_2'
+        name: ANSIBLE_TEST_1_2
         server:
-          - '192.168.254.252'
-          - '192.168.254.253'
+          - 192.168.254.252
+          - 192.168.254.253
       register: opn4
       failed_when: >
         opn4.failed or
@@ -67,10 +66,10 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.dhcrelay_destination:
-        name: 'ANSIBLE_TEST_1_2'
+        name: ANSIBLE_TEST_1_2
         server:
-          - '192.168.254.252'
-          - '192.168.254.253'
+          - 192.168.254.252
+          - 192.168.254.253
       register: opn5
       failed_when: >
         opn5.failed or
@@ -79,8 +78,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.dhcrelay_destination:
-        name: 'ANSIBLE_TEST_1_2'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_2
+        state: absent
       register: opn6
       failed_when: >
         opn6.failed or
@@ -97,8 +96,8 @@
 
     - name: Cleanup
       ansibleguy.opnsense.dhcrelay_destination:
-        name: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_1
+        state: absent
       when: not ansible_check_mode
 
     - name: Listing

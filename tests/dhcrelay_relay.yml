@@ -1,7 +1,7 @@
 ---
 - name: Testing DHCRelay Relay
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -9,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'dhcrelay_relay'
+      target: dhcrelay_relay
 
   vars:
     if_dhcrelay: "{{ lookup('ansible.builtin.env', 'TEST_DHCRELAY_IF') | default('lan', true) }}"
@@ -24,8 +24,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.dhcrelay_relay:
-        interface: 'DOESNOTEXIST'
-        state: 'absent'
+        interface: DOESNOTEXIST
+        state: absent
         reload: false
       register: opn2
       failed_when: >
@@ -34,8 +34,8 @@
 
     - name: Adding - failing because of invalid interface
       ansibleguy.opnsense.dhcrelay_relay:
-        interface: 'DOESNOTEXIST'
-        server: 'ANSIBLE_TEST_1_1'
+        interface: DOESNOTEXIST
+        server: ANSIBLE_TEST_1_1
         reload: false
       register: opn_fail1
       failed_when: not opn_fail1.failed
@@ -43,8 +43,8 @@
 
     - name: Adding - failing because of invalid destination
       ansibleguy.opnsense.dhcrelay_relay:
-        interface: '{{ if_dhcrelay }}'
-        destination: 'DOESNOTEXIST'
+        interface: "{{ if_dhcrelay }}"
+        destination: DOESNOTEXIST
         reload: false
       register: opn_fail2
       failed_when: not opn_fail2.failed
@@ -52,15 +52,15 @@
 
     - name: Adding destination
       ansibleguy.opnsense.dhcrelay_destination:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         server:
-          - '192.168.254.254'
+          - 192.168.254.254
       when: not ansible_check_mode
 
     - name: Adding 1
       ansibleguy.opnsense.dhcrelay_relay:
-        interface: '{{ if_dhcrelay }}'
-        destination: 'ANSIBLE_TEST_1_1'
+        interface: "{{ if_dhcrelay }}"
+        destination: ANSIBLE_TEST_1_1
       register: opn3
       failed_when: >
         opn3.failed or
@@ -68,8 +68,8 @@
 
     - name: Adding 1 - nothing changed
       ansibleguy.opnsense.dhcrelay_relay:
-        interface: '{{ if_dhcrelay }}'
-        destination: 'ANSIBLE_TEST_1_1'
+        interface: "{{ if_dhcrelay }}"
+        destination: ANSIBLE_TEST_1_1
       register: opn4
       failed_when: >
         opn4.failed or
@@ -78,8 +78,8 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.dhcrelay_relay:
-        interface: '{{ if_dhcrelay }}'
-        destination: 'ANSIBLE_TEST_1_1'
+        interface: "{{ if_dhcrelay }}"
+        destination: ANSIBLE_TEST_1_1
         enabled: true
       register: opn5
       failed_when: >
@@ -89,8 +89,8 @@
 
     - name: Enabling 1 - nothing changed
       ansibleguy.opnsense.dhcrelay_relay:
-        interface: '{{ if_dhcrelay }}'
-        destination: 'ANSIBLE_TEST_1_1'
+        interface: "{{ if_dhcrelay }}"
+        destination: ANSIBLE_TEST_1_1
         enabled: true
       register: opn6
       failed_when: >
@@ -108,8 +108,8 @@
 
     - name: Removing
       ansibleguy.opnsense.dhcrelay_relay:
-        interface: '{{ if_dhcrelay }}'
-        state: 'absent'
+        interface: "{{ if_dhcrelay }}"
+        state: absent
       register: opn6
       failed_when: >
         opn6.failed or
@@ -118,8 +118,8 @@
 
     - name: Cleanup destination
       ansibleguy.opnsense.dhcrelay_destination:
-        name: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_1
+        state: absent
       when: not ansible_check_mode
 
     - name: Listing

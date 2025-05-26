@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Unbound DNS-BL settings
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'unbound_dnsbl'
+      target: unbound_dnsbl
 
   tasks:
     - name: Listing
@@ -43,7 +42,7 @@
       ansibleguy.opnsense.unbound_dnsbl:
         type:
           - atf
-        lists: ['https://example.com/dns.blocklist']
+        lists: [https://example.com/dns.blocklist]
         whitelists:
           - opnsense.org
           - ansibleguy.net
@@ -90,7 +89,7 @@
           - example.tor
         nxdomain: true
         enabled: false
-        reload: false  # speed
+        reload: false # speed
       register: opn3
       failed_when: >
         opn3.failed or
@@ -110,7 +109,7 @@
           - example.tor
         nxdomain: true
         enabled: false
-        reload: false  # speed
+        reload: false # speed
       register: opn4
       failed_when: >
         opn4.failed or

@@ -1,8 +1,7 @@
 ---
-
 - name: Testing ACME Certificate
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'acme_certificate'
+      target: acme_certificate
 
   tasks:
     - name: Listing
@@ -22,8 +21,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.acme_certificate:
-        description: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        description: ANSIBLE_TEST_1_1
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -31,78 +30,78 @@
 
     - name: Adding dummy account
       ansibleguy.opnsense.acme_account:
-        name: 'ANSIBLE_TEST_DUMMY_1_1'
+        name: ANSIBLE_TEST_DUMMY_1_1
         ca: letsencrypt_test
 
     - name: Adding dummy validation
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_DUMMY_1_1'
+        name: ANSIBLE_TEST_DUMMY_1_1
         method: http01
 
     - name: Adding dummy action
       ansibleguy.opnsense.acme_action:
-        name: 'ANSIBLE_TEST_DUMMY_1_1'
+        name: ANSIBLE_TEST_DUMMY_1_1
         type: configd_restart_gui
 
     - name: Adding 1 - failing because of missing name
       ansibleguy.opnsense.acme_certificate:
-        description: 'ANSIBLE_TEST_1_1'
-        account: 'ANSIBLE_TEST_DUMMY_1_1'
-        validation: 'ANSIBLE_TEST_DUMMY_1_1'
+        description: ANSIBLE_TEST_1_1
+        account: ANSIBLE_TEST_DUMMY_1_1
+        validation: ANSIBLE_TEST_DUMMY_1_1
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding 1 - failing because of missing account
       ansibleguy.opnsense.acme_certificate:
-        name: 'example.com'
-        description: 'ANSIBLE_TEST_1_1'
-        validation: 'ANSIBLE_TEST_DUMMY_1_1'
+        name: example.com
+        description: ANSIBLE_TEST_1_1
+        validation: ANSIBLE_TEST_DUMMY_1_1
       register: opn_fail2
       failed_when: not opn_fail2.failed
 
     - name: Adding 1 - failing because of unknown account
       ansibleguy.opnsense.acme_certificate:
-        name: 'example.com'
-        description: 'ANSIBLE_TEST_1_1'
-        account: 'DOES_NOT_EXIST'
-        validation: 'ANSIBLE_TEST_DUMMY_1_1'
+        name: example.com
+        description: ANSIBLE_TEST_1_1
+        account: DOES_NOT_EXIST
+        validation: ANSIBLE_TEST_DUMMY_1_1
       register: opn_fail3
       failed_when: not opn_fail3.failed
 
     - name: Adding 1 - failing because of missing validation
       ansibleguy.opnsense.acme_certificate:
-        name: 'example.com'
-        description: 'ANSIBLE_TEST_1_1'
-        account: 'ANSIBLE_TEST_DUMMY_1_1'
+        name: example.com
+        description: ANSIBLE_TEST_1_1
+        account: ANSIBLE_TEST_DUMMY_1_1
       register: opn_fail4
       failed_when: not opn_fail4.failed
 
     - name: Adding 1 - failing because of unknown validation
       ansibleguy.opnsense.acme_certificate:
-        name: 'example.com'
-        description: 'ANSIBLE_TEST_1_1'
-        account: 'ANSIBLE_TEST_DUMMY_1_1'
-        validation: 'DOES_NOT_EXIST'
+        name: example.com
+        description: ANSIBLE_TEST_1_1
+        account: ANSIBLE_TEST_DUMMY_1_1
+        validation: DOES_NOT_EXIST
       register: opn_fail5
       failed_when: not opn_fail5.failed
 
     - name: Adding 1 - failing because of unknown restart_actions
       ansibleguy.opnsense.acme_certificate:
-        name: 'example.com'
-        description: 'ANSIBLE_TEST_1_1'
-        account: 'ANSIBLE_TEST_DUMMY_1_1'
-        validation: 'ANSIBLE_TEST_DUMMY_1_1'
+        name: example.com
+        description: ANSIBLE_TEST_1_1
+        account: ANSIBLE_TEST_DUMMY_1_1
+        validation: ANSIBLE_TEST_DUMMY_1_1
         restart_actions:
-          - 'DOES_NOT_EXIST'
+          - DOES_NOT_EXIST
       register: opn_fail6
       failed_when: not opn_fail6.failed
 
     - name: Adding 1
       ansibleguy.opnsense.acme_certificate:
-        name: 'example.com'
-        description: 'ANSIBLE_TEST_1_1'
-        account: 'ANSIBLE_TEST_DUMMY_1_1'
-        validation: 'ANSIBLE_TEST_DUMMY_1_1'
+        name: example.com
+        description: ANSIBLE_TEST_1_1
+        account: ANSIBLE_TEST_DUMMY_1_1
+        validation: ANSIBLE_TEST_DUMMY_1_1
       register: opn1
       failed_when: >
         opn1.failed or
@@ -110,14 +109,14 @@
 
     - name: Changing 1
       ansibleguy.opnsense.acme_certificate:
-        name: 'example.com'
+        name: example.com
         alt_names:
-          - 'sub.example.com'
-        description: 'ANSIBLE_TEST_1_1'
-        account: 'ANSIBLE_TEST_DUMMY_1_1'
-        validation: 'ANSIBLE_TEST_DUMMY_1_1'
+          - sub.example.com
+        description: ANSIBLE_TEST_1_1
+        account: ANSIBLE_TEST_DUMMY_1_1
+        validation: ANSIBLE_TEST_DUMMY_1_1
         restart_actions:
-          - 'ANSIBLE_TEST_DUMMY_1_1'
+          - ANSIBLE_TEST_DUMMY_1_1
         auto_renewal: false
         renew_interval: 42
         key_length: key_ec384
@@ -129,14 +128,14 @@
 
     - name: Changing 1 - nothing changed
       ansibleguy.opnsense.acme_certificate:
-        name: 'example.com'
+        name: example.com
         alt_names:
-          - 'sub.example.com'
-        description: 'ANSIBLE_TEST_1_1'
-        account: 'ANSIBLE_TEST_DUMMY_1_1'
-        validation: 'ANSIBLE_TEST_DUMMY_1_1'
+          - sub.example.com
+        description: ANSIBLE_TEST_1_1
+        account: ANSIBLE_TEST_DUMMY_1_1
+        validation: ANSIBLE_TEST_DUMMY_1_1
         restart_actions:
-          - 'ANSIBLE_TEST_DUMMY_1_1'
+          - ANSIBLE_TEST_DUMMY_1_1
         auto_renewal: false
         renew_interval: 42
         key_length: key_ec384
@@ -148,14 +147,14 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.acme_certificate:
-        name: 'example.com'
+        name: example.com
         alt_names:
-          - 'sub.example.com'
-        description: 'ANSIBLE_TEST_1_1'
-        account: 'ANSIBLE_TEST_DUMMY_1_1'
-        validation: 'ANSIBLE_TEST_DUMMY_1_1'
+          - sub.example.com
+        description: ANSIBLE_TEST_1_1
+        account: ANSIBLE_TEST_DUMMY_1_1
+        validation: ANSIBLE_TEST_DUMMY_1_1
         restart_actions:
-          - 'ANSIBLE_TEST_DUMMY_1_1'
+          - ANSIBLE_TEST_DUMMY_1_1
         auto_renewal: false
         renew_interval: 42
         key_length: key_ec384
@@ -169,14 +168,14 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.acme_certificate:
-        name: 'example.com'
+        name: example.com
         alt_names:
-          - 'sub.example.com'
-        description: 'ANSIBLE_TEST_1_1'
-        account: 'ANSIBLE_TEST_DUMMY_1_1'
-        validation: 'ANSIBLE_TEST_DUMMY_1_1'
+          - sub.example.com
+        description: ANSIBLE_TEST_1_1
+        account: ANSIBLE_TEST_DUMMY_1_1
+        validation: ANSIBLE_TEST_DUMMY_1_1
         restart_actions:
-          - 'ANSIBLE_TEST_DUMMY_1_1'
+          - ANSIBLE_TEST_DUMMY_1_1
         auto_renewal: false
         renew_interval: 42
         key_length: key_ec384
@@ -190,14 +189,14 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.acme_certificate:
-        name: 'example.com'
+        name: example.com
         alt_names:
-          - 'sub.example.com'
-        description: 'ANSIBLE_TEST_1_1'
-        account: 'ANSIBLE_TEST_DUMMY_1_1'
-        validation: 'ANSIBLE_TEST_DUMMY_1_1'
+          - sub.example.com
+        description: ANSIBLE_TEST_1_1
+        account: ANSIBLE_TEST_DUMMY_1_1
+        validation: ANSIBLE_TEST_DUMMY_1_1
         restart_actions:
-          - 'ANSIBLE_TEST_DUMMY_1_1'
+          - ANSIBLE_TEST_DUMMY_1_1
         auto_renewal: false
         renew_interval: 42
         key_length: key_ec384
@@ -210,10 +209,10 @@
 
     - name: Adding 2
       ansibleguy.opnsense.acme_certificate:
-        name: 'example.com'
-        description: 'ANSIBLE_TEST_1_2'
-        account: 'ANSIBLE_TEST_DUMMY_1_1'
-        validation: 'ANSIBLE_TEST_DUMMY_1_1'
+        name: example.com
+        description: ANSIBLE_TEST_1_2
+        account: ANSIBLE_TEST_DUMMY_1_1
+        validation: ANSIBLE_TEST_DUMMY_1_1
         aliasmode: domain
         domainalias: aliasDomainForValidationOnly.com
       register: opn7
@@ -223,10 +222,10 @@
 
     - name: Changing 2
       ansibleguy.opnsense.acme_certificate:
-        name: 'example.com'
-        description: 'ANSIBLE_TEST_1_2'
-        account: 'ANSIBLE_TEST_DUMMY_1_1'
-        validation: 'ANSIBLE_TEST_DUMMY_1_1'
+        name: example.com
+        description: ANSIBLE_TEST_1_2
+        account: ANSIBLE_TEST_DUMMY_1_1
+        validation: ANSIBLE_TEST_DUMMY_1_1
         aliasmode: domain
         domainalias: aliasDomainForValidationOnly2.com
       register: opn8
@@ -236,10 +235,10 @@
 
     - name: Changing 2 - nothing changed
       ansibleguy.opnsense.acme_certificate:
-        name: 'example.com'
-        description: 'ANSIBLE_TEST_1_2'
-        account: 'ANSIBLE_TEST_DUMMY_1_1'
-        validation: 'ANSIBLE_TEST_DUMMY_1_1'
+        name: example.com
+        description: ANSIBLE_TEST_1_2
+        account: ANSIBLE_TEST_DUMMY_1_1
+        validation: ANSIBLE_TEST_DUMMY_1_1
         aliasmode: domain
         domainalias: aliasDomainForValidationOnly2.com
       register: opn9
@@ -249,10 +248,10 @@
 
     - name: Adding 3
       ansibleguy.opnsense.acme_certificate:
-        name: 'example.com'
-        description: 'ANSIBLE_TEST_1_3'
-        account: 'ANSIBLE_TEST_DUMMY_1_1'
-        validation: 'ANSIBLE_TEST_DUMMY_1_1'
+        name: example.com
+        description: ANSIBLE_TEST_1_3
+        account: ANSIBLE_TEST_DUMMY_1_1
+        validation: ANSIBLE_TEST_DUMMY_1_1
         aliasmode: challenge
         challengealias: aliasDomainForValidationOnly.com
       register: opn10
@@ -262,10 +261,10 @@
 
     - name: Changing 3
       ansibleguy.opnsense.acme_certificate:
-        name: 'example.com'
-        description: 'ANSIBLE_TEST_1_3'
-        account: 'ANSIBLE_TEST_DUMMY_1_1'
-        validation: 'ANSIBLE_TEST_DUMMY_1_1'
+        name: example.com
+        description: ANSIBLE_TEST_1_3
+        account: ANSIBLE_TEST_DUMMY_1_1
+        validation: ANSIBLE_TEST_DUMMY_1_1
         aliasmode: challenge
         challengealias: aliasDomainForValidationOnly2.com
       register: opn11
@@ -275,10 +274,10 @@
 
     - name: Changing 3 - nothing changed
       ansibleguy.opnsense.acme_certificate:
-        name: 'example.com'
-        description: 'ANSIBLE_TEST_1_3'
-        account: 'ANSIBLE_TEST_DUMMY_1_1'
-        validation: 'ANSIBLE_TEST_DUMMY_1_1'
+        name: example.com
+        description: ANSIBLE_TEST_1_3
+        account: ANSIBLE_TEST_DUMMY_1_1
+        validation: ANSIBLE_TEST_DUMMY_1_1
         aliasmode: challenge
         challengealias: aliasDomainForValidationOnly2.com
       register: opn12
@@ -296,12 +295,12 @@
 
     - name: Cleanup
       ansibleguy.opnsense.acme_certificate:
-        description: '{{ item }}'
-        state: 'absent'
+        description: "{{ item }}"
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
-        - 'ANSIBLE_TEST_1_3'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
+        - ANSIBLE_TEST_1_3
       when: not ansible_check_mode
 
     - name: Listing
@@ -314,18 +313,18 @@
 
     - name: Cleanup Dummy Account
       ansibleguy.opnsense.acme_account:
-        name: 'ANSIBLE_TEST_DUMMY_1_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_DUMMY_1_1
+        state: absent
       diff: false
 
     - name: Cleanup Dummy Validation
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_DUMMY_1_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_DUMMY_1_1
+        state: absent
       diff: false
 
     - name: Cleanup Dummy Action
       ansibleguy.opnsense.acme_action:
-        name: 'ANSIBLE_TEST_DUMMY_1_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_DUMMY_1_1
+        state: absent
       diff: false

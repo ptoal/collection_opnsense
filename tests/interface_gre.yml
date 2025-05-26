@@ -1,8 +1,7 @@
 ---
-
 - name: Testing GRE interfaces
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'interface_gre'
+      target: interface_gre
 
   tasks:
     - name: Listing
@@ -22,8 +21,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.interface_gre:
-        description: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        description: ANSIBLE_TEST_1_1
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -31,11 +30,11 @@
 
     - name: Adding 1 - failing because of invalid tunnel_remote_net
       ansibleguy.opnsense.interface_gre:
-        description: 'ANSIBLE_TEST_1_1'
-        local_addr: 'lan'
-        remote_addr: '192.168.100.1'
-        tunnel_local_addr: '10.0.0.1'
-        tunnel_remote_addr: '10.0.0.2'
+        description: ANSIBLE_TEST_1_1
+        local_addr: lan
+        remote_addr: 192.168.100.1
+        tunnel_local_addr: 10.0.0.1
+        tunnel_remote_addr: 10.0.0.2
         tunnel_remote_net: 300
       register: opn_fail1
       failed_when: not opn_fail1.failed or 'tunnel_remote_net' not in opn_fail1.msg
@@ -43,11 +42,11 @@
 
     - name: Adding 1
       ansibleguy.opnsense.interface_gre:
-        description: 'ANSIBLE_TEST_1_1'
-        local_addr: 'lan'
-        remote_addr: '192.168.100.1'
-        tunnel_local_addr: '10.0.0.1'
-        tunnel_remote_addr: '10.0.0.2'
+        description: ANSIBLE_TEST_1_1
+        local_addr: lan
+        remote_addr: 192.168.100.1
+        tunnel_local_addr: 10.0.0.1
+        tunnel_remote_addr: 10.0.0.2
         tunnel_remote_net: 30
       register: opn1
       failed_when: >
@@ -56,11 +55,11 @@
 
     - name: Adding 2
       ansibleguy.opnsense.interface_gre:
-        description: 'ANSIBLE_TEST_1_2'
-        local_addr: '192.168.1.100'
-        remote_addr: '192.168.100.1'
-        tunnel_local_addr: '10.0.0.1'
-        tunnel_remote_addr: '10.0.0.2'
+        description: ANSIBLE_TEST_1_2
+        local_addr: 192.168.1.100
+        remote_addr: 192.168.100.1
+        tunnel_local_addr: 10.0.0.1
+        tunnel_remote_addr: 10.0.0.2
         tunnel_remote_net: 30
       register: opn2
       failed_when: >
@@ -69,11 +68,11 @@
 
     - name: Adding 2 - changing
       ansibleguy.opnsense.interface_gre:
-        description: 'ANSIBLE_TEST_1_2'
-        local_addr: '192.168.1.100'
-        remote_addr: '192.168.100.1'
-        tunnel_local_addr: '10.0.0.5'
-        tunnel_remote_addr: '10.0.0.6'
+        description: ANSIBLE_TEST_1_2
+        local_addr: 192.168.1.100
+        remote_addr: 192.168.100.1
+        tunnel_local_addr: 10.0.0.5
+        tunnel_remote_addr: 10.0.0.6
         tunnel_remote_net: 30
       register: opn3
       failed_when: >
@@ -83,11 +82,11 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.interface_gre:
-        description: 'ANSIBLE_TEST_1_2'
-        local_addr: '192.168.1.100'
-        remote_addr: '192.168.100.1'
-        tunnel_local_addr: '10.0.0.5'
-        tunnel_remote_addr: '10.0.0.6'
+        description: ANSIBLE_TEST_1_2
+        local_addr: 192.168.1.100
+        remote_addr: 192.168.100.1
+        tunnel_local_addr: 10.0.0.5
+        tunnel_remote_addr: 10.0.0.6
         tunnel_remote_net: 30
       register: opn4
       failed_when: >
@@ -97,8 +96,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.interface_gre:
-        description: 'ANSIBLE_TEST_1_2'
-        state: 'absent'
+        description: ANSIBLE_TEST_1_2
+        state: absent
       register: opn5
       failed_when: >
         opn5.failed or
@@ -116,10 +115,10 @@
     - name: Cleanup
       ansibleguy.opnsense.interface_gre:
         description: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when: not ansible_check_mode
 
     - name: Listing

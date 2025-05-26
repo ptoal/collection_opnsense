@@ -1,8 +1,7 @@
 ---
-
 - name: Testing OpenVPN Status
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -12,12 +11,12 @@
   tasks:
     - name: Querying OpenVPN Sessions
       ansibleguy.opnsense.openvpn_status:
-        target: 'sessions'
+        target: sessions
       register: opn1
       failed_when: "'data' not in opn1"
 
     - name: Querying OpenVPN Routes
       ansibleguy.opnsense.openvpn_status:
-        target: 'routes'
+        target: routes
       register: opn2
       failed_when: "'data' not in opn2"

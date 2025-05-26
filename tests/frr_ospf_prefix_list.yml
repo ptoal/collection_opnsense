@@ -1,8 +1,7 @@
 ---
-
 - name: Testing FRR-OSPF prefix lists
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'frr_ospf_prefix_list'
+      target: frr_ospf_prefix_list
 
   tasks:
     - name: Listing
@@ -22,8 +21,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.frr_ospf_prefix_list:
-        name: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_1
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -31,17 +30,17 @@
 
     - name: Adding 1 - failing because of invalid sequence-number
       ansibleguy.opnsense.frr_ospf_prefix_list:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         seq: 100
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding 1
       ansibleguy.opnsense.frr_ospf_prefix_list:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         seq: 20
-        action: 'permit'
-        network: '10.0.0.0/24'
+        action: permit
+        network: 10.0.0.0/24
       register: opn1
       failed_when: >
         opn1.failed or
@@ -49,10 +48,10 @@
 
     - name: Changing 1
       ansibleguy.opnsense.frr_ospf_prefix_list:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         seq: 25
-        action: 'permit'
-        network: '10.0.1.0/24'
+        action: permit
+        network: 10.0.1.0/24
       register: opn9
       failed_when: >
         opn9.failed or
@@ -60,10 +59,10 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.frr_ospf_prefix_list:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         seq: 25
-        action: 'permit'
-        network: '10.0.1.0/24'
+        action: permit
+        network: 10.0.1.0/24
         enabled: false
       register: opn2
       failed_when: >
@@ -73,10 +72,10 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.frr_ospf_prefix_list:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         seq: 25
-        action: 'permit'
-        network: '10.0.1.0/24'
+        action: permit
+        network: 10.0.1.0/24
         enabled: false
       register: opn3
       failed_when: >
@@ -86,10 +85,10 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.frr_ospf_prefix_list:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         seq: 25
-        action: 'permit'
-        network: '10.0.1.0/24'
+        action: permit
+        network: 10.0.1.0/24
       register: opn4
       failed_when: >
         opn4.failed or
@@ -98,10 +97,10 @@
 
     - name: Adding 2
       ansibleguy.opnsense.frr_ospf_prefix_list:
-        name: 'ANSIBLE_TEST_1_2'
+        name: ANSIBLE_TEST_1_2
         seq: 12
-        action: 'deny'
-        network: '10.0.10.0/24'
+        action: deny
+        network: 10.0.10.0/24
       register: opn5
       failed_when: >
         opn5.failed or
@@ -109,10 +108,10 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.frr_ospf_prefix_list:
-        name: 'ANSIBLE_TEST_1_2'
+        name: ANSIBLE_TEST_1_2
         seq: 12
-        action: 'deny'
-        network: '10.0.10.0/24'
+        action: deny
+        network: 10.0.10.0/24
       register: opn6
       failed_when: >
         opn6.failed or
@@ -121,8 +120,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.frr_ospf_prefix_list:
-        name: 'ANSIBLE_TEST_1_2'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_2
+        state: absent
       register: opn7
       failed_when: >
         opn7.failed or
@@ -140,10 +139,10 @@
     - name: Cleanup
       ansibleguy.opnsense.frr_ospf_prefix_list:
         name: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when: not ansible_check_mode
 
     - name: Listing

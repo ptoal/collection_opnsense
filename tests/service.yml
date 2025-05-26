@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Service
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     ansibleguy.opnsense.service:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -13,8 +12,8 @@
   tasks:
     - name: Checking syslog status
       ansibleguy.opnsense.service:
-        name: 'syslog'
-        action: 'status'
+        name: syslog
+        action: status
       register: opn1
       failed_when: >
         opn1.failed or
@@ -23,8 +22,8 @@
 
     - name: Stopping syslog
       ansibleguy.opnsense.service:
-        name: 'syslog'
-        action: 'stop'
+        name: syslog
+        action: stop
       register: opn2
       failed_when: >
         opn2.failed or
@@ -33,8 +32,8 @@
 
     - name: Checking syslog status (should be stopped)
       ansibleguy.opnsense.service:
-        name: 'syslog'
-        action: 'status'
+        name: syslog
+        action: status
       register: opn3
       failed_when: >
         opn3.failed or
@@ -44,8 +43,8 @@
 
     - name: Starting syslog
       ansibleguy.opnsense.service:
-        name: 'syslog'
-        action: 'start'
+        name: syslog
+        action: start
       register: opn4
       failed_when: >
         opn4.failed or
@@ -54,8 +53,8 @@
 
     - name: Checking syslog status (should be running again)
       ansibleguy.opnsense.service:
-        name: 'syslog'
-        action: 'status'
+        name: syslog
+        action: status
       register: opn5
       failed_when: >
         opn5.failed or
@@ -65,8 +64,8 @@
 
     - name: Restarting syslog
       ansibleguy.opnsense.service:
-        name: 'syslog'
-        action: 'restart'
+        name: syslog
+        action: restart
       register: opn6
       failed_when: >
         opn6.failed or
@@ -75,8 +74,8 @@
 
     - name: Reloading syslog
       ansibleguy.opnsense.service:
-        name: 'syslog'
-        action: 'reload'
+        name: syslog
+        action: reload
       register: opn7
       failed_when: >
         opn7.failed or
@@ -85,8 +84,8 @@
 
     - name: Checking syslog status (should still be running)
       ansibleguy.opnsense.service:
-        name: 'syslog'
-        action: 'status'
+        name: syslog
+        action: status
       register: opn8
       failed_when: >
         opn8.failed or
@@ -95,8 +94,8 @@
 
     - name: Restarting traffic-shaper (flush & reload)
       ansibleguy.opnsense.service:
-        name: 'shaper'
-        action: 'restart'
+        name: shaper
+        action: restart
       register: opn9
       failed_when: >
         opn9.failed or

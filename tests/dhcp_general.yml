@@ -1,8 +1,7 @@
 ---
-
 - name: Testing DHCP Setting
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'dhcp_general'
+      target: dhcp_general
 
   tasks:
     - name: Listing
@@ -29,7 +28,7 @@
     - name: Configuring
       ansibleguy.opnsense.dhcp_general:
         enabled: true
-        interfaces: ['opt1']
+        interfaces: [opt1]
       register: opn1
       failed_when: >
         opn1.failed or
@@ -38,7 +37,7 @@
     - name: Changing
       ansibleguy.opnsense.dhcp_general:
         enabled: true
-        interfaces: ['opt1', 'lan']
+        interfaces: [opt1, lan]
         fw_rules: false
         lifetime: 5000
       register: opn2
@@ -50,7 +49,7 @@
     - name: Nothing changed
       ansibleguy.opnsense.dhcp_general:
         enabled: true
-        interfaces: ['opt1', 'lan']
+        interfaces: [opt1, lan]
         fw_rules: false
         lifetime: 5000
       register: opn3

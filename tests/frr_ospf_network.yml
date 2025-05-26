@@ -1,8 +1,7 @@
 ---
-
 - name: Testing FRR OSPF Networks
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,10 +9,9 @@
       ssl_verify: false
 
     ansibleguy.opnsense.frr_ospf_network:
-      match_fields: ['ip', 'mask']
-
+      match_fields: [ip, mask]
     ansibleguy.opnsense.list:
-      target: 'frr_ospf_network'
+      target: frr_ospf_network
 
   tasks:
     - name: Listing
@@ -25,9 +23,9 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.frr_ospf_network:
-        ip: '10.0.1.0'
+        ip: 10.0.1.0
         mask: 30
-        state: 'absent'
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -35,34 +33,34 @@
 
     - name: Adding 1 - failing because of invalid network mask
       ansibleguy.opnsense.frr_ospf_network:
-        ip: '10.0.1.0'
+        ip: 10.0.1.0
         mask: 1337
-        area: '0.0.0.0'
+        area: "0.0.0.0"
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding 1 - failing because of invalid network
       ansibleguy.opnsense.frr_ospf_network:
-        ip: '10.0.0.5'
+        ip: 10.0.0.5
         mask: 30
-        area: '0.0.0.0'
+        area: "0.0.0.0"
       register: opn_fail2
       failed_when: not opn_fail2.failed
 
     - name: Adding 1 - failing because of non-existent prefix-list
       ansibleguy.opnsense.frr_ospf_network:
-        ip: '10.0.1.0'
+        ip: 10.0.1.0
         mask: 30
-        area: '0.0.0.0'
-        prefix_list_in: 'DOES-NOT-EXIST'
+        area: "0.0.0.0"
+        prefix_list_in: DOES-NOT-EXIST
       register: opn_fail3
       failed_when: not opn_fail3.failed
 
     - name: Adding 1
       ansibleguy.opnsense.frr_ospf_network:
-        ip: '10.0.1.0'
+        ip: 10.0.1.0
         mask: 30
-        area: '0.0.0.0'
+        area: "0.0.0.0"
       register: opn1
       failed_when: >
         opn1.failed or
@@ -70,9 +68,9 @@
 
     - name: Changing 1
       ansibleguy.opnsense.frr_ospf_network:
-        ip: '10.0.1.0'
+        ip: 10.0.1.0
         mask: 30
-        area: '0.0.0.1'
+        area: "0.0.0.1"
       register: opn9
       failed_when: >
         opn9.failed or
@@ -80,9 +78,9 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.frr_ospf_network:
-        ip: '10.0.1.0'
+        ip: 10.0.1.0
         mask: 30
-        area: '0.0.0.1'
+        area: "0.0.0.1"
         enabled: false
       register: opn2
       failed_when: >
@@ -92,9 +90,9 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.frr_ospf_network:
-        ip: '10.0.1.0'
+        ip: 10.0.1.0
         mask: 30
-        area: '0.0.0.1'
+        area: "0.0.0.1"
         enabled: false
       register: opn3
       failed_when: >
@@ -104,9 +102,9 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.frr_ospf_network:
-        ip: '10.0.1.0'
+        ip: 10.0.1.0
         mask: 30
-        area: '0.0.0.1'
+        area: "0.0.0.1"
       register: opn4
       failed_when: >
         opn4.failed or
@@ -115,10 +113,10 @@
 
     - name: Adding 2
       ansibleguy.opnsense.frr_ospf_network:
-        ip: '10.0.2.0'
+        ip: 10.0.2.0
         mask: 24
-        area: '0.0.10.1'
-        area_range: '192.168.0.0/18'
+        area: "0.0.10.1"
+        area_range: 192.168.0.0/18
       register: opn5
       failed_when: >
         opn5.failed or
@@ -126,10 +124,10 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.frr_ospf_network:
-        ip: '10.0.2.0'
+        ip: 10.0.2.0
         mask: 24
-        area: '0.0.10.1'
-        area_range: '192.168.0.0/18'
+        area: "0.0.10.1"
+        area_range: 192.168.0.0/18
       register: opn6
       failed_when: >
         opn6.failed or
@@ -138,9 +136,9 @@
 
     - name: Removing 2
       ansibleguy.opnsense.frr_ospf_network:
-        ip: '10.0.2.0'
+        ip: 10.0.2.0
         mask: 24
-        state: 'absent'
+        state: absent
       register: opn7
       failed_when: >
         opn7.failed or
@@ -159,10 +157,10 @@
       ansibleguy.opnsense.frr_ospf_network:
         ip: "{{ item.ip }}"
         mask: "{{ item.mask }}"
-        state: 'absent'
+        state: absent
       loop:
-        - {'ip': '10.0.1.0', 'mask': 30}
-        - {'ip': '10.0.2.0', 'mask': 24}
+        - { ip: 10.0.1.0, mask: 30 }
+        - { ip: 10.0.2.0, mask: 24 }
       when: not ansible_check_mode
 
     - name: Listing
@@ -175,7 +173,7 @@
 
 - name: Testing FRR OSPF Networks - linking
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -183,10 +181,9 @@
       ssl_verify: false
 
     ansibleguy.opnsense.frr_ospf_network:
-      match_fields: ['ip', 'mask']
-
+      match_fields: [ip, mask]
     ansibleguy.opnsense.list:
-      target: 'frr_ospf_network'
+      target: frr_ospf_network
 
   tasks:
     - name: Listing
@@ -199,18 +196,18 @@
 
     - name: Adding dummy prefix-list
       ansibleguy.opnsense.frr_ospf_prefix_list:
-        name: 'ANSIBLE_TEST_3_1'
+        name: ANSIBLE_TEST_3_1
         seq: 25
-        action: 'permit'
-        network: '10.0.1.0/24'
+        action: permit
+        network: 10.0.1.0/24
       when: not ansible_check_mode
 
     - name: Adding network linked to prefix-list
       ansibleguy.opnsense.frr_ospf_network:
-        ip: '10.0.3.0'
+        ip: 10.0.3.0
         mask: 30
-        area: '0.0.0.0'
-        prefix_list_in: 'ANSIBLE_TEST_3_1'
+        area: "0.0.0.0"
+        prefix_list_in: ANSIBLE_TEST_3_1
       register: opn11
       failed_when: >
         opn11.failed or
@@ -219,15 +216,15 @@
 
     - name: Cleanup networks
       ansibleguy.opnsense.frr_ospf_network:
-        ip: '10.0.3.0'
+        ip: 10.0.3.0
         mask: 30
-        state: 'absent'
+        state: absent
       when: not ansible_check_mode
 
     - name: Cleanup prefix-list
       ansibleguy.opnsense.frr_ospf_prefix_list:
-        name: 'ANSIBLE_TEST_3_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_3_1
+        state: absent
       when: not ansible_check_mode
 
     - name: Listing

@@ -1,8 +1,7 @@
 ---
-
 - name: DHCP Reservation
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'dhcp_reservation'
+      target: dhcp_reservation
 
   tasks:
     - name: Listing
@@ -22,9 +21,9 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.dhcp_reservation:
-        subnet: '192.168.69.0/24'
-        ip: '192.168.69.78'
-        state: 'absent'
+        subnet: 192.168.69.0/24
+        ip: 192.168.69.78
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -32,43 +31,43 @@
 
     - name: Adding 1 - failing because of non-existent subnet
       ansibleguy.opnsense.dhcp_reservation:
-        subnet: '192.168.59.0/24'
-        ip: '192.168.59.76'
+        subnet: 192.168.59.0/24
+        ip: 192.168.59.76
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding 1 - failing because of IP-address
       ansibleguy.opnsense.dhcp_reservation:
-        subnet: '192.168.69.0/24'
-        ip: '192.168.69.7x'
+        subnet: 192.168.69.0/24
+        ip: 192.168.69.7x
       register: opn_fail2
       failed_when: not opn_fail2.failed
 
     - name: Adding 1 - failing because of missing mac-address
       ansibleguy.opnsense.dhcp_reservation:
-        subnet: '192.168.69.0/24'
-        ip: '192.168.69.7x'
+        subnet: 192.168.69.0/24
+        ip: 192.168.69.7x
       register: opn_fail3
       failed_when: not opn_fail3.failed
 
     - name: Adding 1 - failing because of ip outside subnet (server-side)
       ansibleguy.opnsense.dhcp_reservation:
-        subnet: '192.168.69.0/24'
-        ip: '192.168.70.7'
+        subnet: 192.168.69.0/24
+        ip: 192.168.70.7
       register: opn_fail4
       failed_when: not opn_fail4.failed
       when: not ansible_check_mode
 
     - name: Adding dummy DHCP-subnet
       ansibleguy.opnsense.dhcp_subnet:
-        subnet: '192.168.69.0/24'
+        subnet: 192.168.69.0/24
       check_mode: false
 
     - name: Adding 1
       ansibleguy.opnsense.dhcp_reservation:
-        subnet: '192.168.69.0/24'
-        ip: '192.168.69.76'
-        mac: 'aa:aa:aa:aa:aa:aa'
+        subnet: 192.168.69.0/24
+        ip: 192.168.69.76
+        mac: aa:aa:aa:aa:aa:aa
       register: opn1
       failed_when: >
         opn1.failed or
@@ -76,18 +75,18 @@
 
     - name: Adding 1 - failing because of duplicate mac-address (server-side)
       ansibleguy.opnsense.dhcp_reservation:
-        subnet: '192.168.69.0/24'
-        ip: '192.168.69.77'
-        mac: 'aa:aa:aa:aa:aa:aa'
+        subnet: 192.168.69.0/24
+        ip: 192.168.69.77
+        mac: aa:aa:aa:aa:aa:aa
       register: opn_fail4
       failed_when: not opn_fail4.failed
       when: not ansible_check_mode
 
     - name: Adding 2
       ansibleguy.opnsense.dhcp_reservation:
-        subnet: '192.168.69.0/24'
-        ip: '192.168.69.86'
-        mac: 'aa:aa:aa:aa:aa:bb'
+        subnet: 192.168.69.0/24
+        ip: 192.168.69.86
+        mac: aa:aa:aa:aa:aa:bb
       register: opn2
       failed_when: >
         opn2.failed or
@@ -95,9 +94,9 @@
 
     - name: Changing 2
       ansibleguy.opnsense.dhcp_reservation:
-        subnet: '192.168.69.0/24'
-        ip: '192.168.69.86'
-        mac: 'aa:aa:aa:aa:aa:cc'
+        subnet: 192.168.69.0/24
+        ip: 192.168.69.86
+        mac: aa:aa:aa:aa:aa:cc
       register: opn3
       failed_when: >
         opn3.failed or
@@ -106,9 +105,9 @@
 
     - name: Changing 2 - Nothing changed
       ansibleguy.opnsense.dhcp_reservation:
-        subnet: '192.168.69.0/24'
-        ip: '192.168.69.86'
-        mac: 'aa:aa:aa:aa:aa:cc'
+        subnet: 192.168.69.0/24
+        ip: 192.168.69.86
+        mac: aa:aa:aa:aa:aa:cc
       register: opn4
       failed_when: >
         opn4.failed or
@@ -125,7 +124,7 @@
 
     - name: Removing 2
       ansibleguy.opnsense.dhcp_reservation:
-        ip: '192.168.69.86'
+        ip: 192.168.69.86
         state: absent
       register: opn5
       failed_when: >
@@ -136,16 +135,16 @@
     - name: Cleanup
       ansibleguy.opnsense.dhcp_reservation:
         ip: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - '192.168.69.76'
-        - '192.168.69.86'
+        - 192.168.69.76
+        - 192.168.69.86
       when: not ansible_check_mode
 
     - name: Cleanup dummy DHCP-subnet
       ansibleguy.opnsense.dhcp_subnet:
-        subnet: '192.168.69.0/24'
-        state: 'absent'
+        subnet: 192.168.69.0/24
+        state: absent
       check_mode: false
 
     - name: Listing

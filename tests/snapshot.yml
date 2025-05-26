@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Snapshot
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,12 +9,12 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'snapshot'
+      target: snapshot
 
   tasks:
     - name: Checking filesystem (only works for ZFS)
       ansibleguy.opnsense.snapshot:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
       failed_when: false
       check_mode: false
       changed_when: false
@@ -35,8 +34,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.snapshot:
-        name: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_1
+        state: absent
       register: opn_pre2
       when: opn_zfs | bool
       failed_when: >
@@ -45,7 +44,7 @@
 
     - name: Adding 1 - failing because of invalid name
       ansibleguy.opnsense.snapshot:
-        name: 'INVALID NAME'
+        name: INVALID NAME
       register: opn_fail1
       failed_when: not opn_fail1.failed
       when:
@@ -54,7 +53,7 @@
 
     - name: Adding 1
       ansibleguy.opnsense.snapshot:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
       register: opn1
       when: opn_zfs | bool
       failed_when: >
@@ -63,7 +62,7 @@
 
     - name: Adding 2
       ansibleguy.opnsense.snapshot:
-        name: 'ANSIBLE_TEST_1_2'
+        name: ANSIBLE_TEST_1_2
       register: opn2
       failed_when: >
         opn2.failed or
@@ -74,7 +73,7 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.snapshot:
-        name: 'ANSIBLE_TEST_1_2'
+        name: ANSIBLE_TEST_1_2
       register: opn3
       failed_when: >
         opn3.failed or
@@ -85,7 +84,7 @@
 
     - name: Activate 2
       ansibleguy.opnsense.snapshot:
-        name: 'ANSIBLE_TEST_1_2'
+        name: ANSIBLE_TEST_1_2
         activate: true
       register: opn4
       failed_when: >
@@ -97,8 +96,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.snapshot:
-        name: 'ANSIBLE_TEST_1_2'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_2
+        state: absent
       register: opn5
       failed_when: >
         not opn5.failed or
@@ -109,7 +108,7 @@
 
     - name: Activate default
       ansibleguy.opnsense.snapshot:
-        name: 'default'
+        name: default
         activate: true
       register: opn6
       failed_when: >
@@ -121,8 +120,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.snapshot:
-        name: 'ANSIBLE_TEST_1_2'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_2
+        state: absent
       register: opn7
       failed_when: >
         opn7.failed or
@@ -143,11 +142,11 @@
 
     - name: Cleanup
       ansibleguy.opnsense.snapshot:
-        name: '{{ item }}'
-        state: 'absent'
+        name: "{{ item }}"
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when:
         - opn_zfs | bool
         - not ansible_check_mode

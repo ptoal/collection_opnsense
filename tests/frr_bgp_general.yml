@@ -1,8 +1,7 @@
 ---
-
 - name: Testing FRR-BGP general settings
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'frr_bgp_general'
+      target: frr_bgp_general
 
   tasks:
     - name: Listing
@@ -29,9 +28,9 @@
     - name: Configuring
       ansibleguy.opnsense.frr_bgp_general:
         as_number: 1337
-        id: '10.0.0.1'
+        id: 10.0.0.1
         graceful: true
-        networks: ['10.0.10.0/24']
+        networks: [10.0.10.0/24]
         enabled: true
       register: opn1
       failed_when: >
@@ -41,9 +40,9 @@
     - name: Changing
       ansibleguy.opnsense.frr_bgp_general:
         as_number: 1337
-        id: '10.0.0.1'
+        id: 10.0.0.1
         graceful: false
-        networks: ['10.0.10.0/25']
+        networks: [10.0.10.0/25]
         distance: 21
         enabled: true
       register: opn9
@@ -54,9 +53,9 @@
     - name: Disabling 1
       ansibleguy.opnsense.frr_bgp_general:
         as_number: 1337
-        id: '10.0.0.1'
+        id: 10.0.0.1
         graceful: false
-        networks: ['10.0.10.0/25']
+        networks: [10.0.10.0/25]
         enabled: false
         distance: 21
       register: opn2
@@ -68,9 +67,9 @@
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.frr_bgp_general:
         as_number: 1337
-        id: '10.0.0.1'
+        id: 10.0.0.1
         graceful: false
-        networks: ['10.0.10.0/25']
+        networks: [10.0.10.0/25]
         enabled: false
         distance: 21
       register: opn3
@@ -82,9 +81,9 @@
     - name: Enabling 1
       ansibleguy.opnsense.frr_bgp_general:
         as_number: 1337
-        id: '10.0.0.1'
+        id: 10.0.0.1
         graceful: false
-        networks: ['10.0.10.0/25']
+        networks: [10.0.10.0/25]
         distance: 21
       register: opn4
       failed_when: >

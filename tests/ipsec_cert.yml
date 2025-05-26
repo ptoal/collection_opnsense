@@ -1,8 +1,7 @@
 ---
-
 - name: Testing IPSec certificates
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -13,7 +12,7 @@
       reload: true
 
     ansibleguy.opnsense.list:
-      target: 'ipsec_cert'
+      target: ipsec_cert
 
   vars:
     test1:
@@ -116,8 +115,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.ipsec_cert:
-        name: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_1
+        state: absent
       register: opn1
       failed_when: >
         opn1.failed or
@@ -125,23 +124,23 @@
 
     - name: Validation - failing because of invalid pub-key
       ansibleguy.opnsense.ipsec_cert:
-        name: 'ANSIBLE_TEST_1_1'
-        public_key: 'not-a-pubkey'
+        name: ANSIBLE_TEST_1_1
+        public_key: not-a-pubkey
         private_key: "{{ test1.priv }}"
       register: opn3
       failed_when: not opn3.failed
 
     - name: Validation - failing because of invalid priv-key
       ansibleguy.opnsense.ipsec_cert:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         public_key: "{{ test1.pub }}"
-        private_key: 'not-a-privkey'
+        private_key: not-a-privkey
       register: opn4
       failed_when: not opn4.failed
 
     - name: Validation - failing because of key-mismatch (server-side)
       ansibleguy.opnsense.ipsec_cert:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         public_key: "{{ test2_mismatch.pub }}"
         private_key: "{{ test2.priv }}"
       register: opn5
@@ -150,7 +149,7 @@
 
     - name: Adding 1
       ansibleguy.opnsense.ipsec_cert:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         public_key: "{{ test1.pub }}"
         private_key: "{{ test1.priv }}"
       register: opn6
@@ -160,7 +159,7 @@
 
     - name: Adding 1 - nothing changed
       ansibleguy.opnsense.ipsec_cert:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         public_key: "{{ test1.pub }}"
         private_key: "{{ test1.priv }}"
       register: opn9
@@ -171,7 +170,7 @@
 
     - name: Adding 2
       ansibleguy.opnsense.ipsec_cert:
-        name: 'ANSIBLE_TEST_1_2'
+        name: ANSIBLE_TEST_1_2
         public_key: "{{ test2.pub }}"
         private_key: "{{ test2.priv }}"
       register: opn7
@@ -181,7 +180,7 @@
 
     - name: Changing 1
       ansibleguy.opnsense.ipsec_cert:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         public_key: "{{ test2.pub }}"
         private_key: "{{ test2.priv }}"
       register: opn8
@@ -201,10 +200,10 @@
     - name: Cleanup
       ansibleguy.opnsense.ipsec_cert:
         name: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when: not ansible_check_mode
 
     - name: Listing

@@ -1,8 +1,7 @@
 ---
-
 - name: Testing LAGG interfaces
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'interface_lagg'
+      target: interface_lagg
 
   vars:
     if_lag: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL_LAGG_IF') | default('vtnet2', true) }}"
@@ -26,8 +25,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.interface_lagg:
-        device: 'lagg99'
-        state: 'absent'
+        device: lagg99
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -35,19 +34,19 @@
 
     - name: Adding 1 - failing because of invalid interface (server-side)
       ansibleguy.opnsense.interface_lagg:
-        device: 'lagg0'
+        device: lagg0
         members:
-          - 'DOES-NOT-EXIST'
+          - DOES-NOT-EXIST
       register: opn_fail1
       failed_when: not opn_fail1.failed
       when: not ansible_check_mode
 
     - name: Adding 1
       ansibleguy.opnsense.interface_lagg:
-        device: 'lagg0'
-        description: 'ANSIBLE_TEST_1_1'
+        device: lagg0
+        description: ANSIBLE_TEST_1_1
         members:
-          - '{{ if_lag }}'
+          - "{{ if_lag }}"
         lagghash: l2
       register: opn1
       failed_when: >
@@ -56,10 +55,10 @@
 
     - name: Adding 1 - nothing changed
       ansibleguy.opnsense.interface_lagg:
-        device: 'lagg0'
-        description: 'ANSIBLE_TEST_1_1'
+        device: lagg0
+        description: ANSIBLE_TEST_1_1
         members:
-          - '{{ if_lag }}'
+          - "{{ if_lag }}"
         lagghash: l2
       register: opn2
       failed_when: >
@@ -77,8 +76,8 @@
 
     - name: Cleanup
       ansibleguy.opnsense.interface_lagg:
-        device: 'lagg0'
-        state: 'absent'
+        device: lagg0
+        state: absent
       when: not ansible_check_mode
 
     - name: Listing

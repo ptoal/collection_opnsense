@@ -1,8 +1,7 @@
 ---
-
 - name: WebProxy PAC-Proxy
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'webproxy_pac_proxy'
+      target: webproxy_pac_proxy
 
   tasks:
     - name: Listing
@@ -23,15 +22,15 @@
 
     - name: Adding 1 - failing because of missing URL
       ansibleguy.opnsense.webproxy_pac_proxy:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding 1
       ansibleguy.opnsense.webproxy_pac_proxy:
-        name: 'ANSIBLE_TEST_1_1'
-        url: 'test.lan:3128'
-        description: 'test'
+        name: ANSIBLE_TEST_1_1
+        url: test.lan:3128
+        description: test
       register: opn1
       failed_when: >
         opn1.failed or
@@ -39,9 +38,9 @@
 
     - name: Changing 1
       ansibleguy.opnsense.webproxy_pac_proxy:
-        name: 'ANSIBLE_TEST_1_1'
-        url: 'test.lan:4228'
-        description: 'test_new'
+        name: ANSIBLE_TEST_1_1
+        url: test.lan:4228
+        description: test_new
       register: opn2
       failed_when: >
         opn2.failed or
@@ -50,9 +49,9 @@
 
     - name: Changing 1 - nothing changed
       ansibleguy.opnsense.webproxy_pac_proxy:
-        name: 'ANSIBLE_TEST_1_1'
-        url: 'test.lan:4228'
-        description: 'test_new'
+        name: ANSIBLE_TEST_1_1
+        url: test.lan:4228
+        description: test_new
       register: opn3
       failed_when: >
         opn3.failed or
@@ -61,9 +60,9 @@
 
     - name: Adding 2
       ansibleguy.opnsense.webproxy_pac_proxy:
-        name: 'ANSIBLE_TEST_1_2'
-        url: 'test.lan:4228'
-        description: 'test'
+        name: ANSIBLE_TEST_1_2
+        url: test.lan:4228
+        description: test
       register: opn6
       failed_when: >
         opn6.failed or
@@ -80,8 +79,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.webproxy_pac_proxy:
-        name: 'ANSIBLE_TEST_1_2'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_2
+        state: absent
       register: opn8
       failed_when: >
         opn8.failed or
@@ -99,10 +98,10 @@
     - name: Cleanup
       ansibleguy.opnsense.webproxy_pac_proxy:
         name: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when: not ansible_check_mode
 
     - name: Checking cleanup
@@ -115,8 +114,8 @@
 
     - name: Removing non-existent
       ansibleguy.opnsense.webproxy_pac_proxy:
-        name: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_1
+        state: absent
       register: opn11
       failed_when: >
         opn11.failed or

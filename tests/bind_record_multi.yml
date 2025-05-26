@@ -1,8 +1,7 @@
 ---
-
 - name: Testing BIND Multi-Records
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'bind_record'
+      target: bind_record
 
   tasks:
     - name: Listing
@@ -24,18 +23,18 @@
     - name: Adding - failing because of non-existing domain
       ansibleguy.opnsense.bind_record_multi:
         records:
-          'test4.ansibleguy':
-            - name: 'test1'
-              value: '192.168.1.1'
+          test4.ansibleguy:
+            - name: test1
+              value: 192.168.1.1
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding - warning because of non-existing domain
       ansibleguy.opnsense.bind_record_multi:
         records:
-          'test4.ansibleguy':
-            - name: 'test1'
-              value: '192.168.1.1'
+          test4.ansibleguy:
+            - name: test1
+              value: 192.168.1.1
         fail_processing: false
       register: opn_warn1
       failed_when: >
@@ -44,32 +43,32 @@
 
     - name: Adding dummy domain
       ansibleguy.opnsense.bind_domain:
-        name: 'test4.ansibleguy'
+        name: test4.ansibleguy
       when: not ansible_check_mode
 
     - name: Adding 1
       ansibleguy.opnsense.bind_record_multi:
         records:
-          'test4.ansibleguy':
-            - name: 'test1'
-              value: '192.168.1.1'
-            - name: 'test1'
-              type: 'TXT'
-              value: 'random'
-            - name: 'test2'
-              value: '192.168.2.1'
-            - name: 'test3'
-              value: '192.168.3.1'
-            - name: 'test4'
-              type: 'CNAME'
-              value: 'test1.test3.ansibleguy'
-            - name: 'test5'
-              type: 'AAAA'
-              value: '2001:db8::1'
+          test4.ansibleguy:
+            - name: test1
+              value: 192.168.1.1
+            - name: test1
+              type: TXT
+              value: random
+            - name: test2
+              value: 192.168.2.1
+            - name: test3
+              value: 192.168.3.1
+            - name: test4
+              type: CNAME
+              value: test1.test3.ansibleguy
+            - name: test5
+              type: AAAA
+              value: 2001:db8::1
               round_robin: true
-            - name: 'test5'
-              type: 'AAAA'
-              value: '2001:db8::2'
+            - name: test5
+              type: AAAA
+              value: 2001:db8::2
               round_robin: true
       register: opn1
       failed_when: >
@@ -80,28 +79,28 @@
     - name: Changing 1
       ansibleguy.opnsense.bind_record_multi:
         records:
-          'test4.ansibleguy':
-            - name: 'test1'
-              value: '192.168.1.2'
-            - name: 'test1'
-              type: 'TXT'
-              value: 'random_new'
-            - name: 'test2'
-              value: '192.168.2.1'
+          test4.ansibleguy:
+            - name: test1
+              value: 192.168.1.2
+            - name: test1
+              type: TXT
+              value: random_new
+            - name: test2
+              value: 192.168.2.1
               enabled: false
-            - name: 'test3'
-              state: 'absent'
-            - name: 'test4'
-              type: 'CNAME'
-              value: 'test2.test3.ansibleguy'
+            - name: test3
+              state: absent
+            - name: test4
+              type: CNAME
+              value: test2.test3.ansibleguy
             # round-robin
-            - name: 'test5'
-              type: 'AAAA'
-              value: '2001:db8::1'
+            - name: test5
+              type: AAAA
+              value: 2001:db8::1
               round_robin: true
-            - name: 'test5'
-              type: 'AAAA'
-              value: '2001:db8::2'
+            - name: test5
+              type: AAAA
+              value: 2001:db8::2
               round_robin: true
       register: opn2
       failed_when: >
@@ -112,28 +111,28 @@
     - name: Nothing changed
       ansibleguy.opnsense.bind_record_multi:
         records:
-          'test4.ansibleguy':
-            - name: 'test1'
-              value: '192.168.1.2'
-            - name: 'test1'
-              type: 'TXT'
-              value: 'random_new'
-            - name: 'test2'
-              value: '192.168.2.1'
+          test4.ansibleguy:
+            - name: test1
+              value: 192.168.1.2
+            - name: test1
+              type: TXT
+              value: random_new
+            - name: test2
+              value: 192.168.2.1
               enabled: false
-            - name: 'test3'
-              state: 'absent'
-            - name: 'test4'
-              type: 'CNAME'
-              value: 'test2.test3.ansibleguy'
+            - name: test3
+              state: absent
+            - name: test4
+              type: CNAME
+              value: test2.test3.ansibleguy
             # round-robin
-            - name: 'test5'
-              type: 'AAAA'
-              value: '2001:db8::1'
+            - name: test5
+              type: AAAA
+              value: 2001:db8::1
               round_robin: true
-            - name: 'test5'
-              type: 'AAAA'
-              value: '2001:db8::2'
+            - name: test5
+              type: AAAA
+              value: 2001:db8::2
               round_robin: true
       register: opn3
       failed_when: >
@@ -152,11 +151,11 @@
     - name: Removing - round robin
       ansibleguy.opnsense.bind_record_multi:
         records:
-          'test4.ansibleguy':
-            - name: 'test5'
-              type: 'AAAA'
+          test4.ansibleguy:
+            - name: test5
+              type: AAAA
               round_robin: true
-        state: 'absent'
+        state: absent
       when: not ansible_check_mode
 
     - name: Listing
@@ -170,21 +169,21 @@
     - name: Cleanup
       ansibleguy.opnsense.bind_record_multi:
         records:
-          'test4.ansibleguy':
-            - 'test1'
-            - name: 'test1'
-              type: 'TXT'
-            - 'test2'
-            - 'test3'
-            - name: 'test4'
-              type: 'CNAME'
-        state: 'absent'
+          test4.ansibleguy:
+            - test1
+            - name: test1
+              type: TXT
+            - test2
+            - test3
+            - name: test4
+              type: CNAME
+        state: absent
       when: not ansible_check_mode
 
     - name: Cleanup domain
       ansibleguy.opnsense.bind_domain:
-        name: 'test4.ansibleguy'
-        state: 'absent'
+        name: test4.ansibleguy
+        state: absent
       when: not ansible_check_mode
 
     - name: Listing

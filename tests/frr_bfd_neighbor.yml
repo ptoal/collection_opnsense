@@ -1,8 +1,7 @@
 ---
-
 - name: Testing FRR-BFD Neighbors
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'frr_bfd_neighbor'
+      target: frr_bfd_neighbor
 
   tasks:
     - name: Listing
@@ -22,8 +21,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.frr_bfd_neighbor:
-        ip: '10.0.0.1'
-        state: 'absent'
+        ip: 10.0.0.1
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -31,13 +30,13 @@
 
     - name: Adding 1 - failing because of invalid value
       ansibleguy.opnsense.frr_bfd_neighbor:
-        ip: '10.0.0.1000'
+        ip: 10.0.0.1000
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding 1
       ansibleguy.opnsense.frr_bfd_neighbor:
-        ip: '10.0.0.1'
+        ip: 10.0.0.1
       register: opn1
       failed_when: >
         opn1.failed or
@@ -45,8 +44,8 @@
 
     - name: Changing 1
       ansibleguy.opnsense.frr_bfd_neighbor:
-        ip: '10.0.0.1'
-        description: 'changed'
+        ip: 10.0.0.1
+        description: changed
       register: opn9
       failed_when: >
         opn9.failed or
@@ -54,8 +53,8 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.frr_bfd_neighbor:
-        ip: '10.0.0.1'
-        description: 'changed'
+        ip: 10.0.0.1
+        description: changed
         enabled: false
       register: opn2
       failed_when: >
@@ -65,8 +64,8 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.frr_bfd_neighbor:
-        ip: '10.0.0.1'
-        description: 'changed'
+        ip: 10.0.0.1
+        description: changed
         enabled: false
       register: opn3
       failed_when: >
@@ -76,8 +75,8 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.frr_bfd_neighbor:
-        ip: '10.0.0.1'
-        description: 'changed'
+        ip: 10.0.0.1
+        description: changed
       register: opn4
       failed_when: >
         opn4.failed or
@@ -86,7 +85,7 @@
 
     - name: Adding 2
       ansibleguy.opnsense.frr_bfd_neighbor:
-        ip: '10.0.0.0/28'
+        ip: 10.0.0.0/28
       register: opn5
       failed_when: >
         opn5.failed or
@@ -94,7 +93,7 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.frr_bfd_neighbor:
-        ip: '10.0.0.0/28'
+        ip: 10.0.0.0/28
       register: opn6
       failed_when: >
         opn6.failed or
@@ -103,8 +102,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.frr_bfd_neighbor:
-        ip: '10.0.0.0/28'
-        state: 'absent'
+        ip: 10.0.0.0/28
+        state: absent
       register: opn7
       failed_when: >
         opn7.failed or
@@ -122,10 +121,10 @@
     - name: Cleanup
       ansibleguy.opnsense.frr_bfd_neighbor:
         ip: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - '10.0.0.1'
-        - '10.0.0.0/28'
+        - 10.0.0.1
+        - 10.0.0.0/28
       when: not ansible_check_mode
 
     - name: Listing

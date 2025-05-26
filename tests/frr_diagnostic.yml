@@ -1,8 +1,7 @@
 ---
-
 - name: Testing FRR info querying
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     ansibleguy.opnsense.frr_diagnostic:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -12,7 +11,7 @@
   tasks:
     - name: Showing BGP neighbors
       ansibleguy.opnsense.frr_diagnostic:
-        target: 'bgpneighbors'
+        target: bgpneighbors
       register: opn1
       failed_when: >
         opn1.failed or
@@ -20,7 +19,7 @@
 
     - name: Showing config
       ansibleguy.opnsense.frr_diagnostic:
-        target: 'generalrunningconfig'
+        target: generalrunningconfig
       register: opn2
       failed_when: >
         opn2.failed or

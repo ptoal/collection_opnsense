@@ -1,8 +1,7 @@
 ---
-
 - name: Testing RIP
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'frr_rip'
+      target: frr_rip
 
   tasks:
     - name: Listing
@@ -32,9 +31,9 @@
 
     - name: Configuring
       ansibleguy.opnsense.frr_rip:
-        passive_ints: ['lan']
-        redistribute: ['static']
-        networks: ['10.0.10.0/24']
+        passive_ints: [lan]
+        redistribute: [static]
+        networks: [10.0.10.0/24]
         enabled: true
       register: opn1
       failed_when: >
@@ -43,9 +42,9 @@
 
     - name: Changing
       ansibleguy.opnsense.frr_rip:
-        passive_ints: ['lan']
-        redistribute: ['static', 'ospf']
-        networks: ['10.0.11.0/24']
+        passive_ints: [lan]
+        redistribute: [static, ospf]
+        networks: [10.0.11.0/24]
         metric: 6
         enabled: true
       register: opn9
@@ -55,9 +54,9 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.frr_rip:
-        passive_ints: ['lan']
-        redistribute: ['static', 'ospf']
-        networks: ['10.0.11.0/24']
+        passive_ints: [lan]
+        redistribute: [static, ospf]
+        networks: [10.0.11.0/24]
         metric: 6
         enabled: false
       register: opn2
@@ -68,9 +67,9 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.frr_rip:
-        passive_ints: ['lan']
-        redistribute: ['static', 'ospf']
-        networks: ['10.0.11.0/24']
+        passive_ints: [lan]
+        redistribute: [static, ospf]
+        networks: [10.0.11.0/24]
         metric: 6
         enabled: false
       register: opn3
@@ -81,9 +80,9 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.frr_rip:
-        passive_ints: ['lan']
-        redistribute: ['static', 'ospf']
-        networks: ['10.0.11.0/24']
+        passive_ints: [lan]
+        redistribute: [static, ospf]
+        networks: [10.0.11.0/24]
         metric: 6
       register: opn4
       failed_when: >

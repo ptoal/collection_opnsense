@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Packages
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -13,11 +12,11 @@
       timeout: 120
 
     ansibleguy.opnsense.list:
-      target: 'package'
+      target: package
 
   vars:
-    test_app1: 'os-hw-probe'
-    test_app2: 'os-dmidecode'
+    test_app1: os-hw-probe
+    test_app2: os-dmidecode
 
   tasks:
     - name: Listing
@@ -27,8 +26,8 @@
 
     - name: Installing - exists
       ansibleguy.opnsense.package:
-        name: 'os-squid'
-        action: 'install'
+        name: os-squid
+        action: install
       register: opn1
       failed_when: >
         opn1.failed or
@@ -37,7 +36,7 @@
     - name: Removing - does not exist
       ansibleguy.opnsense.package:
         name: "{{ test_app1 }}"
-        action: 'remove'
+        action: remove
       register: opn2
       failed_when: >
         opn2.failed or
@@ -46,7 +45,7 @@
     - name: Installing
       ansibleguy.opnsense.package:
         name: "{{ test_app1 }}"
-        action: 'install'
+        action: install
       register: opn3
       failed_when: >
         opn3.failed or
@@ -55,7 +54,7 @@
     - name: Installing multiple
       ansibleguy.opnsense.package:
         name: ["{{ test_app1 }}", "{{ test_app2 }}"]
-        action: 'install'
+        action: install
       register: opn9
       failed_when: >
         opn9.failed or
@@ -78,7 +77,7 @@
     - name: Locking
       ansibleguy.opnsense.package:
         name: "{{ test_app1 }}"
-        action: 'lock'
+        action: lock
       register: opn4
       failed_when: >
         opn4.failed or
@@ -88,7 +87,7 @@
     - name: Removing - locked
       ansibleguy.opnsense.package:
         name: "{{ test_app1 }}"
-        action: 'remove'
+        action: remove
       register: opn5
       failed_when: not opn5.failed
       when: not ansible_check_mode
@@ -96,7 +95,7 @@
     - name: Unlocking
       ansibleguy.opnsense.package:
         name: "{{ test_app1 }}"
-        action: 'unlock'
+        action: unlock
       register: opn6
       failed_when: >
         opn6.failed or
@@ -106,7 +105,7 @@
     - name: Reinstall
       ansibleguy.opnsense.package:
         name: "{{ test_app1 }}"
-        action: 'reinstall'
+        action: reinstall
       register: opn7
       failed_when: >
         opn7.failed or
@@ -116,7 +115,7 @@
     - name: Removing multiple
       ansibleguy.opnsense.package:
         name: ["{{ test_app1 }}", "{{ test_app2 }}"]
-        action: 'remove'
+        action: remove
       register: opn8
       failed_when: >
         opn8.failed or

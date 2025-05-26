@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Unbound ACLs
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'unbound_acl'
+      target: unbound_acl
 
   tasks:
     - name: Listing
@@ -23,32 +22,32 @@
 
     - name: Adding - failing because an invalid action was provided
       ansibleguy.opnsense.unbound_acl:
-        name: 'ANSIBLE_TEST_1_1'
-        action: 'INVALID_ACTION'
-        networks: ['192.168.0.0/24']
+        name: ANSIBLE_TEST_1_1
+        action: INVALID_ACTION
+        networks: [192.168.0.0/24]
         reload: false
       register: opn_fail2
       failed_when: not opn_fail2.failed
 
     - name: Adding - failing because no network was provided
       ansibleguy.opnsense.unbound_acl:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         reload: false
       register: opn_fail3
       failed_when: not opn_fail3.failed
 
     - name: Adding - failing because an invalid network was provided
       ansibleguy.opnsense.unbound_acl:
-        name: 'ANSIBLE_TEST_1_1'
-        networks: ['192.168.0.0/258']
+        name: ANSIBLE_TEST_1_1
+        networks: [192.168.0.0/258]
         reload: false
       register: opn_fail4
       failed_when: not opn_fail4.failed
 
     - name: Adding - failing because of an invalid description was provided
       ansibleguy.opnsense.unbound_acl:
-        name: 'ANSIBLE_TEST_1_1'
-        networks: ['192.168.0.0/24']
+        name: ANSIBLE_TEST_1_1
+        networks: [192.168.0.0/24]
         description: >-
           123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
           123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
@@ -59,11 +58,11 @@
 
     - name: Adding 1
       ansibleguy.opnsense.unbound_acl:
-        name: 'ANSIBLE_TEST_1_1'
-        action: 'deny'
-        networks: ['192.168.0.0/24']
-        description: 'Deny access'
-        reload: false  # speed
+        name: ANSIBLE_TEST_1_1
+        action: deny
+        networks: [192.168.0.0/24]
+        description: Deny access
+        reload: false # speed
       register: opn1
       failed_when: >
         opn1.failed or
@@ -71,11 +70,11 @@
 
     - name: Changing 1
       ansibleguy.opnsense.unbound_acl:
-        name: 'ANSIBLE_TEST_1_1'
-        action: 'deny'
-        networks: ['192.168.0.0/25']
-        description: 'Deny access'
-        reload: false  # speed
+        name: ANSIBLE_TEST_1_1
+        action: deny
+        networks: [192.168.0.0/25]
+        description: Deny access
+        reload: false # speed
       register: opn2
       failed_when: >
         opn2.failed or
@@ -83,11 +82,11 @@
 
     - name: Changing 1 - more
       ansibleguy.opnsense.unbound_acl:
-        name: 'ANSIBLE_TEST_1_1'
-        action: 'deny'
-        networks: ['10.10.0.0/29', '192.168.0.0/25']
-        description: 'Deny access'
-        reload: false  # speed
+        name: ANSIBLE_TEST_1_1
+        action: deny
+        networks: [10.10.0.0/29, 192.168.0.0/25]
+        description: Deny access
+        reload: false # speed
       register: opn10
       failed_when: >
         opn10.failed or
@@ -95,10 +94,10 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.unbound_acl:
-        name: 'ANSIBLE_TEST_1_1'
-        action: 'deny'
-        networks: ['10.10.0.0/29', '192.168.0.0/25']
-        description: 'Deny access'
+        name: ANSIBLE_TEST_1_1
+        action: deny
+        networks: [10.10.0.0/29, 192.168.0.0/25]
+        description: Deny access
         enabled: false
         reload: false
       register: opn3
@@ -109,12 +108,12 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.unbound_acl:
-        name: 'ANSIBLE_TEST_1_1'
-        action: 'deny'
-        networks: ['10.10.0.0/29', '192.168.0.0/25']
-        description: 'Deny access'
+        name: ANSIBLE_TEST_1_1
+        action: deny
+        networks: [10.10.0.0/29, 192.168.0.0/25]
+        description: Deny access
         enabled: false
-        reload: false  # speed
+        reload: false # speed
       register: opn4
       failed_when: >
         opn4.failed or
@@ -123,11 +122,11 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.unbound_acl:
-        name: 'ANSIBLE_TEST_1_1'
-        action: 'deny'
-        networks: ['10.10.0.0/29', '192.168.0.0/25']
-        description: 'Deny access'
-        reload: false  # speed
+        name: ANSIBLE_TEST_1_1
+        action: deny
+        networks: [10.10.0.0/29, 192.168.0.0/25]
+        description: Deny access
+        reload: false # speed
       register: opn5
       failed_when: >
         opn5.failed or
@@ -136,11 +135,11 @@
 
     - name: Adding 2
       ansibleguy.opnsense.unbound_acl:
-        name: 'ANSIBLE_TEST_1_2'
-        action: 'allow_snoop'
-        networks: ['192.168.0.128/29', '192.168.0.192/29']
-        description: 'Allow snoop'
-        reload: false  # speed
+        name: ANSIBLE_TEST_1_2
+        action: allow_snoop
+        networks: [192.168.0.128/29, 192.168.0.192/29]
+        description: Allow snoop
+        reload: false # speed
       register: opn6
       failed_when: >
         opn6.failed or
@@ -149,11 +148,11 @@
 
     - name: Adding 2 - Nothing changed
       ansibleguy.opnsense.unbound_acl:
-        name: 'ANSIBLE_TEST_1_2'
-        action: 'allow_snoop'
-        networks: ['192.168.0.128/29', '192.168.0.192/29']
-        description: 'Allow snoop'
-        reload: false  # speed
+        name: ANSIBLE_TEST_1_2
+        action: allow_snoop
+        networks: [192.168.0.128/29, 192.168.0.192/29]
+        description: Allow snoop
+        reload: false # speed
       register: opn7
       failed_when: >
         opn7.failed or
@@ -162,9 +161,9 @@
 
     - name: Removing 2
       ansibleguy.opnsense.unbound_acl:
-        name: 'ANSIBLE_TEST_1_2'
-        state: 'absent'
-        reload: false  # speed
+        name: ANSIBLE_TEST_1_2
+        state: absent
+        reload: false # speed
       register: opn8
       failed_when: >
         opn8.failed or
@@ -182,11 +181,11 @@
     - name: Cleanup
       ansibleguy.opnsense.unbound_acl:
         name: "{{ item }}"
-        state: 'absent'
+        state: absent
         reload: false
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when: not ansible_check_mode
 
     - name: Listing

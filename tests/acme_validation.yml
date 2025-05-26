@@ -1,8 +1,7 @@
 ---
-
 - name: Testing ACME Validation
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'acme_validation'
+      target: acme_validation
 
   tasks:
     - name: Listing
@@ -22,8 +21,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_1
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -31,14 +30,14 @@
 
     - name: Adding 1 - failing because of invalid value
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         method: ANSIBLE_TEST_1_1
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding 1
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         method: http01
       register: opn1
       failed_when: >
@@ -47,7 +46,7 @@
 
     - name: Changing 1
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         method: http01
         http_opn_autodiscovery: false
         http_opn_ipaddresses:
@@ -59,7 +58,7 @@
 
     - name: Changing 1 - nothing changed
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         method: http01
         http_opn_autodiscovery: false
         http_opn_ipaddresses:
@@ -72,7 +71,7 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         method: http01
         http_opn_autodiscovery: false
         http_opn_ipaddresses:
@@ -86,7 +85,7 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         method: http01
         http_opn_autodiscovery: false
         http_opn_ipaddresses:
@@ -100,7 +99,7 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         method: http01
         http_opn_autodiscovery: false
         http_opn_ipaddresses:
@@ -113,7 +112,7 @@
 
     - name: Adding 2 - HTTP HAProxy
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_2'
+        name: ANSIBLE_TEST_1_2
         method: http01
         http_service: haproxy
       register: opn7
@@ -123,7 +122,7 @@
 
     - name: Adding 2 - HTTP HAProxy - nothing changed
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_2'
+        name: ANSIBLE_TEST_1_2
         method: http01
         http_service: haproxy
       register: opn8
@@ -134,7 +133,7 @@
 
     - name: Adding 3 - TLS ALPN
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_3'
+        name: ANSIBLE_TEST_1_3
         method: tlsalpn01
         tlsalpn_acme_ipaddresses:
           - 1.2.3.4
@@ -145,7 +144,7 @@
 
     - name: Adding 3 - TLS ALPN - nothing changed
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_3'
+        name: ANSIBLE_TEST_1_3
         method: tlsalpn01
         tlsalpn_acme_ipaddresses:
           - 1.2.3.4
@@ -157,7 +156,7 @@
 
     - name: Adding 4 - DNS Active24
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_4'
+        name: ANSIBLE_TEST_1_4
         dns_service: dns_active24
         dns_active24_token: SECRET
       register: opn11
@@ -167,7 +166,7 @@
 
     - name: Adding 4 - DNS Active24 - nothing changed
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_4'
+        name: ANSIBLE_TEST_1_4
         dns_service: dns_active24
         dns_active24_token: SECRET
       register: opn12
@@ -178,7 +177,7 @@
 
     - name: Adding 5 - DNS aliyun.com
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_5'
+        name: ANSIBLE_TEST_1_5
         dns_service: dns_ali
         dns_ali_key: KEY
         dns_ali_secret: SECRET
@@ -189,7 +188,7 @@
 
     - name: Adding 5 - DNS aliyun.com - nothing changed
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_5'
+        name: ANSIBLE_TEST_1_5
         dns_service: dns_ali
         dns_ali_key: KEY
         dns_ali_secret: SECRET
@@ -201,7 +200,7 @@
 
     - name: Adding 6 - DNS AutoDNS
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_6'
+        name: ANSIBLE_TEST_1_6
         dns_service: dns_autodns
         dns_autodns_user: auto
         dns_autodns_password: SECRET
@@ -213,7 +212,7 @@
 
     - name: Adding 6 - DNS AutoDNS - nothing changed
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_6'
+        name: ANSIBLE_TEST_1_6
         dns_service: dns_autodns
         dns_autodns_user: auto
         dns_autodns_password: SECRET
@@ -226,7 +225,7 @@
 
     - name: Adding 7 - DNS AWS
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_7'
+        name: ANSIBLE_TEST_1_7
         dns_service: dns_aws
         dns_aws_id: ID
         dns_aws_secret: SECRET
@@ -237,7 +236,7 @@
 
     - name: Adding 7 - DNS AWS - nothing changed
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_7'
+        name: ANSIBLE_TEST_1_7
         dns_service: dns_aws
         dns_aws_id: ID
         dns_aws_secret: SECRET
@@ -249,7 +248,7 @@
 
     - name: Adding 8 - DNS Azure
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_8'
+        name: ANSIBLE_TEST_1_8
         dns_service: dns_azure
         dns_azuredns_subscriptionid: SUB
         dns_azuredns_tenantid: TENANT
@@ -262,7 +261,7 @@
 
     - name: Adding 8 - DNS Azure - nothing changed
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_8'
+        name: ANSIBLE_TEST_1_8
         dns_service: dns_azure
         dns_azuredns_subscriptionid: SUB
         dns_azuredns_tenantid: TENANT
@@ -276,7 +275,7 @@
 
     - name: Adding 9 - DNS Bunny
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_9'
+        name: ANSIBLE_TEST_1_9
         dns_service: dns_bunny
         dns_bunny_api_key: SECRET
       register: opn21
@@ -286,7 +285,7 @@
 
     - name: Adding 9 - DNS Bunny - nothing changed
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_9'
+        name: ANSIBLE_TEST_1_9
         dns_service: dns_bunny
         dns_bunny_api_key: SECRET
       register: opn22
@@ -297,7 +296,7 @@
 
     - name: Adding 10 - DNS Cloudflare
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_10'
+        name: ANSIBLE_TEST_1_10
         dns_service: dns_cf
         dns_cf_email: cf@example.com
         dns_cf_key: KEY
@@ -311,7 +310,7 @@
 
     - name: Adding 10 - Unifi - nothing changed
       ansibleguy.opnsense.acme_validation:
-        name: 'ANSIBLE_TEST_1_10'
+        name: ANSIBLE_TEST_1_10
         dns_service: dns_cf
         dns_cf_email: cf@example.com
         dns_cf_key: KEY
@@ -334,19 +333,19 @@
 
     - name: Cleanup
       ansibleguy.opnsense.acme_validation:
-        name: '{{ item }}'
-        state: 'absent'
+        name: "{{ item }}"
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
-        - 'ANSIBLE_TEST_1_3'
-        - 'ANSIBLE_TEST_1_4'
-        - 'ANSIBLE_TEST_1_5'
-        - 'ANSIBLE_TEST_1_6'
-        - 'ANSIBLE_TEST_1_7'
-        - 'ANSIBLE_TEST_1_8'
-        - 'ANSIBLE_TEST_1_9'
-        - 'ANSIBLE_TEST_1_10'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
+        - ANSIBLE_TEST_1_3
+        - ANSIBLE_TEST_1_4
+        - ANSIBLE_TEST_1_5
+        - ANSIBLE_TEST_1_6
+        - ANSIBLE_TEST_1_7
+        - ANSIBLE_TEST_1_8
+        - ANSIBLE_TEST_1_9
+        - ANSIBLE_TEST_1_10
       when: not ansible_check_mode
 
     - name: Listing

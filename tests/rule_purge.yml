@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Purging of Rules
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,42 +9,42 @@
       ssl_verify: false
 
     ansibleguy.opnsense.rule_multi:
-      match_fields: ['description']
-      key_field: 'description'
+      match_fields: [description]
+      key_field: description
 
     ansibleguy.opnsense.rule_purge:
-      match_fields: ['description']
-      key_field: 'description'
+      match_fields: [description]
+      key_field: description
 
     ansibleguy.opnsense.list:
-      target: 'rule'
+      target: rule
 
   tasks:
     - name: Adding 1
       ansibleguy.opnsense.rule_multi:
         rules:
           ANSIBLE_TEST_3_1:
-            source_net: '192.168.1.0/24'
+            source_net: 192.168.1.0/24
             destination_invert: true
-            destination_net: '10.0.0.0/8'
-            action: 'block'
+            destination_net: 10.0.0.0/8
+            action: block
           ANSIBLE_TEST_3_2:
-            source_net: '192.168.0.0/24'
-            destination_net: '192.168.10.0/24'
+            source_net: 192.168.0.0/24
+            destination_net: 192.168.10.0/24
             destination_port: 443
-            protocol: 'TCP'
-            interface: 'lan'
+            protocol: TCP
+            interface: lan
           ANSIBLE_TEST_3_3:
             source_invert: true
-            source_net: 'bogons'
-            action: 'block'
+            source_net: bogons
+            action: block
       when: not ansible_check_mode
 
     - name: Simple disable-purge
       ansibleguy.opnsense.rule_purge:
         rules:
           ANSIBLE_TEST_3_1:
-        action: 'disable'
+        action: disable
       register: opn2
       when: not ansible_check_mode
       failed_when: >
@@ -74,26 +73,26 @@
       ansibleguy.opnsense.rule_multi:
         rules:
           ANSIBLE_TEST_3_1:
-            source_net: '192.168.1.0/24'
+            source_net: 192.168.1.0/24
             destination_invert: true
-            destination_net: '192.168.10.0/24'
-            action: 'block'
+            destination_net: 192.168.10.0/24
+            action: block
           ANSIBLE_TEST_3_2:
-            source_net: '192.168.0.0/24'
-            destination_net: '192.168.10.0/24'
+            source_net: 192.168.0.0/24
+            destination_net: 192.168.10.0/24
             destination_port: 443
-            protocol: 'TCP'
-            interface: 'lan'
+            protocol: TCP
+            interface: lan
           ANSIBLE_TEST_3_3:
             source_invert: true
-            source_net: 'bogons'
-            action: 'block'
+            source_net: bogons
+            action: block
       when: not ansible_check_mode
 
     - name: Filtered purge (single)
       ansibleguy.opnsense.rule_purge:
         filters:
-          destination_net: '192.168.10.0/24'
+          destination_net: 192.168.10.0/24
       when: not ansible_check_mode
       register: opn1
       failed_when: >
@@ -112,26 +111,26 @@
       ansibleguy.opnsense.rule_multi:
         rules:
           ANSIBLE_TEST_3_1:
-            source_net: '192.168.1.0/24'
+            source_net: 192.168.1.0/24
             destination_invert: true
-            destination_net: '192.168.10.0/24'
-            action: 'block'
+            destination_net: 192.168.10.0/24
+            action: block
           ANSIBLE_TEST_3_2:
-            source_net: '192.168.0.0/24'
-            destination_net: '192.168.10.0/24'
+            source_net: 192.168.0.0/24
+            destination_net: 192.168.10.0/24
             destination_port: 443
-            protocol: 'TCP'
-            interface: 'lan'
+            protocol: TCP
+            interface: lan
           ANSIBLE_TEST_3_3:
             source_invert: true
-            source_net: 'bogons'
-            action: 'block'
+            source_net: bogons
+            action: block
       when: not ansible_check_mode
 
     - name: Filtered purge (single inverted)
       ansibleguy.opnsense.rule_purge:
         filters:
-          destination_net: '192.168.10.0/24'
+          destination_net: 192.168.10.0/24
         filter_invert: true
       when: not ansible_check_mode
       register: opn6
@@ -151,27 +150,27 @@
       ansibleguy.opnsense.rule_multi:
         rules:
           ANSIBLE_TEST_3_1:
-            source_net: '192.168.1.0/24'
+            source_net: 192.168.1.0/24
             destination_invert: true
-            destination_net: '192.168.10.0/24'
-            action: 'block'
+            destination_net: 192.168.10.0/24
+            action: block
           ANSIBLE_TEST_3_2:
-            source_net: '192.168.0.0/24'
-            destination_net: '192.168.10.0/24'
+            source_net: 192.168.0.0/24
+            destination_net: 192.168.10.0/24
             destination_port: 443
-            protocol: 'TCP'
-            interface: 'lan'
+            protocol: TCP
+            interface: lan
           ANSIBLE_TEST_3_3:
             source_invert: true
-            source_net: 'bogons'
-            action: 'block'
+            source_net: bogons
+            action: block
       when: not ansible_check_mode
 
     - name: Filtered purge (multiple)
       ansibleguy.opnsense.rule_purge:
         filters:
-          ip_protocol: 'inet'
-          action: 'block'
+          ip_protocol: inet
+          action: block
       when: not ansible_check_mode
       register: opn8
       failed_when: >

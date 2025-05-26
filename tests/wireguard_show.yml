@@ -1,8 +1,7 @@
 ---
-
 - name: Testing WireGuard info querying
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     ansibleguy.opnsense.wireguard_show:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"

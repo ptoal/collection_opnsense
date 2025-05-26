@@ -1,8 +1,7 @@
 ---
-
 - name: Testing OpenVPN Client
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'openvpn_instance'
+      target: openvpn_instance
 
   tasks:
     - name: Listing
@@ -22,8 +21,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.openvpn_client:
-        name: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_1
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -31,31 +30,31 @@
 
     - name: Adding 1 - failing because no remote was provided
       ansibleguy.opnsense.openvpn_client:
-        name: 'ANSIBLE_TEST_1_1'
-        protocol: 'udp'
-        mode: 'tun'
-        certificate: 'OpenVPN Client'
-        ca: 'OpenVPN'
+        name: ANSIBLE_TEST_1_1
+        protocol: udp
+        mode: tun
+        certificate: OpenVPN Client
+        ca: OpenVPN
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding 1 - failing because no ca/cert was provided
       ansibleguy.opnsense.openvpn_client:
-        name: 'ANSIBLE_TEST_1_1'
-        remote: 'openvpn.test.ansibleguy.net:20000'
-        protocol: 'udp'
-        mode: 'tun'
+        name: ANSIBLE_TEST_1_1
+        remote: openvpn.test.ansibleguy.net:20000
+        protocol: udp
+        mode: tun
       register: opn_fail2
       failed_when: not opn_fail2.failed
 
     - name: Adding 1
       ansibleguy.opnsense.openvpn_client:
-        name: 'ANSIBLE_TEST_1_1'
-        remote: 'openvpn.test.ansibleguy.net:20000'
-        protocol: 'udp'
-        mode: 'tun'
-        network_remote: ['192.168.77.128/27']
-        ca: 'OpenVPN'
+        name: ANSIBLE_TEST_1_1
+        remote: openvpn.test.ansibleguy.net:20000
+        protocol: udp
+        mode: tun
+        network_remote: [192.168.77.128/27]
+        ca: OpenVPN
       register: opn1
       failed_when: >
         opn1.failed or
@@ -63,14 +62,14 @@
 
     - name: Changing 1
       ansibleguy.opnsense.openvpn_client:
-        name: 'ANSIBLE_TEST_1_1'
-        remote: 'openvpn.test.ansibleguy.net:20000'
-        protocol: 'udp'
-        mode: 'tun'
-        network_remote: ['192.168.77.128/27', '192.168.89.64/27']
+        name: ANSIBLE_TEST_1_1
+        remote: openvpn.test.ansibleguy.net:20000
+        protocol: udp
+        mode: tun
+        network_remote: [192.168.77.128/27, 192.168.89.64/27]
         log_level: 5
-        ca: 'OpenVPN'
-        certificate: 'OpenVPN Client'
+        ca: OpenVPN
+        certificate: OpenVPN Client
         mtu: 1400
         mss_fix: true
       register: opn9
@@ -80,14 +79,14 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.openvpn_client:
-        name: 'ANSIBLE_TEST_1_1'
-        remote: 'openvpn.test.ansibleguy.net:20000'
-        protocol: 'udp'
-        mode: 'tun'
-        network_remote: ['192.168.77.128/27', '192.168.89.64/27']
+        name: ANSIBLE_TEST_1_1
+        remote: openvpn.test.ansibleguy.net:20000
+        protocol: udp
+        mode: tun
+        network_remote: [192.168.77.128/27, 192.168.89.64/27]
         log_level: 5
-        ca: 'OpenVPN'
-        certificate: 'OpenVPN Client'
+        ca: OpenVPN
+        certificate: OpenVPN Client
         mtu: 1400
         mss_fix: true
         enabled: false
@@ -99,14 +98,14 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.openvpn_client:
-        name: 'ANSIBLE_TEST_1_1'
-        remote: 'openvpn.test.ansibleguy.net:20000'
-        protocol: 'udp'
-        mode: 'tun'
-        network_remote: ['192.168.77.128/27', '192.168.89.64/27']
+        name: ANSIBLE_TEST_1_1
+        remote: openvpn.test.ansibleguy.net:20000
+        protocol: udp
+        mode: tun
+        network_remote: [192.168.77.128/27, 192.168.89.64/27]
         log_level: 5
-        ca: 'OpenVPN'
-        certificate: 'OpenVPN Client'
+        ca: OpenVPN
+        certificate: OpenVPN Client
         mtu: 1400
         mss_fix: true
         enabled: false
@@ -118,14 +117,14 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.openvpn_client:
-        name: 'ANSIBLE_TEST_1_1'
-        remote: 'openvpn.test.ansibleguy.net:20000'
-        protocol: 'udp'
-        mode: 'tun'
-        network_remote: ['192.168.77.128/27', '192.168.89.64/27']
+        name: ANSIBLE_TEST_1_1
+        remote: openvpn.test.ansibleguy.net:20000
+        protocol: udp
+        mode: tun
+        network_remote: [192.168.77.128/27, 192.168.89.64/27]
         log_level: 5
-        ca: 'OpenVPN'
-        certificate: 'OpenVPN Client'
+        ca: OpenVPN
+        certificate: OpenVPN Client
         mtu: 1400
         mss_fix: true
       register: opn4
@@ -136,14 +135,14 @@
 
     - name: Adding 2
       ansibleguy.opnsense.openvpn_client:
-        name: 'ANSIBLE_TEST_1_2'
-        remote: 'openvpn.test.ansibleguy.net:24000'
-        protocol: 'tcp'
-        mode: 'tap'
-        network_local: '192.168.67.0/29'
-        network_remote: '192.168.67.128/29'
-        ca: 'OpenVPN'
-        certificate: 'OpenVPN Client'
+        name: ANSIBLE_TEST_1_2
+        remote: openvpn.test.ansibleguy.net:24000
+        protocol: tcp
+        mode: tap
+        network_local: 192.168.67.0/29
+        network_remote: 192.168.67.128/29
+        ca: OpenVPN
+        certificate: OpenVPN Client
         mtu: 1420
       register: opn5
       failed_when: >
@@ -152,14 +151,14 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.openvpn_client:
-        name: 'ANSIBLE_TEST_1_2'
-        remote: 'openvpn.test.ansibleguy.net:24000'
-        protocol: 'tcp'
-        mode: 'tap'
-        network_local: '192.168.67.0/29'
-        network_remote: '192.168.67.128/29'
-        ca: 'OpenVPN'
-        certificate: 'OpenVPN Client'
+        name: ANSIBLE_TEST_1_2
+        remote: openvpn.test.ansibleguy.net:24000
+        protocol: tcp
+        mode: tap
+        network_local: 192.168.67.0/29
+        network_remote: 192.168.67.128/29
+        ca: OpenVPN
+        certificate: OpenVPN Client
         mtu: 1420
       register: opn6
       failed_when: >
@@ -169,8 +168,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.openvpn_client:
-        name: 'ANSIBLE_TEST_1_2'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_2
+        state: absent
       register: opn7
       failed_when: >
         opn7.failed or
@@ -188,10 +187,10 @@
     - name: Cleanup
       ansibleguy.opnsense.openvpn_client:
         name: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when: not ansible_check_mode
 
     - name: Listing
@@ -203,7 +202,7 @@
 
 - name: Testing OpenVPN Client with Static Key
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -213,15 +212,15 @@
   tasks:
     - name: Adding dummy key
       ansibleguy.opnsense.openvpn_static_key:
-        name: 'ANSIBLE_TEST_2_1'
+        name: ANSIBLE_TEST_2_1
       when: not ansible_check_mode
 
     - name: Adding 1 with link to static-key
       ansibleguy.opnsense.openvpn_client:
-        name: 'ANSIBLE_TEST_2_1'
-        remote: 'openvpn.test.ansibleguy.net'
-        ca: 'OpenVPN'
-        key: 'ANSIBLE_TEST_2_1'
+        name: ANSIBLE_TEST_2_1
+        remote: openvpn.test.ansibleguy.net
+        ca: OpenVPN
+        key: ANSIBLE_TEST_2_1
       register: opn10
       failed_when: >
         opn10.failed or
@@ -230,12 +229,12 @@
 
     - name: Cleanup
       ansibleguy.opnsense.openvpn_client:
-        name: 'ANSIBLE_TEST_2_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_2_1
+        state: absent
       when: not ansible_check_mode
 
     - name: Cleanup key
       ansibleguy.opnsense.openvpn_static_key:
-        name: 'ANSIBLE_TEST_2_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_2_1
+        state: absent
       when: not ansible_check_mode

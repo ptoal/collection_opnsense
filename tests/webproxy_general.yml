@@ -1,8 +1,7 @@
 ---
-
 - name: WebProxy General Settings
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'webproxy_general'
+      target: webproxy_general
 
   tasks:
     - name: Listing
@@ -28,13 +27,13 @@
 
     - name: Configuring
       ansibleguy.opnsense.webproxy_general:
-        errors: 'custom'
+        errors: custom
         icp_port: 50000
         log: true
         log_store: true
-        log_target: 'file_json'
-        dns_servers: ['192.168.0.1', '192.168.10.1']
-        handling_forwarded_for: 'truncate'
+        log_target: file_json
+        dns_servers: [192.168.0.1, 192.168.10.1]
+        handling_forwarded_for: truncate
         suppress_version: true
       register: opn1
       failed_when: >
@@ -43,14 +42,14 @@
 
     - name: Changing 1
       ansibleguy.opnsense.webproxy_general:
-        errors: 'squid'
+        errors: squid
         icp_port: 30000
         log: true
         log_store: true
-        log_target: 'syslog'
-        log_ignore: ['192.168.50.0/24']
-        email: 'netadmin@ansibleguy.net'
-        handling_forwarded_for: 'truncate'
+        log_target: syslog
+        log_ignore: [192.168.50.0/24]
+        email: netadmin@ansibleguy.net
+        handling_forwarded_for: truncate
         suppress_version: false
       register: opn9
       failed_when: >
@@ -60,14 +59,14 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.webproxy_general:
-        errors: 'squid'
+        errors: squid
         icp_port: 30000
         log: true
         log_store: true
-        log_target: 'syslog'
-        log_ignore: ['192.168.50.0/24']
-        email: 'netadmin@ansibleguy.net'
-        handling_forwarded_for: 'truncate'
+        log_target: syslog
+        log_ignore: [192.168.50.0/24]
+        email: netadmin@ansibleguy.net
+        handling_forwarded_for: truncate
         suppress_version: false
         enabled: false
       register: opn2
@@ -78,14 +77,14 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.webproxy_general:
-        errors: 'squid'
+        errors: squid
         icp_port: 30000
         log: true
         log_store: true
-        log_target: 'syslog'
-        log_ignore: ['192.168.50.0/24']
-        email: 'netadmin@ansibleguy.net'
-        handling_forwarded_for: 'truncate'
+        log_target: syslog
+        log_ignore: [192.168.50.0/24]
+        email: netadmin@ansibleguy.net
+        handling_forwarded_for: truncate
         suppress_version: false
         enabled: false
       register: opn3
@@ -96,14 +95,14 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.webproxy_general:
-        errors: 'squid'
+        errors: squid
         icp_port: 30000
         log: true
         log_store: true
-        log_target: 'syslog'
-        log_ignore: ['192.168.50.0/24']
-        email: 'netadmin@ansibleguy.net'
-        handling_forwarded_for: 'truncate'
+        log_target: syslog
+        log_ignore: [192.168.50.0/24]
+        email: netadmin@ansibleguy.net
+        handling_forwarded_for: truncate
         suppress_version: false
       register: opn4
       failed_when: >

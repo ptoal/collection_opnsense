@@ -1,8 +1,7 @@
 ---
-
 - name: Testing BGP AS Paths
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'frr_bgp_as_path'
+      target: frr_bgp_as_path
 
   tasks:
     - name: Listing
@@ -22,8 +21,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.frr_bgp_as_path:
-        description: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        description: ANSIBLE_TEST_1_1
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -31,19 +30,19 @@
 
     - name: Adding 1 - failing because of invalid number
       ansibleguy.opnsense.frr_bgp_as_path:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         number: 200
-        action: 'permit'
-        as_pattern: 'as-pattern'
+        action: permit
+        as_pattern: as-pattern
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding 1
       ansibleguy.opnsense.frr_bgp_as_path:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         number: 20
-        action: 'permit'
-        as_pattern: 'as-pattern'
+        action: permit
+        as_pattern: as-pattern
       register: opn1
       failed_when: >
         opn1.failed or
@@ -51,10 +50,10 @@
 
     - name: Changing 1
       ansibleguy.opnsense.frr_bgp_as_path:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         number: 25
-        action: 'permit'
-        as_pattern: 'as-pattern-new'
+        action: permit
+        as_pattern: as-pattern-new
       register: opn9
       failed_when: >
         opn9.failed or
@@ -62,10 +61,10 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.frr_bgp_as_path:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         number: 25
-        action: 'permit'
-        as_pattern: 'as-pattern-new'
+        action: permit
+        as_pattern: as-pattern-new
         enabled: false
       register: opn2
       failed_when: >
@@ -75,10 +74,10 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.frr_bgp_as_path:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         number: 25
-        action: 'permit'
-        as_pattern: 'as-pattern-new'
+        action: permit
+        as_pattern: as-pattern-new
         enabled: false
       register: opn3
       failed_when: >
@@ -88,10 +87,10 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.frr_bgp_as_path:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         number: 25
-        action: 'permit'
-        as_pattern: 'as-pattern-new'
+        action: permit
+        as_pattern: as-pattern-new
       register: opn4
       failed_when: >
         opn4.failed or
@@ -100,10 +99,10 @@
 
     - name: Adding 2
       ansibleguy.opnsense.frr_bgp_as_path:
-        description: 'ANSIBLE_TEST_1_2'
+        description: ANSIBLE_TEST_1_2
         number: 80
-        action: 'deny'
-        as_pattern: 'what'
+        action: deny
+        as_pattern: what
       register: opn5
       failed_when: >
         opn5.failed or
@@ -111,10 +110,10 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.frr_bgp_as_path:
-        description: 'ANSIBLE_TEST_1_2'
+        description: ANSIBLE_TEST_1_2
         number: 80
-        action: 'deny'
-        as_pattern: 'what'
+        action: deny
+        as_pattern: what
       register: opn6
       failed_when: >
         opn6.failed or
@@ -123,8 +122,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.frr_bgp_as_path:
-        description: 'ANSIBLE_TEST_1_2'
-        state: 'absent'
+        description: ANSIBLE_TEST_1_2
+        state: absent
       register: opn7
       failed_when: >
         opn7.failed or
@@ -142,10 +141,10 @@
     - name: Cleanup
       ansibleguy.opnsense.frr_bgp_as_path:
         description: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when: not ansible_check_mode
 
     - name: Listing

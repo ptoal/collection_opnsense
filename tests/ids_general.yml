@@ -1,8 +1,7 @@
 ---
-
 - name: Testing IDS General
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'ids_general'
+      target: ids_general
 
   tasks:
     - name: Listing
@@ -29,15 +28,15 @@
 
     - name: Adding 1 - failing because of invalid local-network
       ansibleguy.opnsense.ids_general:
-        interfaces: ['LAN']
+        interfaces: [LAN]
         enabled: true
-        local_networks: ['invalid']
+        local_networks: [invalid]
       register: opn_fail2
       failed_when: not opn_fail2.failed
 
     - name: Adding 1 - failing because of too low packet-size
       ansibleguy.opnsense.ids_general:
-        interfaces: ['LAN']
+        interfaces: [LAN]
         enabled: true
         default_packet_size: 12
       register: opn_fail3
@@ -45,38 +44,38 @@
 
     - name: Adding 1 - failing because of non-existing cron (server-side)
       ansibleguy.opnsense.ids_general:
-        interfaces: ['LAN']
+        interfaces: [LAN]
         enabled: true
-        schedule: 'DOES-NOT-EXIST'
+        schedule: DOES-NOT-EXIST
       register: opn_fail4
       failed_when: not opn_fail4.failed
       when: not ansible_check_mode
 
     - name: Adding 1
       ansibleguy.opnsense.ids_general:
-        interfaces: ['opt1']
+        interfaces: [opt1]
         enabled: true
-        pattern_matcher: 'ac'
-        profile: 'low'
-        local_networks: ['10.0.0.0/16']
-        log_rotate: 'daily'
+        pattern_matcher: ac
+        profile: low
+        local_networks: [10.0.0.0/16]
+        log_rotate: daily
         log_retention: 14
         syslog: true
-        log_level: 'info'
+        log_level: info
 
     - name: Changing 1
       ansibleguy.opnsense.ids_general:
-        interfaces: ['opt1']
+        interfaces: [opt1]
         enabled: true
         block: true
-        pattern_matcher: 'ac-bs'
-        profile: 'medium'
-        local_networks: ['10.0.0.0/16']
-        log_rotate: 'daily'
+        pattern_matcher: ac-bs
+        profile: medium
+        local_networks: [10.0.0.0/16]
+        log_rotate: daily
         log_retention: 10
         syslog: true
         syslog_output: true
-        log_level: 'info'
+        log_level: info
       register: opn9
       failed_when: >
         opn9.failed or
@@ -84,17 +83,17 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.ids_general:
-        interfaces: ['opt1']
+        interfaces: [opt1]
         enabled: false
         block: true
-        pattern_matcher: 'ac-bs'
-        profile: 'medium'
-        local_networks: ['10.0.0.0/16']
-        log_rotate: 'daily'
+        pattern_matcher: ac-bs
+        profile: medium
+        local_networks: [10.0.0.0/16]
+        log_rotate: daily
         log_retention: 10
         syslog: true
         syslog_output: true
-        log_level: 'info'
+        log_level: info
       register: opn2
       failed_when: >
         opn2.failed or
@@ -103,17 +102,17 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.ids_general:
-        interfaces: ['opt1']
+        interfaces: [opt1]
         enabled: false
         block: true
-        pattern_matcher: 'ac-bs'
-        profile: 'medium'
-        local_networks: ['10.0.0.0/16']
-        log_rotate: 'daily'
+        pattern_matcher: ac-bs
+        profile: medium
+        local_networks: [10.0.0.0/16]
+        log_rotate: daily
         log_retention: 10
         syslog: true
         syslog_output: true
-        log_level: 'info'
+        log_level: info
       register: opn3
       failed_when: >
         opn3.failed or
@@ -122,16 +121,16 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.ids_general:
-        interfaces: ['opt1']
+        interfaces: [opt1]
         block: true
-        pattern_matcher: 'ac-bs'
-        profile: 'medium'
-        local_networks: ['10.0.0.0/16']
-        log_rotate: 'daily'
+        pattern_matcher: ac-bs
+        profile: medium
+        local_networks: [10.0.0.0/16]
+        log_rotate: daily
         log_retention: 10
         syslog: true
         syslog_output: true
-        log_level: 'info'
+        log_level: info
       register: opn4
       failed_when: >
         opn4.failed or
@@ -140,6 +139,6 @@
 
     - name: Cleanup
       ansibleguy.opnsense.ids_general:
-        interfaces: ['opt1']
+        interfaces: [opt1]
         enabled: false
       when: not ansible_check_mode

@@ -1,8 +1,7 @@
 ---
-
 - name: Testing stuff
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -11,7 +10,7 @@
       # match_fields: ['description']
 
     ansibleguy.opnsense.list:
-      target: '_tmpl_obj'
+      target: _tmpl_obj
 
   tasks:
     - name: Listing
@@ -24,7 +23,7 @@
     - name: Removing - does not exist
       ansibleguy.opnsense.list:
 
-        state: 'absent'
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -32,20 +31,19 @@
 
     - name: Adding 1 - failing because of invalid value
       ansibleguy.opnsense.list:
-        field1: 'INVALID-IP'
+        field1: INVALID-IP
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding 1 - failing because of invalid domain
       ansibleguy.opnsense.list:
-        field1: '!INVALID-DOMAIN!'
-        field2: 'INVALID-IP'
+        field1: "!INVALID-DOMAIN!"
+        field2: INVALID-IP
       register: opn_fail2
       failed_when: not opn_fail2.failed
 
     - name: Adding 1
       ansibleguy.opnsense.list:
-
       register: opn1
       failed_when: >
         opn1.failed or
@@ -53,7 +51,6 @@
 
     - name: Changing 1
       ansibleguy.opnsense.list:
-
       register: opn9
       failed_when: >
         opn9.failed or
@@ -81,7 +78,6 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.list:
-
       register: opn4
       failed_when: >
         opn4.failed or
@@ -90,7 +86,6 @@
 
     - name: Adding 2
       ansibleguy.opnsense.list:
-
       register: opn5
       failed_when: >
         opn5.failed or
@@ -98,7 +93,6 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.list:
-
       register: opn6
       failed_when: >
         opn6.failed or
@@ -108,7 +102,7 @@
     - name: Removing 2
       ansibleguy.opnsense.list:
 
-        state: 'absent'
+        state: absent
       register: opn7
       failed_when: >
         opn7.failed or
@@ -126,10 +120,10 @@
     - name: Cleanup
       ansibleguy.opnsense.list:
 
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when: not ansible_check_mode
 
     - name: Listing

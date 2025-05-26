@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Nginx upstream server
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'nginx_upstream_server'
+      target: nginx_upstream_server
 
   tasks:
     - name: Listing
@@ -22,8 +21,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.nginx_upstream_server:
-        name: 'ANSIBLE@TEST1'
-        state: 'absent'
+        name: ANSIBLE@TEST1
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -31,20 +30,20 @@
 
     - name: Adding 1 - failing because of missing server
       ansibleguy.opnsense.nginx_upstream_server:
-        name: 'ANSIBLE@TEST1'
+        name: ANSIBLE@TEST1
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding 1 - failing because of missing port
       ansibleguy.opnsense.nginx_upstream_server:
-        name: 'ANSIBLE@TEST1'
+        name: ANSIBLE@TEST1
         server: 192.168.1.1
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding 1 - failing because of missing priority
       ansibleguy.opnsense.nginx_upstream_server:
-        name: 'ANSIBLE@TEST1'
+        name: ANSIBLE@TEST1
         server: 192.168.1.1
         port: 80
       register: opn_fail1
@@ -52,14 +51,14 @@
 
     - name: Adding 1 - should succeed
       ansibleguy.opnsense.nginx_upstream_server:
-        name: 'ANSIBLE@TEST1'
+        name: ANSIBLE@TEST1
         server: 192.168.1.1
         port: 80
         priority: 1
 
     - name: Adding 1 - should succeed and not change
       ansibleguy.opnsense.nginx_upstream_server:
-        name: 'ANSIBLE@TEST1'
+        name: ANSIBLE@TEST1
         server: 192.168.1.1
         port: 80
         priority: 1
@@ -71,6 +70,6 @@
 
     - name: Remove 1 - should succeed
       ansibleguy.opnsense.nginx_upstream_server:
-        name: 'ANSIBLE@TEST1'
-        state: 'absent'
+        name: ANSIBLE@TEST1
+        state: absent
       when: not ansible_check_mode

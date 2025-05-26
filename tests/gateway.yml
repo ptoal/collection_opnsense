@@ -1,12 +1,11 @@
 ---
-
 # NOTE:
 #   The gateway tests will not work correctly if the LAN network mismatches.
 #   You can provide your GW IPs via env-vars: `TEST_FIREWALL_GW1` and `TEST_FIREWALL_GW2`
 
 - name: Testing Gateways
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -14,7 +13,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'gateway'
+      target: gateway
 
   vars:
     gw:
@@ -24,8 +23,8 @@
   tasks:
     - name: Removing - does not exist
       ansibleguy.opnsense.gateway:
-        name: 'Test_GW'
-        state: 'absent'
+        name: Test_GW
+        state: absent
       register: opn3
       failed_when: >
         opn3.failed or
@@ -33,8 +32,8 @@
 
     - name: Adding 1
       ansibleguy.opnsense.gateway:
-        name: 'ANSIBLE_TEST_1'
-        interface: 'lan'
+        name: ANSIBLE_TEST_1
+        interface: lan
         gateway: "{{ gw.ip1 }}"
       register: opn4
       failed_when: >
@@ -43,9 +42,9 @@
 
     - name: Adding 2
       ansibleguy.opnsense.gateway:
-        name: 'ANSIBLE_TEST_2'
-        description: 'xyz'
-        interface: 'lan'
+        name: ANSIBLE_TEST_2
+        description: xyz
+        interface: lan
         gateway: "{{ gw.ip2 }}"
       register: opn5
       failed_when: >
@@ -54,8 +53,8 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.gateway:
-        name: 'ANSIBLE_TEST_1'
-        interface: 'lan'
+        name: ANSIBLE_TEST_1
+        interface: lan
         gateway: "{{ gw.ip1 }}"
         enabled: false
       register: opn6
@@ -66,8 +65,8 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.gateway:
-        name: 'ANSIBLE_TEST_1'
-        interface: 'lan'
+        name: ANSIBLE_TEST_1
+        interface: lan
         gateway: "{{ gw.ip1 }}"
         enabled: false
       register: opn7
@@ -75,8 +74,8 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.gateway:
-        name: 'ANSIBLE_TEST_1'
-        interface: 'lan'
+        name: ANSIBLE_TEST_1
+        interface: lan
         gateway: "{{ gw.ip1 }}"
       register: opn8
       failed_when: >
@@ -95,10 +94,10 @@
     - name: Cleanup
       ansibleguy.opnsense.gateway:
         name: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1'
-        - 'ANSIBLE_TEST_2'
+        - ANSIBLE_TEST_1
+        - ANSIBLE_TEST_2
 
     - name: Listing gateways
       ansibleguy.opnsense.list:

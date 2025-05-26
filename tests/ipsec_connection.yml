@@ -1,8 +1,7 @@
 ---
-
 - name: Testing IPSec tunnels/connections
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'ipsec_connection'
+      target: ipsec_connection
 
   tasks:
     - name: Listing
@@ -22,8 +21,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.ipsec_connection:
-        name: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_1
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -31,18 +30,18 @@
 
     - name: Adding 1 - failing because of invalid proposal (server-side)
       ansibleguy.opnsense.ipsec_connection:
-        name: 'ANSIBLE_TEST_1_1'
-        proposals: 'INVALID-IP'
+        name: ANSIBLE_TEST_1_1
+        proposals: INVALID-IP
       register: opn_fail1
       failed_when: not opn_fail1.failed
       when: not ansible_check_mode
 
     - name: Adding 1
       ansibleguy.opnsense.ipsec_connection:
-        name: 'ANSIBLE_TEST_1_1'
-        version: 'ikev2'
-        unique: 'replace'
-        proposals: ['default', 'aes256-sha256-modp2048', 'aes256gcm16-sha512-modp2048']
+        name: ANSIBLE_TEST_1_1
+        version: ikev2
+        unique: replace
+        proposals: [default, aes256-sha256-modp2048, aes256gcm16-sha512-modp2048]
       register: opn1
       failed_when: >
         opn1.failed or
@@ -50,10 +49,10 @@
 
     - name: Adding 1 - nothing changed
       ansibleguy.opnsense.ipsec_connection:
-        name: 'ANSIBLE_TEST_1_1'
-        version: 'ikev2'
-        unique: 'replace'
-        proposals: ['default', 'aes256-sha256-modp2048', 'aes256gcm16-sha512-modp2048']
+        name: ANSIBLE_TEST_1_1
+        version: ikev2
+        unique: replace
+        proposals: [default, aes256-sha256-modp2048, aes256gcm16-sha512-modp2048]
       register: opn2
       failed_when: >
         opn2.failed or
@@ -62,9 +61,9 @@
 
     - name: Changing 1
       ansibleguy.opnsense.ipsec_connection:
-        name: 'ANSIBLE_TEST_1_1'
-        unique: 'replace'
-        proposals: 'aes256gcm16-sha512-modp2048'
+        name: ANSIBLE_TEST_1_1
+        unique: replace
+        proposals: aes256gcm16-sha512-modp2048
         reauth_seconds: 3600
         keying_tries: 5
       register: opn3
@@ -74,9 +73,9 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.ipsec_connection:
-        name: 'ANSIBLE_TEST_1_1'
-        unique: 'replace'
-        proposals: 'aes256gcm16-sha512-modp2048'
+        name: ANSIBLE_TEST_1_1
+        unique: replace
+        proposals: aes256gcm16-sha512-modp2048
         reauth_seconds: 3600
         keying_tries: 5
         enabled: false
@@ -88,9 +87,9 @@
 
     - name: Disabling 1 - nothing changed (w/ module alias)
       ansibleguy.opnsense.ipsec_tunnel:
-        name: 'ANSIBLE_TEST_1_1'
-        unique: 'replace'
-        proposals: 'aes256gcm16-sha512-modp2048'
+        name: ANSIBLE_TEST_1_1
+        unique: replace
+        proposals: aes256gcm16-sha512-modp2048
         reauth_seconds: 3600
         keying_tries: 5
         enabled: false
@@ -98,9 +97,9 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.ipsec_connection:
-        name: 'ANSIBLE_TEST_1_1'
-        unique: 'replace'
-        proposals: 'aes256gcm16-sha512-modp2048'
+        name: ANSIBLE_TEST_1_1
+        unique: replace
+        proposals: aes256gcm16-sha512-modp2048
         reauth_seconds: 3600
         keying_tries: 5
         enabled: false
@@ -112,9 +111,9 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.ipsec_connection:
-        name: 'ANSIBLE_TEST_1_1'
-        unique: 'replace'
-        proposals: 'aes256gcm16-sha512-modp2048'
+        name: ANSIBLE_TEST_1_1
+        unique: replace
+        proposals: aes256gcm16-sha512-modp2048
         reauth_seconds: 3600
         keying_tries: 5
       register: opn6
@@ -125,9 +124,9 @@
 
     - name: Adding 2
       ansibleguy.opnsense.ipsec_connection:
-        name: 'ANSIBLE_TEST_1_2'
-        unique: 'never'
-        version: 'ikev1'
+        name: ANSIBLE_TEST_1_2
+        unique: never
+        version: ikev1
         reauth_seconds: 7200
         dpd_timeout_seconds: 7200
         dpd_delay_seconds: 7200
@@ -137,8 +136,8 @@
         encapsulation: true
         mobike: false
         aggressive: true
-        local_addresses: ['192.168.1.1']
-        remote_addresses: ['192.168.2.1', '192.168.3.1']
+        local_addresses: [192.168.1.1]
+        remote_addresses: [192.168.2.1, 192.168.3.1]
       register: opn7
       failed_when: >
         opn7.failed or
@@ -146,9 +145,9 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.ipsec_connection:
-        name: 'ANSIBLE_TEST_1_2'
-        unique: 'never'
-        version: 'ikev1'
+        name: ANSIBLE_TEST_1_2
+        unique: never
+        version: ikev1
         reauth_seconds: 7200
         dpd_timeout_seconds: 7200
         dpd_delay_seconds: 7200
@@ -158,8 +157,8 @@
         encapsulation: true
         mobike: false
         aggressive: true
-        local_addresses: ['192.168.1.1']
-        remote_addresses: ['192.168.2.1', '192.168.3.1']
+        local_addresses: [192.168.1.1]
+        remote_addresses: [192.168.2.1, 192.168.3.1]
       register: opn8
       failed_when: >
         opn8.failed or
@@ -168,8 +167,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.ipsec_connection:
-        name: 'ANSIBLE_TEST_1_2'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_2
+        state: absent
       register: opn9
       failed_when: >
         opn9.failed or
@@ -187,10 +186,10 @@
     - name: Cleanup
       ansibleguy.opnsense.ipsec_connection:
         name: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when: not ansible_check_mode
 
     - name: Listing
@@ -203,7 +202,7 @@
 
 - name: Testing IPSec connection to pool linking
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -213,20 +212,20 @@
   tasks:
     - name: Adding dummy pool 1
       ansibleguy.opnsense.ipsec_pool:
-        name: 'ANSIBLE_TEST_2_1'
-        network: '192.168.2.0/29'
+        name: ANSIBLE_TEST_2_1
+        network: 192.168.2.0/29
       when: not ansible_check_mode
 
     - name: Adding dummy pool 2
       ansibleguy.opnsense.ipsec_pool:
-        name: 'ANSIBLE_TEST_2_2'
-        network: '192.168.3.0/29'
+        name: ANSIBLE_TEST_2_2
+        network: 192.168.3.0/29
       when: not ansible_check_mode
 
     - name: Adding connection linked to pool
       ansibleguy.opnsense.ipsec_connection:
-        name: 'ANSIBLE_TEST_2_1'
-        pools: ['ANSIBLE_TEST_2_1', 'ANSIBLE_TEST_2_2']
+        name: ANSIBLE_TEST_2_1
+        pools: [ANSIBLE_TEST_2_1, ANSIBLE_TEST_2_2]
       register: opn11
       failed_when: >
         opn11.failed or
@@ -235,8 +234,8 @@
 
     - name: Nothing changed
       ansibleguy.opnsense.ipsec_connection:
-        name: 'ANSIBLE_TEST_2_1'
-        pools: ['ANSIBLE_TEST_2_2', 'ANSIBLE_TEST_2_1']
+        name: ANSIBLE_TEST_2_1
+        pools: [ANSIBLE_TEST_2_2, ANSIBLE_TEST_2_1]
       register: opn13
       failed_when: >
         opn13.failed or
@@ -245,8 +244,8 @@
 
     - name: Changing linked pools
       ansibleguy.opnsense.ipsec_connection:
-        name: 'ANSIBLE_TEST_2_1'
-        pools: ['ANSIBLE_TEST_2_1']
+        name: ANSIBLE_TEST_2_1
+        pools: [ANSIBLE_TEST_2_1]
       register: opn12
       failed_when: >
         opn12.failed or
@@ -255,15 +254,15 @@
 
     - name: Cleanup connection
       ansibleguy.opnsense.ipsec_connection:
-        name: 'ANSIBLE_TEST_2_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_2_1
+        state: absent
       when: not ansible_check_mode
 
     - name: Cleanup pools
       ansibleguy.opnsense.ipsec_pool:
         name: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_2_1'
-        - 'ANSIBLE_TEST_2_2'
+        - ANSIBLE_TEST_2_1
+        - ANSIBLE_TEST_2_2
       when: not ansible_check_mode

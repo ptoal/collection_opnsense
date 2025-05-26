@@ -1,8 +1,7 @@
 ---
-
 - name: Testing FRR-OSPF general settings
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'frr_ospf_general'
+      target: frr_ospf_general
 
   tasks:
     - name: Listing
@@ -34,9 +33,9 @@
 
     - name: Configuring
       ansibleguy.opnsense.frr_ospf_general:
-        id: '10.0.0.1'
+        id: 10.0.0.1
         cost: 250
-        passive_ints: ['lan']
+        passive_ints: [lan]
         originate: true
         enabled: true
       register: opn1
@@ -46,9 +45,9 @@
 
     - name: Changing
       ansibleguy.opnsense.frr_ospf_general:
-        id: '10.0.1.1'
+        id: 10.0.1.1
         cost: 300
-        passive_ints: ['lan']
+        passive_ints: [lan]
         originate: true
         originate_metric: 1000
         enabled: true
@@ -59,9 +58,9 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.frr_ospf_general:
-        id: '10.0.1.1'
+        id: 10.0.1.1
         cost: 300
-        passive_ints: ['lan']
+        passive_ints: [lan]
         originate: true
         originate_metric: 1000
         enabled: false
@@ -73,9 +72,9 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.frr_ospf_general:
-        id: '10.0.1.1'
+        id: 10.0.1.1
         cost: 300
-        passive_ints: ['lan']
+        passive_ints: [lan]
         originate: true
         originate_metric: 1000
         enabled: false
@@ -87,9 +86,9 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.frr_ospf_general:
-        id: '10.0.1.1'
+        id: 10.0.1.1
         cost: 300
-        passive_ints: ['lan']
+        passive_ints: [lan]
         originate: true
         originate_metric: 1000
       register: opn4

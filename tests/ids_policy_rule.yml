@@ -1,8 +1,7 @@
 ---
-
 - name: Testing IDS Policy-Rule
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'ids_policy_rule'
+      target: ids_policy_rule
 
   tasks:
     - name: Listing
@@ -23,12 +22,12 @@
     - name: Adding 1
       ansibleguy.opnsense.ids_policy_rule:
         sid: 2400000
-        action: 'alert'
+        action: alert
 
     - name: Adding 1 - nothing changed
       ansibleguy.opnsense.ids_policy_rule:
         sid: 2400000
-        action: 'alert'
+        action: alert
       register: opn6
       failed_when: >
         opn6.failed or
@@ -38,7 +37,7 @@
     - name: Changing 1
       ansibleguy.opnsense.ids_policy_rule:
         sid: 2400000
-        action: 'drop'
+        action: drop
       register: opn1
       failed_when: >
         opn1.failed or
@@ -48,7 +47,7 @@
     - name: Changing 1 - nothing changed
       ansibleguy.opnsense.ids_policy_rule:
         sid: 2400000
-        action: 'drop'
+        action: drop
       register: opn5
       failed_when: >
         opn5.failed or
@@ -58,7 +57,7 @@
     - name: Disabling 1
       ansibleguy.opnsense.ids_policy_rule:
         sid: 2400000
-        action: 'drop'
+        action: drop
         enabled: false
       register: opn2
       failed_when: >
@@ -69,7 +68,7 @@
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.ids_policy_rule:
         sid: 2400000
-        action: 'drop'
+        action: drop
         enabled: false
       register: opn3
       failed_when: >
@@ -80,7 +79,7 @@
     - name: Enabling 1
       ansibleguy.opnsense.ids_policy_rule:
         sid: 2400000
-        action: 'drop'
+        action: drop
         enabled: true
       register: opn4
       failed_when: >

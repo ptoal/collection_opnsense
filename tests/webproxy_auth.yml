@@ -1,8 +1,7 @@
 ---
-
 - name: WebProxy Forward-Auth Settings
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'webproxy_auth'
+      target: webproxy_auth
 
   tasks:
     - name: Listing
@@ -22,8 +21,8 @@
 
     - name: Configuring
       ansibleguy.opnsense.webproxy_auth:
-        method: 'Local Database'
-        prompt: 'AnsibleGuy Test'
+        method: Local Database
+        prompt: AnsibleGuy Test
         ttl_h: 4
         processes: 8
       register: opn1
@@ -33,8 +32,8 @@
 
     - name: Changing 1
       ansibleguy.opnsense.webproxy_auth:
-        method: 'Local Database'
-        prompt: 'AnsibleGuy Test NEW'
+        method: Local Database
+        prompt: AnsibleGuy Test NEW
         ttl_h: 3
         processes: 6
       register: opn2
@@ -45,8 +44,8 @@
 
     - name: Changing 1 - nothing changed
       ansibleguy.opnsense.webproxy_auth:
-        method: 'Local Database'
-        prompt: 'AnsibleGuy Test NEW'
+        method: Local Database
+        prompt: AnsibleGuy Test NEW
         ttl_h: 3
         processes: 6
       register: opn3

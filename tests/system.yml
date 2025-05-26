@@ -1,8 +1,7 @@
 ---
-
 - name: Testing System
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     ansibleguy.opnsense.system:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -12,11 +11,11 @@
   tasks:
     - name: Fetching updates
       ansibleguy.opnsense.system:
-        action: 'update'
+        action: update
 
     - name: Upgrade with wait - failing because not forced
       ansibleguy.opnsense.system:
-        action: 'upgrade'
+        action: upgrade
         wait: true
         timeout: 120
         poll_interval: 2
@@ -25,7 +24,7 @@
 
     - name: Upgrade with wait
       ansibleguy.opnsense.system:
-        action: 'upgrade'
+        action: upgrade
         force_upgrade: true
         wait: true
         timeout: 120
@@ -38,7 +37,7 @@
 
     - name: Rebooting with wait
       ansibleguy.opnsense.system:
-        action: 'reboot'
+        action: reboot
         wait: true
         timeout: 90
         poll_interval: 2

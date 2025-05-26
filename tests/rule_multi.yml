@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Multiple Rules
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,11 +9,11 @@
       ssl_verify: false
 
     ansibleguy.opnsense.rule_multi:
-      match_fields: ['description']
-      key_field: 'description'
+      match_fields: [description]
+      key_field: description
 
     ansibleguy.opnsense.list:
-      target: 'rule'
+      target: rule
 
   tasks:
     - name: Removing - do not exist
@@ -26,7 +25,7 @@
           ANSIBLE_TEST_2_4:
           ANSIBLE_TEST_2_5:
           ANSIBLE_TEST_2_6:
-        state: 'absent'
+        state: absent
       register: opn1
       failed_when: >
         opn1.failed or
@@ -36,20 +35,20 @@
       ansibleguy.opnsense.rule_multi:
         rules:
           ANSIBLE_TEST_2_1:
-            source_net: '192.168.1.0/24'
+            source_net: 192.168.1.0/24
             destination_invert: true
-            destination_net: '10.0.0.0/8'
-            action: 'block'
+            destination_net: 10.0.0.0/8
+            action: block
           ANSIBLE_TEST_2_2:
-            source_net: '192.168.0.0/24'
-            destination_net: '192.168.10.0/24'
+            source_net: 192.168.0.0/24
+            destination_net: 192.168.10.0/24
             destination_port: 443
-            protocol: 'TCP'
-            interface: 'lan'
+            protocol: TCP
+            interface: lan
           ANSIBLE_TEST_2_3:
             source_invert: true
-            source_net: 'bogons'
-            action: 'block'
+            source_net: bogons
+            action: block
       register: opn2
       failed_when: >
         opn2.failed or
@@ -59,21 +58,21 @@
       ansibleguy.opnsense.rule_multi:
         rules:
           ANSIBLE_TEST_2_1:
-            source_net: '192.168.1.0/24'
+            source_net: 192.168.1.0/24
             destination_invert: true
-            destination_net: '10.1.0.0/8'
-            action: 'block'
+            destination_net: 10.1.0.0/8
+            action: block
           ANSIBLE_TEST_2_2:
-            source_net: '192.168.0.0/24'
-            destination_net: '192.168.10.0/24'
+            source_net: 192.168.0.0/24
+            destination_net: 192.168.10.0/24
             destination_port: 8080
-            protocol: 'TCP'
-            interface: ['lan']
+            protocol: TCP
+            interface: [lan]
           ANSIBLE_TEST_2_3:
             source_invert: true
-            source_net: 'bogons'
-            ip_protocol: 'inet6'
-            action: 'block'
+            source_net: bogons
+            ip_protocol: inet6
+            action: block
       when: not ansible_check_mode
       register: opn3
       failed_when: >
@@ -84,21 +83,21 @@
       ansibleguy.opnsense.rule_multi:
         rules:
           ANSIBLE_TEST_2_1:
-            source_net: '192.168.1.0/24'
+            source_net: 192.168.1.0/24
             destination_invert: true
-            destination_net: '10.1.0.0/8'
-            action: 'block'
+            destination_net: 10.1.0.0/8
+            action: block
           ANSIBLE_TEST_2_2:
-            source_net: '192.168.0.0/24'
-            destination_net: '192.168.10.0/24'
+            source_net: 192.168.0.0/24
+            destination_net: 192.168.10.0/24
             destination_port: 8080
-            protocol: 'TCP'
-            interface: ['lan']
+            protocol: TCP
+            interface: [lan]
           ANSIBLE_TEST_2_3:
             source_invert: true
-            source_net: 'bogons'
-            ip_protocol: 'inet6'
-            action: 'block'
+            source_net: bogons
+            ip_protocol: inet6
+            action: block
       when: not ansible_check_mode
       register: opn7
       failed_when: >
@@ -109,8 +108,8 @@
       ansibleguy.opnsense.rule_multi:
         rules:
           ANSIBLE_TEST_2_4:
-            interface: 'opt1'
-            protocol: 'ICMP'
+            interface: opt1
+            protocol: ICMP
       when: not ansible_check_mode
       register: opn8
       failed_when: >
@@ -121,8 +120,8 @@
       ansibleguy.opnsense.rule_multi:
         rules:
           ANSIBLE_TEST_2_4:
-            interface: 'opt1'
-            protocol: 'ICMP'
+            interface: opt1
+            protocol: ICMP
       when: not ansible_check_mode
       register: opn9
       failed_when: >
@@ -134,7 +133,7 @@
         rules:
           ANSIBLE_TEST_2_1:
           ANSIBLE_TEST_2_2:
-            destination_port: 'XXX'
+            destination_port: XXX
           ANSIBLE_TEST_2_3:
       register: opn6
       failed_when: not opn6.failed
@@ -147,7 +146,7 @@
             allow_opts: true
             tcp_flags: syn
             tcp_flags_clear: ack
-            protocol: 'TCP'
+            protocol: TCP
           ANSIBLE_TEST_2_6:
             protocol: TCP
             state_type: sloppy
@@ -173,7 +172,7 @@
             allow_opts: true
             tcp_flags: syn
             tcp_flags_clear: ack
-            protocol: 'TCP'
+            protocol: TCP
           ANSIBLE_TEST_2_6:
             protocol: TCP
             state_type: sloppy
@@ -233,7 +232,7 @@
           ANSIBLE_TEST_2_4:
           ANSIBLE_TEST_2_5:
           ANSIBLE_TEST_2_6:
-        state: 'absent'
+        state: absent
 
     - name: Checking cleanup
       ansibleguy.opnsense.list:
