@@ -1,8 +1,7 @@
 ---
-
 - name: Testing IPSec Manual SPD
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'ipsec_manual_spd'
+      target: ipsec_manual_spd
 
   tasks:
     - name: Listing
@@ -22,8 +21,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.ipsec_manual_spd:
-        description: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        description: ANSIBLE_TEST_1_1
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -31,7 +30,7 @@
 
     - name: Adding 1 - failing because of invalid request_id
       ansibleguy.opnsense.ipsec_manual_spd:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         request_id: 67890
         source: 192.168.1.0/24
       register: opn_fail1
@@ -39,8 +38,8 @@
 
     - name: Adding 1 - failing because of invalid connection_child
       ansibleguy.opnsense.ipsec_manual_spd:
-        description: 'ANSIBLE_TEST_1_1'
-        connection_child: 'DOESNOTEXIST'
+        description: ANSIBLE_TEST_1_1
+        connection_child: DOESNOTEXIST
         source: 192.168.1.0/24
       register: opn_fail2
       failed_when: not opn_fail2.failed
@@ -48,7 +47,7 @@
 
     - name: Adding 1
       ansibleguy.opnsense.ipsec_manual_spd:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         request_id: 12345
         source: 192.168.1.0/24
       register: opn1
@@ -58,7 +57,7 @@
 
     - name: Adding 1 - nothing changed
       ansibleguy.opnsense.ipsec_manual_spd:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         request_id: 12345
         source: 192.168.1.0/24
       register: opn2
@@ -69,7 +68,7 @@
 
     - name: Changing 1
       ansibleguy.opnsense.ipsec_manual_spd:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         request_id: 1234
         source: 192.168.2.0/24
         destination: 10.10.10.0/24
@@ -80,7 +79,7 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.ipsec_manual_spd:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         request_id: 1234
         source: 192.168.2.0/24
         destination: 10.10.10.0/24
@@ -93,7 +92,7 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.ipsec_manual_spd:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         request_id: 1234
         source: 192.168.2.0/24
         destination: 10.10.10.0/24
@@ -106,7 +105,7 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.ipsec_manual_spd:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         request_id: 1234
         source: 192.168.2.0/24
         destination: 10.10.10.0/24
@@ -121,20 +120,20 @@
       block:
         - name: Adding dummy connection
           ansibleguy.opnsense.ipsec_connection:
-            name: 'ANSIBLE_TEST_3_1'
+            name: ANSIBLE_TEST_3_1
 
         - name: Adding dummy child
           ansibleguy.opnsense.ipsec_child:
-            name: 'ANSIBLE_TEST_2_1'
-            connection: 'ANSIBLE_TEST_3_1'
-            local_net: '192.168.1.0/28'
-            remote_net: '192.168.2.0/28'
+            name: ANSIBLE_TEST_2_1
+            connection: ANSIBLE_TEST_3_1
+            local_net: 192.168.1.0/28
+            remote_net: 192.168.2.0/28
 
         - name: Adding 2
           ansibleguy.opnsense.ipsec_manual_spd:
-            description: 'ANSIBLE_TEST_1_2'
+            description: ANSIBLE_TEST_1_2
             source: 192.168.1.0/24
-            connection_child: 'ANSIBLE_TEST_3_1 - ANSIBLE_TEST_2_1'
+            connection_child: ANSIBLE_TEST_3_1 - ANSIBLE_TEST_2_1
             debug: true
           register: opn7
           failed_when: >
@@ -143,9 +142,9 @@
 
         - name: Adding 2 - nothing changed
           ansibleguy.opnsense.ipsec_manual_spd:
-            description: 'ANSIBLE_TEST_1_2'
+            description: ANSIBLE_TEST_1_2
             source: 192.168.1.0/24
-            connection_child: 'ANSIBLE_TEST_3_1 - ANSIBLE_TEST_2_1'
+            connection_child: ANSIBLE_TEST_3_1 - ANSIBLE_TEST_2_1
           register: opn8
           failed_when: >
             opn8.failed or
@@ -153,8 +152,8 @@
 
         - name: Removing 2
           ansibleguy.opnsense.ipsec_manual_spd:
-            description: 'ANSIBLE_TEST_1_2'
-            state: 'absent'
+            description: ANSIBLE_TEST_1_2
+            state: absent
           register: opn9
           failed_when: >
             opn9.failed or
@@ -162,13 +161,13 @@
 
         - name: Cleanup dummy child
           ansibleguy.opnsense.ipsec_child:
-            name: 'ANSIBLE_TEST_2_1'
-            state: 'absent'
+            name: ANSIBLE_TEST_2_1
+            state: absent
 
         - name: Cleanup dummy connection
           ansibleguy.opnsense.ipsec_connection:
-            name: 'ANSIBLE_TEST_3_1'
-            state: 'absent'
+            name: ANSIBLE_TEST_3_1
+            state: absent
 
     - name: Listing
       ansibleguy.opnsense.list:
@@ -181,10 +180,10 @@
     - name: Cleanup
       ansibleguy.opnsense.ipsec_manual_spd:
         description: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when: not ansible_check_mode
 
     - name: Listing

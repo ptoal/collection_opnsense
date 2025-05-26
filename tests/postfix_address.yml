@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Postfix Address
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'postfix_address'
+      target: postfix_address
 
   tasks:
     - name: Listing
@@ -22,8 +21,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.postfix_address:
-        address: 'ANSIBLE_TEST_99_9'
-        state: 'absent'
+        address: ANSIBLE_TEST_99_9
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -133,7 +132,7 @@
     - name: Cleanup
       ansibleguy.opnsense.postfix_address:
         address: alice@example.com
-        state: 'absent'
+        state: absent
       when: not ansible_check_mode
 
     - name: Listing

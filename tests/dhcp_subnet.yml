@@ -1,8 +1,7 @@
 ---
-
 - name: DHCP Subnet
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'dhcp_subnet'
+      target: dhcp_subnet
 
   tasks:
     - name: Listing
@@ -22,8 +21,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.dhcp_subnet:
-        subnet: '192.168.88.0/24'
-        state: 'absent'
+        subnet: 192.168.88.0/24
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -38,7 +37,7 @@
 
     - name: Adding 1
       ansibleguy.opnsense.dhcp_subnet:
-        subnet: '192.168.88.0/24'
+        subnet: 192.168.88.0/24
       register: opn1
       failed_when: >
         opn1.failed or
@@ -46,14 +45,14 @@
 
     - name: Adding 2
       ansibleguy.opnsense.dhcp_subnet:
-        subnet: '192.168.89.0/24'
+        subnet: 192.168.89.0/24
         pools:
-          - '192.168.89.10-192.168.89.20'
-          - '192.168.89.40-192.168.89.50'
+          - 192.168.89.10-192.168.89.20
+          - 192.168.89.40-192.168.89.50
         auto_options: false
-        gateway: '192.168.89.200'
-        dns: '1.1.1.1'
-        domain: 'test.lan'
+        gateway: 192.168.89.200
+        dns: 1.1.1.1
+        domain: test.lan
       register: opn2
       failed_when: >
         opn2.failed or
@@ -61,17 +60,17 @@
 
     - name: Changing 2
       ansibleguy.opnsense.dhcp_subnet:
-        subnet: '192.168.89.0/24'
+        subnet: 192.168.89.0/24
         pools:
-          - '192.168.89.40-192.168.89.60'
-          - '192.168.89.110-192.168.89.120'
+          - 192.168.89.40-192.168.89.60
+          - 192.168.89.110-192.168.89.120
         auto_options: false
-        gateway: '192.168.89.240'
-        dns: ['1.1.1.2', '1.0.0.2']
-        domain: 'test.lan'
-        time_servers: '192.168.89.240'
-        tftp_server: '192.168.89.210'
-        tftp_file: 'openwrt.bin'
+        gateway: 192.168.89.240
+        dns: [1.1.1.2, 1.0.0.2]
+        domain: test.lan
+        time_servers: 192.168.89.240
+        tftp_server: 192.168.89.210
+        tftp_file: openwrt.bin
       register: opn3
       failed_when: >
         opn3.failed or
@@ -80,17 +79,17 @@
 
     - name: Changing 2 - Nothing changed
       ansibleguy.opnsense.dhcp_subnet:
-        subnet: '192.168.89.0/24'
+        subnet: 192.168.89.0/24
         pools:
-          - '192.168.89.40-192.168.89.60'
-          - '192.168.89.110-192.168.89.120'
+          - 192.168.89.40-192.168.89.60
+          - 192.168.89.110-192.168.89.120
         auto_options: false
-        gateway: '192.168.89.240'
-        dns: ['1.1.1.2', '1.0.0.2']
-        domain: 'test.lan'
-        time_servers: '192.168.89.240'
-        tftp_server: '192.168.89.210'
-        tftp_file: 'openwrt.bin'
+        gateway: 192.168.89.240
+        dns: [1.1.1.2, 1.0.0.2]
+        domain: test.lan
+        time_servers: 192.168.89.240
+        tftp_server: 192.168.89.210
+        tftp_file: openwrt.bin
       register: opn4
       failed_when: >
         opn4.failed or
@@ -107,7 +106,7 @@
 
     - name: Removing 2
       ansibleguy.opnsense.dhcp_subnet:
-        subnet: '192.168.89.0/24'
+        subnet: 192.168.89.0/24
         state: absent
       register: opn5
       failed_when: >
@@ -118,10 +117,10 @@
     - name: Cleanup
       ansibleguy.opnsense.dhcp_subnet:
         subnet: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - '192.168.88.0/24'
-        - '192.168.89.0/24'
+        - 192.168.88.0/24
+        - 192.168.89.0/24
       when: not ansible_check_mode
 
     - name: Listing

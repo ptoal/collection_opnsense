@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Postfix Headercheck
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'postfix_headercheck'
+      target: postfix_headercheck
 
   tasks:
     - name: Listing
@@ -22,9 +21,9 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.postfix_headercheck:
-        expression: 'ANSIBLE_TEST_99_9'
+        expression: ANSIBLE_TEST_99_9
         filter: WHILE_RECEIVING
-        state: 'absent'
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -32,13 +31,13 @@
 
     - name: Adding 1 - failing because of missing filter
       ansibleguy.opnsense.postfix_headercheck:
-        expression: '/^\s*User-Agent/ IGNORE'
+        expression: /^\s*User-Agent/ IGNORE
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding 1
       ansibleguy.opnsense.postfix_headercheck:
-        expression: '/^\s*User-Agent/ IGNORE'
+        expression: /^\s*User-Agent/ IGNORE
         filter: WHILE_RECEIVING
       register: opn1
       failed_when: >
@@ -47,7 +46,7 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.postfix_headercheck:
-        expression: '/^\s*User-Agent/ IGNORE'
+        expression: /^\s*User-Agent/ IGNORE
         filter: WHILE_RECEIVING
         enabled: false
       register: opn3
@@ -58,7 +57,7 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.postfix_headercheck:
-        expression: '/^\s*User-Agent/ IGNORE'
+        expression: /^\s*User-Agent/ IGNORE
         filter: WHILE_RECEIVING
         enabled: false
       register: opn4
@@ -69,7 +68,7 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.postfix_headercheck:
-        expression: '/^\s*User-Agent/ IGNORE'
+        expression: /^\s*User-Agent/ IGNORE
         filter: WHILE_RECEIVING
       register: opn5
       failed_when: >
@@ -79,7 +78,7 @@
 
     - name: Adding 2
       ansibleguy.opnsense.postfix_headercheck:
-        expression: '/^\s*User-Agent/ IGNORE'
+        expression: /^\s*User-Agent/ IGNORE
         filter: WHILE_DELIVERING
       register: opn6
       failed_when: >
@@ -88,7 +87,7 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.postfix_headercheck:
-        expression: '/^\s*User-Agent/ IGNORE'
+        expression: /^\s*User-Agent/ IGNORE
         filter: WHILE_DELIVERING
       register: opn7
       failed_when: >
@@ -98,9 +97,9 @@
 
     - name: Removing 2
       ansibleguy.opnsense.postfix_headercheck:
-        expression: '/^\s*User-Agent/ IGNORE'
+        expression: /^\s*User-Agent/ IGNORE
         filter: WHILE_DELIVERING
-        state: 'absent'
+        state: absent
       register: opn8
       failed_when: >
         opn8.failed or
@@ -117,9 +116,9 @@
 
     - name: Cleanup
       ansibleguy.opnsense.postfix_headercheck:
-        expression: '/^\s*User-Agent/ IGNORE'
+        expression: /^\s*User-Agent/ IGNORE
         filter: WHILE_RECEIVING
-        state: 'absent'
+        state: absent
       when: not ansible_check_mode
 
     - name: Listing

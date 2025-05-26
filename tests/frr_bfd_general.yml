@@ -1,8 +1,7 @@
 ---
-
 - name: Testing FRR-BFD General
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     ansibleguy.opnsense.frr_bfd_general:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"

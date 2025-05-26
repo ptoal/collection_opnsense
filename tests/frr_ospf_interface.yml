@@ -1,8 +1,7 @@
 ---
-
 - name: Testing FRR-OSPF interfaces
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,10 +9,9 @@
       ssl_verify: false
 
     ansibleguy.opnsense.frr_ospf_interface:
-      match_fields: ['interface']
-
+      match_fields: [interface]
     ansibleguy.opnsense.list:
-      target: 'frr_ospf_interface'
+      target: frr_ospf_interface
 
   tasks:
     - name: Listing
@@ -25,8 +23,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.frr_ospf_interface:
-        interface: 'lan'
-        state: 'absent'
+        interface: lan
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -34,24 +32,24 @@
 
     - name: Adding 1 - failing because of invalid cost
       ansibleguy.opnsense.frr_ospf_interface:
-        interface: 'lan'
-        area: '0.0.0.0'
+        interface: lan
+        area: "0.0.0.0"
         cost: 4300000000
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding 1 - failing because of invalid cost_demoted
       ansibleguy.opnsense.frr_ospf_interface:
-        interface: 'lan'
-        area: '0.0.0.0'
+        interface: lan
+        area: "0.0.0.0"
         field2: 70000
       register: opn_fail2
       failed_when: not opn_fail2.failed
 
     - name: Adding 1
       ansibleguy.opnsense.frr_ospf_interface:
-        interface: 'lan'
-        area: '0.0.0.0'
+        interface: lan
+        area: "0.0.0.0"
         cost: 250
         cost_demoted: 1000
       register: opn1
@@ -61,8 +59,8 @@
 
     - name: Changing 1
       ansibleguy.opnsense.frr_ospf_interface:
-        interface: 'lan'
-        area: '0.0.0.0'
+        interface: lan
+        area: "0.0.0.0"
         cost: 500
         cost_demoted: 2000
       register: opn9
@@ -72,8 +70,8 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.frr_ospf_interface:
-        interface: 'lan'
-        area: '0.0.0.0'
+        interface: lan
+        area: "0.0.0.0"
         cost: 500
         cost_demoted: 2000
         enabled: false
@@ -85,8 +83,8 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.frr_ospf_interface:
-        interface: 'lan'
-        area: '0.0.0.0'
+        interface: lan
+        area: "0.0.0.0"
         cost: 500
         cost_demoted: 2000
         enabled: false
@@ -98,8 +96,8 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.frr_ospf_interface:
-        interface: 'lan'
-        area: '0.0.0.0'
+        interface: lan
+        area: "0.0.0.0"
         cost: 500
         cost_demoted: 2000
       register: opn4
@@ -110,8 +108,8 @@
 
     - name: Adding 2
       ansibleguy.opnsense.frr_ospf_interface:
-        interface: 'opt1'
-        area: '0.0.0.0'
+        interface: opt1
+        area: "0.0.0.0"
         cost: 500
         cost_demoted: 2000
         hello_interval: 7000
@@ -119,8 +117,8 @@
         retransmit_interval: 66
         transmit_delay: 60
         priority: 30
-        network_type: 'point-to-point'
-        auth_type: 'message-digest'
+        network_type: point-to-point
+        auth_type: message-digest
         auth_key: "{{ 'random' | hash('md5') }}"
         auth_key_id: 5
       register: opn5
@@ -130,8 +128,8 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.frr_ospf_interface:
-        interface: 'opt1'
-        area: '0.0.0.0'
+        interface: opt1
+        area: "0.0.0.0"
         cost: 500
         cost_demoted: 2000
         hello_interval: 7000
@@ -139,8 +137,8 @@
         retransmit_interval: 66
         transmit_delay: 60
         priority: 30
-        network_type: 'point-to-point'
-        auth_type: 'message-digest'
+        network_type: point-to-point
+        auth_type: message-digest
         auth_key: "{{ 'random' | hash('md5') }}"
         auth_key_id: 5
       register: opn6
@@ -151,8 +149,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.frr_ospf_interface:
-        interface: 'opt1'
-        state: 'absent'
+        interface: opt1
+        state: absent
       register: opn7
       failed_when: >
         opn7.failed or
@@ -170,10 +168,10 @@
     - name: Cleanup
       ansibleguy.opnsense.frr_ospf_interface:
         interface: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'opt1'
-        - 'lan'
+        - opt1
+        - lan
       when: not ansible_check_mode
 
     - name: Listing

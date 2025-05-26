@@ -1,8 +1,7 @@
 ---
-
 - name: Testing ACME Account
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'acme_account'
+      target: acme_account
 
   tasks:
     - name: Listing
@@ -22,8 +21,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.acme_account:
-        name: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_1
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -31,14 +30,14 @@
 
     - name: Adding 1 - failing because of invalid ca
       ansibleguy.opnsense.acme_account:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         ca: opnsense
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding 1
       ansibleguy.opnsense.acme_account:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         ca: letsencrypt_test
         email: example@example.com
       register: opn1
@@ -48,7 +47,7 @@
 
     - name: Changing 1
       ansibleguy.opnsense.acme_account:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         description: letsencrypt_test
         ca: letsencrypt_test
         email: example@example.com
@@ -59,7 +58,7 @@
 
     - name: Changing 1 - nothing changed
       ansibleguy.opnsense.acme_account:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         description: letsencrypt_test
         ca: letsencrypt_test
         email: example@example.com
@@ -71,7 +70,7 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.acme_account:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         description: letsencrypt_test
         ca: letsencrypt_test
         email: example@example.com
@@ -84,7 +83,7 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.acme_account:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         description: letsencrypt_test
         ca: letsencrypt_test
         email: example@example.com
@@ -97,7 +96,7 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.acme_account:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         description: letsencrypt_test
         ca: letsencrypt_test
         email: example@example.com
@@ -117,10 +116,10 @@
 
     - name: Cleanup
       ansibleguy.opnsense.acme_account:
-        name: '{{ item }}'
-        state: 'absent'
+        name: "{{ item }}"
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
+        - ANSIBLE_TEST_1_1
       when: not ansible_check_mode
 
     - name: Listing

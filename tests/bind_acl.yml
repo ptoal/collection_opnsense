@@ -1,8 +1,7 @@
 ---
-
 - name: Testing BIND ACLs
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'bind_acl'
+      target: bind_acl
 
   tasks:
     - name: Listing
@@ -24,30 +23,30 @@
     - name: Adding - failing because of invalid names
       ansibleguy.opnsense.bind_acl:
         name: "{{ item }}"
-        networks: ['192.168.0.0/24']
+        networks: [192.168.0.0/24]
       register: opn_fail1
       failed_when: not opn_fail1.failed
       loop:
-        - 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-        - 'localhost'
+        - aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        - localhost
 
     - name: Adding - failing because no network was provided
       ansibleguy.opnsense.bind_acl:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
       register: opn_fail2
       failed_when: not opn_fail2.failed
 
     - name: Adding - failing because an invalid network was provided
       ansibleguy.opnsense.bind_acl:
-        name: 'ANSIBLE_TEST_1_1'
-        networks: ['192.168.0.0/258']
+        name: ANSIBLE_TEST_1_1
+        networks: [192.168.0.0/258]
       register: opn_fail3
       failed_when: not opn_fail3.failed
 
     - name: Adding 1
       ansibleguy.opnsense.bind_acl:
-        name: 'ANSIBLE_TEST_1_1'
-        networks: ['192.168.0.0/24']
+        name: ANSIBLE_TEST_1_1
+        networks: [192.168.0.0/24]
       register: opn1
       failed_when: >
         opn1.failed or
@@ -55,8 +54,8 @@
 
     - name: Changing 1
       ansibleguy.opnsense.bind_acl:
-        name: 'ANSIBLE_TEST_1_1'
-        networks: ['192.168.0.0/25']
+        name: ANSIBLE_TEST_1_1
+        networks: [192.168.0.0/25]
       register: opn9
       failed_when: >
         opn9.failed or
@@ -64,8 +63,8 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.bind_acl:
-        name: 'ANSIBLE_TEST_1_1'
-        networks: ['192.168.0.0/25']
+        name: ANSIBLE_TEST_1_1
+        networks: [192.168.0.0/25]
         enabled: false
       register: opn2
       failed_when: >
@@ -75,8 +74,8 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.bind_acl:
-        name: 'ANSIBLE_TEST_1_1'
-        networks: ['192.168.0.0/25']
+        name: ANSIBLE_TEST_1_1
+        networks: [192.168.0.0/25]
         enabled: false
       register: opn3
       failed_when: >
@@ -86,8 +85,8 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.bind_acl:
-        name: 'ANSIBLE_TEST_1_1'
-        networks: ['192.168.0.0/25']
+        name: ANSIBLE_TEST_1_1
+        networks: [192.168.0.0/25]
       register: opn4
       failed_when: >
         opn4.failed or
@@ -96,8 +95,8 @@
 
     - name: Adding 2
       ansibleguy.opnsense.bind_acl:
-        name: 'ANSIBLE_TEST_1_2'
-        networks: ['192.168.0.128/29', '192.168.0.192/29']
+        name: ANSIBLE_TEST_1_2
+        networks: [192.168.0.128/29, 192.168.0.192/29]
       register: opn5
       failed_when: >
         opn5.failed or
@@ -106,8 +105,8 @@
 
     - name: Adding 2 - Nothing changed
       ansibleguy.opnsense.bind_acl:
-        name: 'ANSIBLE_TEST_1_2'
-        networks: ['192.168.0.128/29', '192.168.0.192/29']
+        name: ANSIBLE_TEST_1_2
+        networks: [192.168.0.128/29, 192.168.0.192/29]
       register: opn6
       failed_when: >
         opn6.failed or
@@ -116,8 +115,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.bind_acl:
-        name: 'ANSIBLE_TEST_1_2'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_2
+        state: absent
       register: opn7
       failed_when: >
         opn7.failed or
@@ -135,10 +134,10 @@
     - name: Cleanup
       ansibleguy.opnsense.bind_acl:
         name: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when: not ansible_check_mode
 
     - name: Listing

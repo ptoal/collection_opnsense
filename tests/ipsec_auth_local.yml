@@ -1,8 +1,7 @@
 ---
-
 - name: Testing IPSec Local Authentication
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'ipsec_auth_local'
+      target: ipsec_auth_local
 
   vars:
     test1:
@@ -63,8 +62,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.ipsec_auth_local:
-        name: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_1
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -72,60 +71,60 @@
 
     - name: Adding 1 - failing because of missing connection
       ansibleguy.opnsense.ipsec_auth_local:
-        name: 'ANSIBLE_TEST_1_1'
-        authentication: 'psk'
+        name: ANSIBLE_TEST_1_1
+        authentication: psk
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding 1 - failing because of missing cert/pubkey when using pubkey-auth
       ansibleguy.opnsense.ipsec_auth_local:
-        name: 'ANSIBLE_TEST_1_1'
-        authentication: 'pubkey'
+        name: ANSIBLE_TEST_1_1
+        authentication: pubkey
       register: opn_fail2
       failed_when: not opn_fail2.failed
 
     - name: Adding 1 - failing because of missing eap-id when using eap-auth
       ansibleguy.opnsense.ipsec_auth_local:
-        name: 'ANSIBLE_TEST_1_1'
-        authentication: 'eap_mschapv2'
-        eap_id: 'dummy'
+        name: ANSIBLE_TEST_1_1
+        authentication: eap_mschapv2
+        eap_id: dummy
       register: opn_fail3
       failed_when: not opn_fail3.failed
 
     - name: Adding 1 - failing because of invalid round
       ansibleguy.opnsense.ipsec_auth_local:
-        name: 'ANSIBLE_TEST_1_1'
-        authentication: 'psk'
+        name: ANSIBLE_TEST_1_1
+        authentication: psk
         round: 11
       register: opn_fail4
       failed_when: not opn_fail4.failed
 
     - name: Adding 1 - failing because of non-existent connection
       ansibleguy.opnsense.ipsec_auth_local:
-        name: 'ANSIBLE_TEST_1_1'
-        authentication: 'psk'
-        connection: 'ANSIBLE_TEST_4_1'
+        name: ANSIBLE_TEST_1_1
+        authentication: psk
+        connection: ANSIBLE_TEST_4_1
       register: opn_fail5
       failed_when: not opn_fail5.failed
       when: not ansible_check_mode
 
     - name: Adding dummy connection
       ansibleguy.opnsense.ipsec_connection:
-        name: 'ANSIBLE_TEST_4_1'
+        name: ANSIBLE_TEST_4_1
       when: not ansible_check_mode
 
     - name: Adding dummy cert
       ansibleguy.opnsense.ipsec_cert:
-        name: 'ANSIBLE_TEST_2_1'
+        name: ANSIBLE_TEST_2_1
         public_key: "{{ test1.pub }}"
         private_key: "{{ test1.priv }}"
       when: not ansible_check_mode
 
     - name: Adding 1 (psk)
       ansibleguy.opnsense.ipsec_auth_local:
-        name: 'ANSIBLE_TEST_1_1'
-        authentication: 'psk'
-        connection: 'ANSIBLE_TEST_4_1'
+        name: ANSIBLE_TEST_1_1
+        authentication: psk
+        connection: ANSIBLE_TEST_4_1
       register: opn1
       failed_when: >
         opn1.failed or
@@ -134,9 +133,9 @@
 
     - name: Adding 1 - nothing changed
       ansibleguy.opnsense.ipsec_auth_local:
-        name: 'ANSIBLE_TEST_1_1'
-        authentication: 'psk'
-        connection: 'ANSIBLE_TEST_4_1'
+        name: ANSIBLE_TEST_1_1
+        authentication: psk
+        connection: ANSIBLE_TEST_4_1
       register: opn2
       failed_when: >
         opn2.failed or
@@ -145,10 +144,10 @@
 
     - name: Changing 1 (pubkey)
       ansibleguy.opnsense.ipsec_auth_local:
-        name: 'ANSIBLE_TEST_1_1'
-        connection: 'ANSIBLE_TEST_4_1'
-        authentication: 'pubkey'
-        public_keys: 'ANSIBLE_TEST_2_1'
+        name: ANSIBLE_TEST_1_1
+        connection: ANSIBLE_TEST_4_1
+        authentication: pubkey
+        public_keys: ANSIBLE_TEST_2_1
       register: opn3
       failed_when: >
         opn3.failed or
@@ -157,10 +156,10 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.ipsec_auth_local:
-        name: 'ANSIBLE_TEST_1_1'
-        connection: 'ANSIBLE_TEST_4_1'
-        authentication: 'pubkey'
-        public_keys: 'ANSIBLE_TEST_2_1'
+        name: ANSIBLE_TEST_1_1
+        connection: ANSIBLE_TEST_4_1
+        authentication: pubkey
+        public_keys: ANSIBLE_TEST_2_1
         enabled: false
       register: opn4
       failed_when: >
@@ -170,10 +169,10 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.ipsec_auth_local:
-        name: 'ANSIBLE_TEST_1_1'
-        connection: 'ANSIBLE_TEST_4_1'
-        authentication: 'pubkey'
-        public_keys: 'ANSIBLE_TEST_2_1'
+        name: ANSIBLE_TEST_1_1
+        connection: ANSIBLE_TEST_4_1
+        authentication: pubkey
+        public_keys: ANSIBLE_TEST_2_1
         enabled: false
       register: opn5
       failed_when: >
@@ -183,10 +182,10 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.ipsec_auth_local:
-        name: 'ANSIBLE_TEST_1_1'
-        connection: 'ANSIBLE_TEST_4_1'
-        authentication: 'pubkey'
-        public_keys: 'ANSIBLE_TEST_2_1'
+        name: ANSIBLE_TEST_1_1
+        connection: ANSIBLE_TEST_4_1
+        authentication: pubkey
+        public_keys: ANSIBLE_TEST_2_1
       register: opn6
       failed_when: >
         opn6.failed or
@@ -195,10 +194,10 @@
 
     - name: Adding 2 (eap)
       ansibleguy.opnsense.ipsec_auth_local:
-        name: 'ANSIBLE_TEST_1_2'
-        connection: 'ANSIBLE_TEST_4_1'
-        authentication: 'eap-tls'
-        eap_id: 'dummy'
+        name: ANSIBLE_TEST_1_2
+        connection: ANSIBLE_TEST_4_1
+        authentication: eap-tls
+        eap_id: dummy
       register: opn7
       failed_when: >
         opn7.failed or
@@ -206,10 +205,10 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.ipsec_auth_local:
-        name: 'ANSIBLE_TEST_1_2'
-        connection: 'ANSIBLE_TEST_4_1'
-        authentication: 'eap-tls'
-        eap_id: 'dummy'
+        name: ANSIBLE_TEST_1_2
+        connection: ANSIBLE_TEST_4_1
+        authentication: eap-tls
+        eap_id: dummy
       register: opn8
       failed_when: >
         opn8.failed or
@@ -218,8 +217,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.ipsec_auth_local:
-        name: 'ANSIBLE_TEST_1_2'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_2
+        state: absent
       register: opn9
       failed_when: >
         opn9.failed or
@@ -237,22 +236,22 @@
     - name: Cleanup auth
       ansibleguy.opnsense.ipsec_auth_local:
         name: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when: not ansible_check_mode
 
     - name: Cleanup connection
       ansibleguy.opnsense.ipsec_connection:
-        name: 'ANSIBLE_TEST_4_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_4_1
+        state: absent
       when: not ansible_check_mode
 
     - name: Cleanup cert
       ansibleguy.opnsense.ipsec_cert:
-        name: 'ANSIBLE_TEST_2_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_2_1
+        state: absent
 
     - name: Listing
       ansibleguy.opnsense.list:

@@ -1,8 +1,7 @@
 ---
-
 - name: Testing VIPs
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'interface_vip'
+      target: interface_vip
 
   tasks:
     - name: Listing
@@ -22,9 +21,9 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.interface_vip:
-        interface: 'lan'
-        address: '192.168.0.1/30'
-        state: 'absent'
+        interface: lan
+        address: 192.168.0.1/30
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -32,23 +31,23 @@
 
     - name: Adding 1 - failing because of invalid interface (server-side)
       ansibleguy.opnsense.interface_vip:
-        interface: 'DOESNOTEXIST'
-        address: '192.168.1.1/30'
+        interface: DOESNOTEXIST
+        address: 192.168.1.1/30
       register: opn_fail1
       failed_when: not opn_fail1.failed
       when: not ansible_check_mode
 
     - name: Adding 1 - failing because of missing CIDR
       ansibleguy.opnsense.interface_vip:
-        interface: 'lan'
-        address: '192.168.1.1'
+        interface: lan
+        address: 192.168.1.1
       register: opn_fail2
       failed_when: not opn_fail2.failed
 
     - name: Adding 1
       ansibleguy.opnsense.interface_vip:
-        interface: 'lan'
-        address: '192.168.1.1/30'
+        interface: lan
+        address: 192.168.1.1/30
       register: opn1
       failed_when: >
         opn1.failed or
@@ -56,11 +55,11 @@
 
     - name: Adding 2
       ansibleguy.opnsense.interface_vip:
-        interface: 'opt1'
-        address: '192.168.2.1/24'
-        mode: 'carp'
+        interface: opt1
+        address: 192.168.2.1/24
+        mode: carp
         vhid: 10
-        password: 'top_secret'
+        password: top_secret
         advertising_base: 2
         advertising_skew: 1
         bind: false
@@ -71,11 +70,11 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.interface_vip:
-        interface: 'opt1'
-        address: '192.168.2.1/24'
-        mode: 'carp'
+        interface: opt1
+        address: 192.168.2.1/24
+        mode: carp
         vhid: 10
-        password: 'top_secret'
+        password: top_secret
         advertising_base: 2
         advertising_skew: 1
         bind: false
@@ -85,9 +84,9 @@
 
     - name: Removing 2
       ansibleguy.opnsense.interface_vip:
-        interface: 'opt1'
-        address: '192.168.2.1/24'
-        state: 'absent'
+        interface: opt1
+        address: 192.168.2.1/24
+        state: absent
       register: opn7
       failed_when: >
         opn7.failed or
@@ -96,12 +95,12 @@
 
     - name: Adding 3 - unicast peer
       ansibleguy.opnsense.interface_vip:
-        interface: 'opt1'
-        address: '192.168.2.1/24'
-        mode: 'carp'
-        peer: '192.168.3.3'
+        interface: opt1
+        address: 192.168.2.1/24
+        mode: carp
+        peer: 192.168.3.3
         vhid: 10
-        password: 'top_secret'
+        password: top_secret
         advertising_base: 2
         advertising_skew: 1
         bind: false
@@ -112,9 +111,9 @@
 
     - name: Removing 3
       ansibleguy.opnsense.interface_vip:
-        interface: 'opt1'
-        address: '192.168.2.1/24'
-        state: 'absent'
+        interface: opt1
+        address: 192.168.2.1/24
+        state: absent
       register: opn_carpuni2
       failed_when: >
         opn_carpuni2.failed or
@@ -123,12 +122,12 @@
 
     - name: Adding 4 - unicast peer6
       ansibleguy.opnsense.interface_vip:
-        interface: 'opt1'
-        address: '2001:db8::1/128'
-        mode: 'carp'
-        peer6: '2001:db8::3'
+        interface: opt1
+        address: 2001:db8::1/128
+        mode: carp
+        peer6: 2001:db8::3
         vhid: 10
-        password: 'top_secret'
+        password: top_secret
         advertising_base: 2
         advertising_skew: 1
         bind: false
@@ -139,12 +138,12 @@
 
     - name: Adding 4 - nothing changed
       ansibleguy.opnsense.interface_vip:
-        interface: 'opt1'
-        address: '2001:db8::1/128'
-        mode: 'carp'
-        peer6: '2001:db8::3'
+        interface: opt1
+        address: 2001:db8::1/128
+        mode: carp
+        peer6: 2001:db8::3
         vhid: 10
-        password: 'top_secret'
+        password: top_secret
         advertising_base: 2
         advertising_skew: 1
         bind: false
@@ -156,9 +155,9 @@
 
     - name: Removing 4
       ansibleguy.opnsense.interface_vip:
-        interface: 'opt1'
-        address: '2001:db8::1/128'
-        state: 'absent'
+        interface: opt1
+        address: 2001:db8::1/128
+        state: absent
       register: opn_carpuni4
       failed_when: >
         opn_carpuni4.failed or
@@ -177,11 +176,11 @@
       ansibleguy.opnsense.interface_vip:
         interface: "{{ item.int }}"
         address: "{{ item.ip }}"
-        state: 'absent'
+        state: absent
       loop:
-        - {int: 'lan', ip: '192.168.1.1/30'}
-        - {int: 'opt1', ip: '192.168.2.1/24'}
-        - {int: 'opt1', ip: '2001:db8::1/128'}
+        - { int: lan, ip: 192.168.1.1/30 }
+        - { int: opt1, ip: 192.168.2.1/24 }
+        - { int: opt1, ip: 2001:db8::1/128 }
       when: not ansible_check_mode
 
     - name: Listing

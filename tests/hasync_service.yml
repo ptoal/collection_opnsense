@@ -1,8 +1,7 @@
 ---
-
 - name: Testing HASync Service
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -29,7 +28,7 @@
       ansibleguy.opnsense.hasync_general:
         synchronize_to_ip: "{{ hasync_peer }}"
         username: "{{ hasync_username }}"
-        password: "invalid{{ hasync_password }}"
+        password: invalid{{ hasync_password }}
         syncitems:
           - aliases
           - rules

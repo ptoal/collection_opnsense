@@ -1,8 +1,7 @@
 ---
-
 - name: Testing FRR BGP Neighbors
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,10 +9,9 @@
       ssl_verify: false
 
     ansibleguy.opnsense.frr_bgp_neighbor:
-      match_fields: ['description']
-
+      match_fields: [description]
     ansibleguy.opnsense.list:
-      target: 'frr_bgp_neighbor'
+      target: frr_bgp_neighbor
 
   tasks:
     - name: Listing
@@ -25,8 +23,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.frr_bgp_neighbor:
-        description: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        description: ANSIBLE_TEST_1_1
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -34,7 +32,7 @@
 
     - name: Adding 1 - failing because of invalid keepalive
       ansibleguy.opnsense.frr_bgp_neighbor:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         as_number: 1337
         keepalive: 3000
       register: opn_fail1
@@ -42,41 +40,41 @@
 
     - name: Adding 1 - failing because of invalid ip-address
       ansibleguy.opnsense.frr_bgp_neighbor:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         as_number: 1337
-        ip: 'INVALID-IP'
+        ip: INVALID-IP
       register: opn_fail2
       failed_when: not opn_fail2.failed
 
     - name: Adding 1 - failing because of invalid local ip-address
       ansibleguy.opnsense.frr_bgp_neighbor:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         as_number: 1337
-        local_ip: 'INVALID-IP'
+        local_ip: INVALID-IP
       register: opn_fail3
       failed_when: not opn_fail3.failed
 
     - name: Adding 1 - failing because of non-existent prefix-list
       ansibleguy.opnsense.frr_bgp_neighbor:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         as_number: 1337
-        prefix_list_in: 'DOES-NOT-EXIST'
+        prefix_list_in: DOES-NOT-EXIST
       register: opn_fail4
       failed_when: not opn_fail4.failed
 
     - name: Adding 1 - failing because of non-existent route-map
       ansibleguy.opnsense.frr_bgp_neighbor:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         as_number: 1337
-        route_map_out: 'DOES-NOT-EXIST'
+        route_map_out: DOES-NOT-EXIST
       register: opn_fail5
       failed_when: not opn_fail5.failed
 
     - name: Adding 1
       ansibleguy.opnsense.frr_bgp_neighbor:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         as_number: 1337
-        ip: '10.0.0.1'
+        ip: 10.0.0.1
       register: opn1
       failed_when: >
         opn1.failed or
@@ -84,13 +82,13 @@
 
     - name: Changing 1
       ansibleguy.opnsense.frr_bgp_neighbor:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         as_number: 1337
-        ip: '10.0.0.1'
+        ip: 10.0.0.1
         password: "{{ 'random' | hash('md5') }}"
         weight: 200
-        local_ip: '10.0.0.254'
-        source_int: 'opt1'
+        local_ip: 10.0.0.254
+        source_int: opt1
         multi_protocol: true
         keepalive: 45
         hold_down: 135
@@ -101,13 +99,13 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.frr_bgp_neighbor:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         as_number: 1337
-        ip: '10.0.0.1'
+        ip: 10.0.0.1
         password: "{{ 'random' | hash('md5') }}"
         weight: 200
-        local_ip: '10.0.0.254'
-        source_int: 'opt1'
+        local_ip: 10.0.0.254
+        source_int: opt1
         multi_protocol: true
         keepalive: 45
         hold_down: 135
@@ -120,13 +118,13 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.frr_bgp_neighbor:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         as_number: 1337
-        ip: '10.0.0.1'
+        ip: 10.0.0.1
         password: "{{ 'random' | hash('md5') }}"
         weight: 200
-        local_ip: '10.0.0.254'
-        source_int: 'opt1'
+        local_ip: 10.0.0.254
+        source_int: opt1
         multi_protocol: true
         keepalive: 45
         hold_down: 135
@@ -139,13 +137,13 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.frr_bgp_neighbor:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         as_number: 1337
-        ip: '10.0.0.1'
+        ip: 10.0.0.1
         password: "{{ 'random' | hash('md5') }}"
         weight: 200
-        local_ip: '10.0.0.254'
-        source_int: 'opt1'
+        local_ip: 10.0.0.254
+        source_int: opt1
         multi_protocol: true
         keepalive: 45
         hold_down: 135
@@ -157,11 +155,11 @@
 
     - name: Adding 2
       ansibleguy.opnsense.frr_bgp_neighbor:
-        description: 'ANSIBLE_TEST_1_2'
+        description: ANSIBLE_TEST_1_2
         as_number: 1338
-        ip: '10.0.1.1'
+        ip: 10.0.1.1
         password: "{{ 'oh-so-random' | hash('md5') }}"
-        local_ip: '10.0.1.254'
+        local_ip: 10.0.1.254
       register: opn5
       failed_when: >
         opn5.failed or
@@ -169,11 +167,11 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.frr_bgp_neighbor:
-        description: 'ANSIBLE_TEST_1_2'
+        description: ANSIBLE_TEST_1_2
         as_number: 1338
-        ip: '10.0.1.1'
+        ip: 10.0.1.1
         password: "{{ 'oh-so-random' | hash('md5') }}"
-        local_ip: '10.0.1.254'
+        local_ip: 10.0.1.254
       register: opn6
       failed_when: >
         opn6.failed or
@@ -182,8 +180,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.frr_bgp_neighbor:
-        description: 'ANSIBLE_TEST_1_2'
-        state: 'absent'
+        description: ANSIBLE_TEST_1_2
+        state: absent
       register: opn7
       failed_when: >
         opn7.failed or
@@ -201,10 +199,10 @@
     - name: Cleanup
       ansibleguy.opnsense.frr_bgp_neighbor:
         description: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when: not ansible_check_mode
 
     - name: Listing
@@ -217,7 +215,7 @@
 
 - name: Testing FRR BGP Neighbors - linking
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -225,10 +223,9 @@
       ssl_verify: false
 
     ansibleguy.opnsense.frr_bgp_neighbor:
-      match_fields: ['description']
-
+      match_fields: [description]
     ansibleguy.opnsense.list:
-      target: 'frr_bgp_neighbor'
+      target: frr_bgp_neighbor
 
   tasks:
     - name: Listing
@@ -241,26 +238,26 @@
 
     - name: Adding dummy prefix-list
       ansibleguy.opnsense.frr_bgp_prefix_list:
-        name: 'ANSIBLE_TEST_2_1'
-        network: '10.0.10.0/24'
+        name: ANSIBLE_TEST_2_1
+        network: 10.0.10.0/24
         seq: 51
-        action: 'permit'
+        action: permit
       when: not ansible_check_mode
 
     - name: Adding dummy prefix-list 2 (same name, other sequence)
       ansibleguy.opnsense.frr_bgp_prefix_list:
-        name: 'ANSIBLE_TEST_2_1'
-        network: '10.0.11.0/24'
+        name: ANSIBLE_TEST_2_1
+        network: 10.0.11.0/24
         seq: 50
-        action: 'permit'
+        action: permit
       when: not ansible_check_mode
 
     - name: Adding neighbor linked to prefix-list
       ansibleguy.opnsense.frr_bgp_neighbor:
-        description: 'ANSIBLE_TEST_2_1'
-        prefix_list_in: 'ANSIBLE_TEST_2_1'
+        description: ANSIBLE_TEST_2_1
+        prefix_list_in: ANSIBLE_TEST_2_1
         as_number: 1337
-        ip: '10.0.0.1'
+        ip: 10.0.0.1
       register: opn11
       failed_when: >
         opn11.failed or
@@ -269,17 +266,17 @@
 
     - name: Adding dummy route-map
       ansibleguy.opnsense.frr_bgp_route_map:
-        name: 'ANSIBLE_TEST_3_1'
+        name: ANSIBLE_TEST_3_1
         id: 50
-        action: 'permit'
+        action: permit
       when: not ansible_check_mode
 
     - name: Adding neighbor linked to route-map
       ansibleguy.opnsense.frr_bgp_neighbor:
-        description: 'ANSIBLE_TEST_2_2'
-        route_map_out: 'ANSIBLE_TEST_3_1'
+        description: ANSIBLE_TEST_2_2
+        route_map_out: ANSIBLE_TEST_3_1
         as_number: 1338
-        ip: '10.0.1.1'
+        ip: 10.0.1.1
       register: opn13
       failed_when: >
         opn13.failed or
@@ -289,17 +286,17 @@
     - name: Cleanup neighbors
       ansibleguy.opnsense.frr_bgp_neighbor:
         description: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_2_1'
-        - 'ANSIBLE_TEST_2_2'
+        - ANSIBLE_TEST_2_1
+        - ANSIBLE_TEST_2_2
       when: not ansible_check_mode
 
     - name: Cleanup prefix-list
       ansibleguy.opnsense.frr_bgp_prefix_list:
-        name: 'ANSIBLE_TEST_2_1'
+        name: ANSIBLE_TEST_2_1
         seq: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
         - 50
         - 51
@@ -307,8 +304,8 @@
 
     - name: Cleanup route-map
       ansibleguy.opnsense.frr_bgp_route_map:
-        name: 'ANSIBLE_TEST_3_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_3_1
+        state: absent
       when: not ansible_check_mode
 
     - name: Listing

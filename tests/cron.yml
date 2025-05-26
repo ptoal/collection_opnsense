@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Cron
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'cron'
+      target: cron
 
   tasks:
     # NOTE: one exists because of IDS
@@ -23,8 +22,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.cron:
-        description: 'ANSIBLE_TEST_1'
-        state: 'absent'
+        description: ANSIBLE_TEST_1
+        state: absent
       register: opn6
       failed_when: >
         opn6.failed or
@@ -32,22 +31,22 @@
 
     - name: Adding daily firmware update check
       ansibleguy.opnsense.cron:
-        description: 'ANSIBLE_TEST_1'
-        command: 'firmware poll'
-        minutes: '0'
-        hours: '0'
-        days: '*'
+        description: ANSIBLE_TEST_1
+        command: firmware poll
+        minutes: "0"
+        hours: "0"
+        days: "*"
 
     - name: Adding 2
       ansibleguy.opnsense.cron:
-        description: 'ANSIBLE_TEST_2'
-        command: 'system remote backup'
-        minutes: '26'
-        hours: '15'
-        days: '5,9,26'
-        months: '8'
-        weekdays: '4,5,7'
-        who: 'root'
+        description: ANSIBLE_TEST_2
+        command: system remote backup
+        minutes: "26"
+        hours: "15"
+        days: 5,9,26
+        months: "8"
+        weekdays: 4,5,7
+        who: root
       register: opn5
       failed_when: >
         opn5.failed or
@@ -55,14 +54,14 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.cron:
-        description: 'ANSIBLE_TEST_2'
-        command: 'system remote backup'
-        minutes: '26'
-        hours: '15'
-        days: '5,9,26'
-        months: '8'
-        weekdays: '4,5,7'
-        who: 'root'
+        description: ANSIBLE_TEST_2
+        command: system remote backup
+        minutes: "26"
+        hours: "15"
+        days: 5,9,26
+        months: "8"
+        weekdays: 4,5,7
+        who: root
       register: opn1
       failed_when: >
         opn1.failed or
@@ -71,14 +70,14 @@
 
     - name: Disabling 2
       ansibleguy.opnsense.cron:
-        description: 'ANSIBLE_TEST_2'
-        command: 'system remote backup'
-        minutes: '26'
-        hours: '15'
-        days: '5,9,26'
-        months: '8'
-        weekdays: '4,5,7'
-        who: 'root'
+        description: ANSIBLE_TEST_2
+        command: system remote backup
+        minutes: "26"
+        hours: "15"
+        days: 5,9,26
+        months: "8"
+        weekdays: 4,5,7
+        who: root
         enabled: false
       register: opn2
       failed_when: >
@@ -88,14 +87,14 @@
 
     - name: Disabling 2 - nothing changed
       ansibleguy.opnsense.cron:
-        description: 'ANSIBLE_TEST_2'
-        command: 'system remote backup'
-        minutes: '26'
-        hours: '15'
-        days: '5,9,26'
-        months: '8'
-        weekdays: '4,5,7'
-        who: 'root'
+        description: ANSIBLE_TEST_2
+        command: system remote backup
+        minutes: "26"
+        hours: "15"
+        days: 5,9,26
+        months: "8"
+        weekdays: 4,5,7
+        who: root
         enabled: false
       register: opn3
       failed_when: >
@@ -105,14 +104,14 @@
 
     - name: Enabling 2
       ansibleguy.opnsense.cron:
-        description: 'ANSIBLE_TEST_2'
-        command: 'system remote backup'
-        minutes: '26'
-        hours: '15'
-        days: '5,9,26'
-        months: '8'
-        weekdays: '4,5,7'
-        who: 'root'
+        description: ANSIBLE_TEST_2
+        command: system remote backup
+        minutes: "26"
+        hours: "15"
+        days: 5,9,26
+        months: "8"
+        weekdays: 4,5,7
+        who: root
       register: opn4
       failed_when: >
         opn4.failed or
@@ -130,7 +129,7 @@
     - name: Cleanup
       ansibleguy.opnsense.cron:
         description: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1'
-        - 'ANSIBLE_TEST_2'
+        - ANSIBLE_TEST_1
+        - ANSIBLE_TEST_2

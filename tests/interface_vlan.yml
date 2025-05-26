@@ -1,8 +1,7 @@
 ---
-
 - name: Testing VLAN interfaces
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'interface_vlan'
+      target: interface_vlan
 
   tasks:
     - name: Listing
@@ -22,8 +21,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.interface_vlan:
-        description: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        description: ANSIBLE_TEST_1_1
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -31,8 +30,8 @@
 
     - name: Adding 1 - failing because of invalid interface (server-side)
       ansibleguy.opnsense.interface_vlan:
-        description: 'ANSIBLE_TEST_1_1'
-        interface: 'lan'
+        description: ANSIBLE_TEST_1_1
+        interface: lan
         vlan: 100
       register: opn_fail1
       failed_when: not opn_fail1.failed
@@ -40,23 +39,23 @@
 
     - name: Adding 1 - failing because of missing interface
       ansibleguy.opnsense.interface_vlan:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         vlan: 100
       register: opn_fail2
       failed_when: not opn_fail2.failed
 
     - name: Adding 1 - failing because of invalid vlan-id
       ansibleguy.opnsense.interface_vlan:
-        description: 'ANSIBLE_TEST_1_1'
-        interface: 'vtnet0'
+        description: ANSIBLE_TEST_1_1
+        interface: vtnet0
         vlan: 4100
       register: opn_fail4
       failed_when: not opn_fail4.failed
 
     - name: Adding 1
       ansibleguy.opnsense.interface_vlan:
-        description: 'ANSIBLE_TEST_1_1'
-        interface: 'vtnet0'
+        description: ANSIBLE_TEST_1_1
+        interface: vtnet0
         vlan: 100
       register: opn1
       failed_when: >
@@ -65,8 +64,8 @@
 
     - name: Adding 2 - failing because of duplicate vlan-id (server-side)
       ansibleguy.opnsense.interface_vlan:
-        description: 'ANSIBLE_TEST_1_2'
-        interface: 'vtnet0'
+        description: ANSIBLE_TEST_1_2
+        interface: vtnet0
         vlan: 100
       register: opn_fail5
       failed_when: not opn_fail5.failed
@@ -74,31 +73,31 @@
 
     - name: Adding 2 - failing because of invalid device-name (server-side)
       ansibleguy.opnsense.interface_vlan:
-        description: 'ANSIBLE_TEST_1_2'
-        interface: 'vtnet0'
+        description: ANSIBLE_TEST_1_2
+        interface: vtnet0
         vlan: 100
-        device: 'vlan100'
+        device: vlan100
       register: opn_fail5
       failed_when: not opn_fail5.failed
       when: not ansible_check_mode
 
     - name: Adding 2 - failing because of duplicate device-name (server-side)
       ansibleguy.opnsense.interface_vlan:
-        description: 'ANSIBLE_TEST_1_2'
-        interface: 'vtnet0'
+        description: ANSIBLE_TEST_1_2
+        interface: vtnet0
         vlan: 100
-        device: 'vlan0.100'
+        device: vlan0.100
       register: opn_fail5
       failed_when: not opn_fail5.failed
       when: not ansible_check_mode
 
     - name: Adding 2
       ansibleguy.opnsense.interface_vlan:
-        description: 'ANSIBLE_TEST_1_2'
-        interface: 'vtnet0'
+        description: ANSIBLE_TEST_1_2
+        interface: vtnet0
         vlan: 101
         priority: 5
-        device: 'vlan0.101'
+        device: vlan0.101
       register: opn5
       failed_when: >
         opn5.failed or
@@ -106,11 +105,11 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.interface_vlan:
-        description: 'ANSIBLE_TEST_1_2'
-        interface: 'vtnet0'
+        description: ANSIBLE_TEST_1_2
+        interface: vtnet0
         vlan: 101
         priority: 5
-        device: 'vlan0.101'
+        device: vlan0.101
       register: opn6
       failed_when: >
         opn6.failed or
@@ -119,12 +118,12 @@
 
     - name: Removing 2
       ansibleguy.opnsense.interface_vlan:
-        description: 'ANSIBLE_TEST_1_2'
-        interface: 'vtnet0'
+        description: ANSIBLE_TEST_1_2
+        interface: vtnet0
         vlan: 101
         priority: 5
-        device: 'vlan0.101'
-        state: 'absent'
+        device: vlan0.101
+        state: absent
       register: opn7
       failed_when: >
         opn7.failed or
@@ -142,10 +141,10 @@
     - name: Cleanup
       ansibleguy.opnsense.interface_vlan:
         description: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when: not ansible_check_mode
 
     - name: Listing

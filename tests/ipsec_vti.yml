@@ -1,8 +1,7 @@
 ---
-
 - name: Testing IPSec VTI
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'ipsec_vti'
+      target: ipsec_vti
 
   tasks:
     - name: Listing
@@ -22,8 +21,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.ipsec_vti:
-        name: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_1
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -31,31 +30,31 @@
 
     - name: Adding 1 - failing as not all addresses were provided
       ansibleguy.opnsense.ipsec_vti:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         request_id: 100
-        local_tunnel_address: '192.168.0.1/30'
-        remote_tunnel_address: '192.168.0.2/30'
+        local_tunnel_address: 192.168.0.1/30
+        remote_tunnel_address: 192.168.0.2/30
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding 1 - failing without request-id
       ansibleguy.opnsense.ipsec_vti:
-        name: 'ANSIBLE_TEST_1_1'
-        local_address: '192.168.1.1'
-        remote_address: '192.168.1.2'
-        local_tunnel_address: '192.168.0.1'
-        remote_tunnel_address: '192.168.0.2'
+        name: ANSIBLE_TEST_1_1
+        local_address: 192.168.1.1
+        remote_address: 192.168.1.2
+        local_tunnel_address: 192.168.0.1
+        remote_tunnel_address: 192.168.0.2
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Adding 1
       ansibleguy.opnsense.ipsec_vti:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         request_id: 100
-        local_address: '192.168.1.1'
-        remote_address: '192.168.1.2'
-        local_tunnel_address: '192.168.0.1'
-        remote_tunnel_address: '192.168.0.2'
+        local_address: 192.168.1.1
+        remote_address: 192.168.1.2
+        local_tunnel_address: 192.168.0.1
+        remote_tunnel_address: 192.168.0.2
       register: opn1
       failed_when: >
         opn1.failed or
@@ -63,12 +62,12 @@
 
     - name: Adding 1 - nothing changed
       ansibleguy.opnsense.ipsec_vti:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         request_id: 100
-        local_address: '192.168.1.1'
-        remote_address: '192.168.1.2'
-        local_tunnel_address: '192.168.0.1'
-        remote_tunnel_address: '192.168.0.2'
+        local_address: 192.168.1.1
+        remote_address: 192.168.1.2
+        local_tunnel_address: 192.168.0.1
+        remote_tunnel_address: 192.168.0.2
       register: opn2
       failed_when: >
         opn2.failed or
@@ -77,12 +76,12 @@
 
     - name: Changing 1
       ansibleguy.opnsense.ipsec_vti:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         request_id: 110
-        local_address: '192.168.10.1'
-        remote_address: '192.168.10.2'
-        local_tunnel_address: '192.168.0.5'
-        remote_tunnel_address: '192.168.0.6'
+        local_address: 192.168.10.1
+        remote_address: 192.168.10.2
+        local_tunnel_address: 192.168.0.5
+        remote_tunnel_address: 192.168.0.6
       register: opn3
       failed_when: >
         opn3.failed or
@@ -90,12 +89,12 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.ipsec_vti:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         request_id: 110
-        local_address: '192.168.10.1'
-        remote_address: '192.168.10.2'
-        local_tunnel_address: '192.168.0.5'
-        remote_tunnel_address: '192.168.0.6'
+        local_address: 192.168.10.1
+        remote_address: 192.168.10.2
+        local_tunnel_address: 192.168.0.5
+        remote_tunnel_address: 192.168.0.6
         enabled: false
       register: opn4
       failed_when: >
@@ -105,12 +104,12 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.ipsec_vti:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         request_id: 110
-        local_address: '192.168.10.1'
-        remote_address: '192.168.10.2'
-        local_tunnel_address: '192.168.0.5'
-        remote_tunnel_address: '192.168.0.6'
+        local_address: 192.168.10.1
+        remote_address: 192.168.10.2
+        local_tunnel_address: 192.168.0.5
+        remote_tunnel_address: 192.168.0.6
         enabled: false
       register: opn5
       failed_when: >
@@ -120,12 +119,12 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.ipsec_vti:
-        name: 'ANSIBLE_TEST_1_1'
+        name: ANSIBLE_TEST_1_1
         request_id: 110
-        local_address: '192.168.10.1'
-        remote_address: '192.168.10.2'
-        local_tunnel_address: '192.168.0.5'
-        remote_tunnel_address: '192.168.0.6'
+        local_address: 192.168.10.1
+        remote_address: 192.168.10.2
+        local_tunnel_address: 192.168.0.5
+        remote_tunnel_address: 192.168.0.6
       register: opn6
       failed_when: >
         opn6.failed or
@@ -134,12 +133,12 @@
 
     - name: Adding 2
       ansibleguy.opnsense.ipsec_vti:
-        name: 'ANSIBLE_TEST_1_2'
+        name: ANSIBLE_TEST_1_2
         request_id: 200
-        local_address: '192.168.20.1'
-        remote_address: '192.168.20.2'
-        local_tunnel_address: '192.168.1.101'
-        remote_tunnel_address: '192.168.1.102'
+        local_address: 192.168.20.1
+        remote_address: 192.168.20.2
+        local_tunnel_address: 192.168.1.101
+        remote_tunnel_address: 192.168.1.102
       register: opn7
       failed_when: >
         opn7.failed or
@@ -147,12 +146,12 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.ipsec_vti:
-        name: 'ANSIBLE_TEST_1_2'
+        name: ANSIBLE_TEST_1_2
         request_id: 200
-        local_address: '192.168.20.1'
-        remote_address: '192.168.20.2'
-        local_tunnel_address: '192.168.1.101'
-        remote_tunnel_address: '192.168.1.102'
+        local_address: 192.168.20.1
+        remote_address: 192.168.20.2
+        local_tunnel_address: 192.168.1.101
+        remote_tunnel_address: 192.168.1.102
       register: opn8
       failed_when: >
         opn8.failed or
@@ -161,8 +160,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.ipsec_vti:
-        name: 'ANSIBLE_TEST_1_2'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_2
+        state: absent
       register: opn9
       failed_when: >
         opn9.failed or
@@ -180,10 +179,10 @@
     - name: Cleanup
       ansibleguy.opnsense.ipsec_vti:
         name: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when: not ansible_check_mode
 
     - name: Listing

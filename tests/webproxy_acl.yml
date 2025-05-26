@@ -1,8 +1,7 @@
 ---
-
 - name: WebProxy Forward-ACL Settings
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'webproxy_acl'
+      target: webproxy_acl
 
   tasks:
     - name: Listing
@@ -22,15 +21,15 @@
 
     - name: Configuring
       ansibleguy.opnsense.webproxy_acl:
-        allow: ['192.168.0.0/24', '172.16.0.5']
-        exclude: ['192.168.2.0/28', '172.16.1.5']
-        banned: ['172.16.3.0/24']
-        exclude_domains: ['ansibleguy.net']
-        block_domains: ['ansibleguy.com']
-        block_user_agents: ['test1']
-        block_mime_types: ['video/flv']
-        ports_tcp: ['80:http', '21:ftp']
-        ports_ssl: ['443:https', '5433:random']
+        allow: [192.168.0.0/24, 172.16.0.5]
+        exclude: [192.168.2.0/28, 172.16.1.5]
+        banned: [172.16.3.0/24]
+        exclude_domains: [ansibleguy.net]
+        block_domains: [ansibleguy.com]
+        block_user_agents: [test1]
+        block_mime_types: [video/flv]
+        ports_tcp: [80:http, 21:ftp]
+        ports_ssl: [443:https, 5433:random]
       register: opn1
       failed_when: >
         opn1.failed or
@@ -38,15 +37,15 @@
 
     - name: Changing 1
       ansibleguy.opnsense.webproxy_acl:
-        allow: ['192.168.0.0/24', '172.16.1.0/29', '172.16.0.5']
-        exclude: ['192.168.2.0/28', '172.16.1.5']
-        banned: ['172.16.3.0/24', '172.16.2.5']
-        exclude_domains: ['ansibleguy.net']
-        block_domains: ['ansibleguy.com']
-        block_user_agents: ['test1', 'test2']
-        block_mime_types: ['video/flv', 'test']
-        ports_tcp: ['80:http', '21:ftp']
-        ports_ssl: ['443:https', '8443:random']
+        allow: [192.168.0.0/24, 172.16.1.0/29, 172.16.0.5]
+        exclude: [192.168.2.0/28, 172.16.1.5]
+        banned: [172.16.3.0/24, 172.16.2.5]
+        exclude_domains: [ansibleguy.net]
+        block_domains: [ansibleguy.com]
+        block_user_agents: [test1, test2]
+        block_mime_types: [video/flv, test]
+        ports_tcp: [80:http, 21:ftp]
+        ports_ssl: [443:https, 8443:random]
       register: opn2
       failed_when: >
         opn2.failed or
@@ -55,15 +54,15 @@
 
     - name: Changing 1 - nothing changed
       ansibleguy.opnsense.webproxy_acl:
-        allow: ['192.168.0.0/24', '172.16.1.0/29', '172.16.0.5']
-        exclude: ['192.168.2.0/28', '172.16.1.5']
-        banned: ['172.16.3.0/24', '172.16.2.5']
-        exclude_domains: ['ansibleguy.net']
-        block_domains: ['ansibleguy.com']
-        block_user_agents: ['test1', 'test2']
-        block_mime_types: ['video/flv', 'test']
-        ports_tcp: ['80:http', '21:ftp']
-        ports_ssl: ['443:https', '8443:random']
+        allow: [192.168.0.0/24, 172.16.1.0/29, 172.16.0.5]
+        exclude: [192.168.2.0/28, 172.16.1.5]
+        banned: [172.16.3.0/24, 172.16.2.5]
+        exclude_domains: [ansibleguy.net]
+        block_domains: [ansibleguy.com]
+        block_user_agents: [test1, test2]
+        block_mime_types: [video/flv, test]
+        ports_tcp: [80:http, 21:ftp]
+        ports_ssl: [443:https, 8443:random]
       register: opn3
       failed_when: >
         opn3.failed or

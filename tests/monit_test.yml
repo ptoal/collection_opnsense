@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Monit test
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'monit_test'
+      target: monit_test
 
   vars:
     default_test_count: 11
@@ -25,8 +24,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.monit_test:
-        name: 'ANSIBLE_TEST_1_1'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_1
+        state: absent
       register: opn1
       failed_when: >
         opn1.failed or
@@ -34,16 +33,16 @@
 
     - name: Adding 1 - failing because of invalid type
       ansibleguy.opnsense.monit_test:
-        name: 'ANSIBLE_TEST_1_1'
-        type: '!INVALID!'
+        name: ANSIBLE_TEST_1_1
+        type: "!INVALID!"
       register: opn12
       failed_when: not opn12.failed
 
     - name: Adding 1
       ansibleguy.opnsense.monit_test:
-        name: 'ANSIBLE_TEST_1_1'
-        condition: 'failed host 127.0.0.1 port 22 protocol ssh'
-        type: 'Connection'
+        name: ANSIBLE_TEST_1_1
+        condition: failed host 127.0.0.1 port 22 protocol ssh
+        type: Connection
       register: opn4
       failed_when: >
         opn4.failed or
@@ -51,9 +50,9 @@
 
     - name: Adding 2
       ansibleguy.opnsense.monit_test:
-        name: 'ANSIBLE_TEST_1_2'
-        condition: 'memory usage is greater than 90%'
-        type: 'SystemResource'
+        name: ANSIBLE_TEST_1_2
+        condition: memory usage is greater than 90%
+        type: SystemResource
       register: opn5
       failed_when: >
         opn5.failed or
@@ -61,9 +60,9 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.monit_test:
-        name: 'ANSIBLE_TEST_1_2'
-        condition: 'memory usage is greater than 90%'
-        type: 'SystemResource'
+        name: ANSIBLE_TEST_1_2
+        condition: memory usage is greater than 90%
+        type: SystemResource
       register: opn13
       failed_when: >
         opn13.failed or
@@ -72,10 +71,10 @@
 
     - name: Removing 2
       ansibleguy.opnsense.monit_test:
-        name: 'ANSIBLE_TEST_1_2'
-        condition: 'memory usage is greater than 90%'
-        type: 'SystemResource'
-        state: 'absent'
+        name: ANSIBLE_TEST_1_2
+        condition: memory usage is greater than 90%
+        type: SystemResource
+        state: absent
       register: opn8
       failed_when: >
         opn8.failed or
@@ -93,10 +92,10 @@
     - name: Cleanup
       ansibleguy.opnsense.monit_test:
         name: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when: not ansible_check_mode
 
     - name: Listing

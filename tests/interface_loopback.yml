@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Loopback
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'interface_loopback'
+      target: interface_loopback
 
   tasks:
     - name: Listing
@@ -22,8 +21,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.interface_loopback:
-        description: 'DOESNOTEXIST'
-        state: 'absent'
+        description: DOESNOTEXIST
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -31,7 +30,7 @@
 
     - name: Adding 1
       ansibleguy.opnsense.interface_loopback:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
       register: opn1
       failed_when: >
         opn1.failed or
@@ -39,7 +38,7 @@
 
     - name: Adding 2
       ansibleguy.opnsense.interface_loopback:
-        description: 'ANSIBLE_TEST_1_2'
+        description: ANSIBLE_TEST_1_2
       register: opn2
       failed_when: >
         opn2.failed or
@@ -47,7 +46,7 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.interface_loopback:
-        description: 'ANSIBLE_TEST_1_2'
+        description: ANSIBLE_TEST_1_2
       register: opn3
       failed_when: >
         opn3.failed or
@@ -56,8 +55,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.interface_loopback:
-        description: 'ANSIBLE_TEST_1_2'
-        state: 'absent'
+        description: ANSIBLE_TEST_1_2
+        state: absent
       register: opn4
       failed_when: >
         opn4.failed or
@@ -75,10 +74,10 @@
     - name: Cleanup
       ansibleguy.opnsense.interface_loopback:
         description: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when: not ansible_check_mode
 
     - name: Listing

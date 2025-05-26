@@ -1,8 +1,7 @@
 ---
-
 - name: WebProxy Forward-ICAP Settings
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'webproxy_icap'
+      target: webproxy_icap
 
   tasks:
     - name: Listing
@@ -22,19 +21,19 @@
 
     - name: Configuring - failing because of invalid user-header
       ansibleguy.opnsense.webproxy_parent:
-        header_username: '!INVALID-'
+        header_username: "!INVALID-"
       register: opn_fail1
       failed_when: not opn_fail1.failed
 
     - name: Configuring
       ansibleguy.opnsense.webproxy_icap:
-        response_url: 'icap://av.lan:1344/avscan'
+        response_url: icap://av.lan:1344/avscan
         ttl: 70
         send_username: true
         send_client_ip: true
         encode_username: true
         preview_size: 3072
-        exclude: ['ansibleguy.net']
+        exclude: [ansibleguy.net]
       register: opn1
       failed_when: >
         opn1.failed or
@@ -42,13 +41,13 @@
 
     - name: Changing 1
       ansibleguy.opnsense.webproxy_icap:
-        response_url: 'icap://av.lan:1345/avscan'
+        response_url: icap://av.lan:1345/avscan
         ttl: 50
         send_username: false
         send_client_ip: true
         encode_username: true
         preview_size: 2048
-        exclude: ['ansibleguy.net', 'random.site']
+        exclude: [ansibleguy.net, random.site]
       register: opn2
       failed_when: >
         opn2.failed or
@@ -57,13 +56,13 @@
 
     - name: Changing 1 - nothing changed
       ansibleguy.opnsense.webproxy_icap:
-        response_url: 'icap://av.lan:1345/avscan'
+        response_url: icap://av.lan:1345/avscan
         ttl: 50
         send_username: false
         send_client_ip: true
         encode_username: true
         preview_size: 2048
-        exclude: ['ansibleguy.net', 'random.site']
+        exclude: [ansibleguy.net, random.site]
       register: opn3
       failed_when: >
         opn3.failed or
@@ -72,13 +71,13 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.webproxy_icap:
-        response_url: 'icap://av.lan:1345/avscan'
+        response_url: icap://av.lan:1345/avscan
         ttl: 50
         send_username: false
         send_client_ip: true
         encode_username: true
         preview_size: 2048
-        exclude: ['ansibleguy.net', 'random.site']
+        exclude: [ansibleguy.net, random.site]
         enabled: false
       register: opn6
       failed_when: >
@@ -88,13 +87,13 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.webproxy_icap:
-        response_url: 'icap://av.lan:1345/avscan'
+        response_url: icap://av.lan:1345/avscan
         ttl: 50
         send_username: false
         send_client_ip: true
         encode_username: true
         preview_size: 2048
-        exclude: ['ansibleguy.net', 'random.site']
+        exclude: [ansibleguy.net, random.site]
         enabled: false
       register: opn4
       failed_when: >
@@ -104,13 +103,13 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.webproxy_icap:
-        response_url: 'icap://av.lan:1345/avscan'
+        response_url: icap://av.lan:1345/avscan
         ttl: 50
         send_username: false
         send_client_ip: true
         encode_username: true
         preview_size: 2048
-        exclude: ['ansibleguy.net', 'random.site']
+        exclude: [ansibleguy.net, random.site]
       register: opn5
       failed_when: >
         opn5.failed or

@@ -1,8 +1,7 @@
 ---
-
 - name: Installing Test-Dependencies
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -16,15 +15,15 @@
     - name: Installing packages
       ansibleguy.opnsense.package:
         name: "{{ item }}"
-        action: 'install'
+        action: install
       register: opn_dep_install
       failed_when:
         - opn_dep_install.failed
         - "'system needs to be upgraded beforehand' not in opn_dep_install.msg"
       loop:
-        - 'os-squid'
-        - 'os-frr'
-        - 'os-bind'
-        - 'os-acme-client'
-        - 'os-postfix'
-        - 'os-nginx'
+        - os-squid
+        - os-frr
+        - os-bind
+        - os-acme-client
+        - os-postfix
+        - os-nginx

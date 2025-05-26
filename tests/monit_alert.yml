@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Monit alert
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'monit_alert'
+      target: monit_alert
 
   vars:
     default_alert_count: 1
@@ -25,8 +24,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.monit_alert:
-        recipient: 'alert@monit.opnsense.test.ansibleguy.net'
-        state: 'absent'
+        recipient: alert@monit.opnsense.test.ansibleguy.net
+        state: absent
       register: opn1
       failed_when: >
         opn1.failed or
@@ -34,20 +33,20 @@
 
     - name: Adding 1 - failing because of invalid reminder
       ansibleguy.opnsense.monit_alert:
-        recipient: 'alert@monit.opnsense.test.ansibleguy.net@INVALID'
+        recipient: alert@monit.opnsense.test.ansibleguy.net@INVALID
         reminder: 90000
       register: opn11
       failed_when: not opn11.failed
 
     - name: Adding 1 - failing because of invalid recipient
       ansibleguy.opnsense.monit_alert:
-        recipient: 'alert@monit.opnsense.test.ansibleguy.net@INVALID'
+        recipient: alert@monit.opnsense.test.ansibleguy.net@INVALID
       register: opn12
       failed_when: not opn12.failed
 
     - name: Adding 1
       ansibleguy.opnsense.monit_alert:
-        recipient: 'alert@monit.opnsense.test.ansibleguy.net'
+        recipient: alert@monit.opnsense.test.ansibleguy.net
       register: opn4
       failed_when: >
         opn4.failed or
@@ -55,7 +54,7 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.monit_alert:
-        recipient: 'alert@monit.opnsense.test.ansibleguy.net'
+        recipient: alert@monit.opnsense.test.ansibleguy.net
         enabled: false
       register: opn6
       failed_when: >
@@ -65,7 +64,7 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.monit_alert:
-        recipient: 'alert@monit.opnsense.test.ansibleguy.net'
+        recipient: alert@monit.opnsense.test.ansibleguy.net
         enabled: false
       register: opn9
       failed_when: >
@@ -75,7 +74,7 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.monit_alert:
-        recipient: 'alert@monit.opnsense.test.ansibleguy.net'
+        recipient: alert@monit.opnsense.test.ansibleguy.net
       register: opn7
       failed_when: >
         opn7.failed or
@@ -84,10 +83,10 @@
 
     - name: Adding 2
       ansibleguy.opnsense.monit_alert:
-        recipient: 'alert2@monit.opnsense.test.ansibleguy.net'
+        recipient: alert2@monit.opnsense.test.ansibleguy.net
         not_on: true
-        events: ['timestamp']
-        description: 'test1'
+        events: [timestamp]
+        description: test1
         reminder: 500
       register: opn5
       failed_when: >
@@ -96,10 +95,10 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.monit_alert:
-        recipient: 'alert2@monit.opnsense.test.ansibleguy.net'
+        recipient: alert2@monit.opnsense.test.ansibleguy.net
         not_on: true
-        events: ['timestamp']
-        description: 'test1'
+        events: [timestamp]
+        description: test1
         reminder: 500
       register: opn13
       failed_when: >
@@ -109,8 +108,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.monit_alert:
-        recipient: 'alert2@monit.opnsense.test.ansibleguy.net'
-        state: 'absent'
+        recipient: alert2@monit.opnsense.test.ansibleguy.net
+        state: absent
       register: opn8
       failed_when: >
         opn8.failed or
@@ -128,10 +127,10 @@
     - name: Cleanup
       ansibleguy.opnsense.monit_alert:
         recipient: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'alert@monit.opnsense.test.ansibleguy.net'
-        - 'alert2@monit.opnsense.test.ansibleguy.net'
+        - alert@monit.opnsense.test.ansibleguy.net
+        - alert2@monit.opnsense.test.ansibleguy.net
       when: not ansible_check_mode
 
     - name: Listing

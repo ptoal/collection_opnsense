@@ -1,8 +1,7 @@
 ---
-
 - name: Testing FRR general settings
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'frr_general'
+      target: frr_general
 
   tasks:
     - name: Listing
@@ -23,9 +22,9 @@
     - name: Configuring
       ansibleguy.opnsense.frr_general:
         enabled: true
-        profile: 'traditional'
+        profile: traditional
         log: true
-        log_level: 'notifications'
+        log_level: notifications
       register: opn1
       failed_when: >
         opn1.failed or
@@ -34,9 +33,9 @@
     - name: Changing
       ansibleguy.opnsense.frr_general:
         enabled: true
-        profile: 'datacenter'
+        profile: datacenter
         log: true
-        log_level: 'emergencies'
+        log_level: emergencies
         snmp_agentx: true
       register: opn5
       failed_when: >
@@ -45,9 +44,9 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.frr_general:
-        profile: 'datacenter'
+        profile: datacenter
         log: true
-        log_level: 'emergencies'
+        log_level: emergencies
         snmp_agentx: true
         enabled: false
       register: opn2
@@ -58,9 +57,9 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.frr_general:
-        profile: 'datacenter'
+        profile: datacenter
         log: true
-        log_level: 'emergencies'
+        log_level: emergencies
         snmp_agentx: true
         enabled: false
       register: opn3
@@ -71,9 +70,9 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.frr_general:
-        profile: 'datacenter'
+        profile: datacenter
         log: true
-        log_level: 'emergencies'
+        log_level: emergencies
         snmp_agentx: true
         enabled: true
       register: opn4
@@ -85,9 +84,9 @@
     - name: Cleanup
       ansibleguy.opnsense.frr_general:
         enabled: false
-        profile: 'traditional'
+        profile: traditional
         carp: false
         snmp_agentx: false
         log: true
-        log_level: 'notifications'
+        log_level: notifications
       when: not ansible_check_mode

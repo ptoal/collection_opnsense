@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Shaper Pipes
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'shaper_pipe'
+      target: shaper_pipe
 
   tasks:
     - name: Listing
@@ -22,9 +21,9 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.shaper_pipe:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         bandwidth: 50
-        state: 'absent'
+        state: absent
       register: opn1
       failed_when: >
         opn1.failed or
@@ -32,7 +31,7 @@
 
     - name: Adding 1 - failing because of invalid int-value
       ansibleguy.opnsense.shaper_pipe:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         bandwidth: 50
         queue: 999
       register: opn11
@@ -40,13 +39,13 @@
 
     - name: Adding 1 - failing because of unprovided bandwidth
       ansibleguy.opnsense.shaper_pipe:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
       register: opn12
       failed_when: not opn12.failed
 
     - name: Adding 1
       ansibleguy.opnsense.shaper_pipe:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         bandwidth: 50
       register: opn4
       failed_when: >
@@ -55,7 +54,7 @@
 
     - name: Changing 1
       ansibleguy.opnsense.shaper_pipe:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         bandwidth: 60
         queue: 20
         pie_enable: true
@@ -68,7 +67,7 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.shaper_pipe:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         bandwidth: 60
         queue: 20
         pie_enable: true
@@ -81,7 +80,7 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.shaper_pipe:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         bandwidth: 60
         queue: 20
         pie_enable: true
@@ -94,7 +93,7 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.shaper_pipe:
-        description: 'ANSIBLE_TEST_1_1'
+        description: ANSIBLE_TEST_1_1
         bandwidth: 60
         queue: 20
         pie_enable: true
@@ -106,9 +105,9 @@
 
     - name: Adding 2 & flushing/resetting running config
       ansibleguy.opnsense.shaper_pipe:
-        description: 'ANSIBLE_TEST_1_2'
+        description: ANSIBLE_TEST_1_2
         bandwidth: 750
-        bandwidth_metric: 'Kbit'
+        bandwidth_metric: Kbit
         reset: true
       register: opn5
       failed_when: >
@@ -117,9 +116,9 @@
 
     - name: Adding 2 - nothing changed
       ansibleguy.opnsense.shaper_pipe:
-        description: 'ANSIBLE_TEST_1_2'
+        description: ANSIBLE_TEST_1_2
         bandwidth: 750
-        bandwidth_metric: 'Kbit'
+        bandwidth_metric: Kbit
       register: opn13
       failed_when: >
         opn13.failed or
@@ -128,8 +127,8 @@
 
     - name: Removing 2
       ansibleguy.opnsense.shaper_pipe:
-        description: 'ANSIBLE_TEST_1_2'
-        state: 'absent'
+        description: ANSIBLE_TEST_1_2
+        state: absent
       register: opn8
       failed_when: >
         opn8.failed or
@@ -147,10 +146,10 @@
     - name: Cleanup
       ansibleguy.opnsense.shaper_pipe:
         description: "{{ item }}"
-        state: 'absent'
+        state: absent
       loop:
-        - 'ANSIBLE_TEST_1_1'
-        - 'ANSIBLE_TEST_1_2'
+        - ANSIBLE_TEST_1_1
+        - ANSIBLE_TEST_1_2
       when: not ansible_check_mode
 
     - name: Listing

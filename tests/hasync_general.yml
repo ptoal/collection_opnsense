@@ -1,8 +1,7 @@
 ---
-
 - name: Testing HASync General
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'hasync_general'
+      target: hasync_general
 
   tasks:
     - name: Listing
@@ -35,8 +34,8 @@
       ansibleguy.opnsense.hasync_general:
         preempt: true
         disconnect_ppps: true
-        pfsync_interface: 'lan'
-        pfsync_peer_ip: '4.4.4.4'
+        pfsync_interface: lan
+        pfsync_peer_ip: 4.4.4.4
       register: opn2
       failed_when: >
         opn2.failed or
@@ -46,8 +45,8 @@
       ansibleguy.opnsense.hasync_general:
         preempt: true
         disconnect_ppps: true
-        pfsync_interface: 'lan'
-        pfsync_peer_ip: '4.4.4.5'
+        pfsync_interface: lan
+        pfsync_peer_ip: 4.4.4.5
       register: opn3
       failed_when: >
         opn3.failed or
@@ -57,8 +56,8 @@
       ansibleguy.opnsense.hasync_general:
         preempt: true
         disconnect_ppps: true
-        pfsync_interface: 'lan'
-        pfsync_peer_ip: '4.4.4.5'
+        pfsync_interface: lan
+        pfsync_peer_ip: 4.4.4.5
       register: opn4
       failed_when: >
         opn4.failed or
@@ -71,9 +70,9 @@
 
     - name: Setting Config Sync
       ansibleguy.opnsense.hasync_general:
-        synchronize_to_ip: '4.4.4.4'
-        username: 'alice'
-        password: 'secret'
+        synchronize_to_ip: 4.4.4.4
+        username: alice
+        password: secret
         syncitems:
           - aliases
       register: opn5
@@ -83,9 +82,9 @@
 
     - name: Changing Config Sync
       ansibleguy.opnsense.hasync_general:
-        synchronize_to_ip: '4.4.4.5'
-        username: 'alice'
-        password: 'secret2'
+        synchronize_to_ip: 4.4.4.5
+        username: alice
+        password: secret2
         syncitems:
           - aliases
           - rules
@@ -96,9 +95,9 @@
 
     - name: Changing Config Sync - nothing changed
       ansibleguy.opnsense.hasync_general:
-        synchronize_to_ip: '4.4.4.5'
-        username: 'alice'
-        password: 'secret2'
+        synchronize_to_ip: 4.4.4.5
+        username: alice
+        password: secret2
         syncitems:
           - aliases
           - rules
@@ -110,9 +109,9 @@
 
     - name: Setting Config Sync - update password
       ansibleguy.opnsense.hasync_general:
-        synchronize_to_ip: '4.4.4.5'
-        username: 'alice'
-        password: 'secret3'
+        synchronize_to_ip: 4.4.4.5
+        username: alice
+        password: secret3
         syncitems:
           - aliases
           - rules
@@ -124,9 +123,9 @@
 
     - name: Setting Config Sync - do not update password
       ansibleguy.opnsense.hasync_general:
-        synchronize_to_ip: '4.4.4.5'
-        username: 'alice'
-        password: 'secret'
+        synchronize_to_ip: 4.4.4.5
+        username: alice
+        password: secret
         update_password: on_create
         syncitems:
           - aliases

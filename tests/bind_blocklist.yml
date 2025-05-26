@@ -1,8 +1,7 @@
 ---
-
 - name: Testing BIND blocklists
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'bind_blocklist'
+      target: bind_blocklist
 
   tasks:
     - name: Listing
@@ -22,8 +21,8 @@
 
     - name: Configuring
       ansibleguy.opnsense.bind_blocklist:
-        block: ['Steven Black List', 'AdGuard List']
-        exclude: 'test.ansibleguy.net'
+        block: [Steven Black List, AdGuard List]
+        exclude: test.ansibleguy.net
         enabled: true
       register: opn1
       failed_when: >
@@ -32,8 +31,8 @@
 
     - name: Changing
       ansibleguy.opnsense.bind_blocklist:
-        block: ['Steven Black List', 'NoCoin List', 'Blocklist.site Phishing', 'AdGuard List']
-        exclude: ['test.ansibleguy.net', 'ansibleguy.net']
+        block: [Steven Black List, NoCoin List, Blocklist.site Phishing, AdGuard List]
+        exclude: [test.ansibleguy.net, ansibleguy.net]
         safe_google: true
         enabled: true
       register: opn9
@@ -43,8 +42,8 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.bind_blocklist:
-        block: ['Steven Black List', 'NoCoin List', 'Blocklist.site Phishing', 'AdGuard List']
-        exclude: ['test.ansibleguy.net', 'ansibleguy.net']
+        block: [Steven Black List, NoCoin List, Blocklist.site Phishing, AdGuard List]
+        exclude: [test.ansibleguy.net, ansibleguy.net]
         safe_google: true
         enabled: false
       register: opn2
@@ -55,8 +54,8 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.bind_blocklist:
-        block: ['Steven Black List', 'NoCoin List', 'Blocklist.site Phishing', 'AdGuard List']
-        exclude: ['test.ansibleguy.net', 'ansibleguy.net']
+        block: [Steven Black List, NoCoin List, Blocklist.site Phishing, AdGuard List]
+        exclude: [test.ansibleguy.net, ansibleguy.net]
         safe_google: true
         enabled: false
       register: opn3
@@ -67,8 +66,8 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.bind_blocklist:
-        block: ['Steven Black List', 'NoCoin List', 'Blocklist.site Phishing', 'AdGuard List']
-        exclude: ['test.ansibleguy.net', 'ansibleguy.net']
+        block: [Steven Black List, NoCoin List, Blocklist.site Phishing, AdGuard List]
+        exclude: [test.ansibleguy.net, ansibleguy.net]
         safe_google: true
       register: opn4
       failed_when: >
@@ -78,8 +77,8 @@
 
     - name: Changing more
       ansibleguy.opnsense.bind_blocklist:
-        block: ['Steven Black List', 'NoCoin List', 'Blocklist.site Phishing', 'AdGuard List']
-        exclude: ['test.ansibleguy.net', 'ansibleguy.net']
+        block: [Steven Black List, NoCoin List, Blocklist.site Phishing, AdGuard List]
+        exclude: [test.ansibleguy.net, ansibleguy.net]
         safe_google: false
         safe_duckduckgo: true
         safe_youtube: true
@@ -92,8 +91,8 @@
 
     - name: Nothing changed
       ansibleguy.opnsense.bind_blocklist:
-        block: ['Steven Black List', 'NoCoin List', 'Blocklist.site Phishing', 'AdGuard List']
-        exclude: ['test.ansibleguy.net', 'ansibleguy.net']
+        block: [Steven Black List, NoCoin List, Blocklist.site Phishing, AdGuard List]
+        exclude: [test.ansibleguy.net, ansibleguy.net]
         safe_google: false
         safe_duckduckgo: true
         safe_youtube: true

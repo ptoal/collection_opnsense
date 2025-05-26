@@ -1,8 +1,7 @@
 ---
-
 - name: WebProxy Cache Settings
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'webproxy_cache'
+      target: webproxy_cache
 
   tasks:
     - name: Listing
@@ -30,7 +29,7 @@
       ansibleguy.opnsense.webproxy_cache:
         memory_mb: 512
         size_mb: 2048
-        memory_cache_mode: 'always'
+        memory_cache_mode: always
         cache_windows_updates: true
       register: opn1
       failed_when: >
@@ -41,7 +40,7 @@
       ansibleguy.opnsense.webproxy_cache:
         memory_mb: 256
         size_mb: 1024
-        memory_cache_mode: 'always'
+        memory_cache_mode: always
         cache_linux_packages: true
         cache_windows_updates: false
       register: opn2
@@ -54,7 +53,7 @@
       ansibleguy.opnsense.webproxy_cache:
         memory_mb: 256
         size_mb: 1024
-        memory_cache_mode: 'always'
+        memory_cache_mode: always
         cache_linux_packages: true
         cache_windows_updates: false
       register: opn3

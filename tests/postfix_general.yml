@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Postfix Setting
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'postfix_general'
+      target: postfix_general
 
   tasks:
     - name: Listing
@@ -48,10 +47,10 @@
         inet_port: 26
         ip_version: ipv4
         mynetworks:
-          - '127.0.0.0/8'
-          - '[::1]/128'
-          - '[:ffff:127.0.0.0]/104'
-          - '192.168.0.0/16'
+          - 127.0.0.0/8
+          - "[::1]/128"
+          - "[:ffff:127.0.0.0]/104"
+          - 192.168.0.0/16
         masquerade_domains:
           - example.com
           - example.net
@@ -76,10 +75,10 @@
         inet_port: 26
         ip_version: ipv4
         mynetworks:
-          - '127.0.0.0/8'
-          - '[::1]/128'
-          - '[:ffff:127.0.0.0]/104'
-          - '192.168.0.0/16'
+          - 127.0.0.0/8
+          - "[::1]/128"
+          - "[:ffff:127.0.0.0]/104"
+          - 192.168.0.0/16
         masquerade_domains:
           - example.com
           - example.net

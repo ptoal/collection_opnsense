@@ -1,8 +1,7 @@
 ---
-
 - name: Testing DHCP-Controlagent
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -22,7 +21,7 @@
       ansibleguy.opnsense.dhcp_controlagent:
         enabled: true
         http_port: 8082
-        http_host: '192.168.0.55'
+        http_host: 192.168.0.55
       register: opn5
       failed_when: >
         opn5.failed or
@@ -32,7 +31,7 @@
       ansibleguy.opnsense.dhcp_controlagent:
         enabled: false
         http_port: 8082
-        http_host: '192.168.0.55'
+        http_host: 192.168.0.55
       register: opn2
       failed_when: >
         opn2.failed or
@@ -43,7 +42,7 @@
       ansibleguy.opnsense.dhcp_controlagent:
         enabled: false
         http_port: 8082
-        http_host: '192.168.0.55'
+        http_host: 192.168.0.55
       register: opn3
       failed_when: >
         opn3.failed or
@@ -54,7 +53,7 @@
       ansibleguy.opnsense.dhcp_controlagent:
         enabled: true
         http_port: 8082
-        http_host: '192.168.0.55'
+        http_host: 192.168.0.55
       register: opn4
       failed_when: >
         opn4.failed or
@@ -64,6 +63,6 @@
     - name: Cleanup
       ansibleguy.opnsense.dhcp_controlagent:
         enabled: false
-        http_host: '127.0.0.1'
+        http_host: 127.0.0.1
         http_port: 8000
       when: not ansible_check_mode

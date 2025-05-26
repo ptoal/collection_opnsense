@@ -1,8 +1,7 @@
 ---
-
 - name: Testing FRR-OSPFv3 general settings
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'frr_ospf3_general'
+      target: frr_ospf3_general
 
   tasks:
     - name: Listing
@@ -22,7 +21,7 @@
 
     - name: Configuring
       ansibleguy.opnsense.frr_ospf3_general:
-        id: '10.0.0.1'
+        id: 10.0.0.1
         enabled: true
       register: opn1
       failed_when: >
@@ -31,7 +30,7 @@
 
     - name: Changing
       ansibleguy.opnsense.frr_ospf3_general:
-        id: '10.0.1.1'
+        id: 10.0.1.1
         enabled: true
       register: opn5
       failed_when: >
@@ -40,7 +39,7 @@
 
     - name: Disabling 1
       ansibleguy.opnsense.frr_ospf3_general:
-        id: '10.0.1.1'
+        id: 10.0.1.1
         enabled: false
       register: opn2
       failed_when: >
@@ -50,7 +49,7 @@
 
     - name: Disabling 1 - nothing changed
       ansibleguy.opnsense.frr_ospf3_general:
-        id: '10.0.1.1'
+        id: 10.0.1.1
         enabled: false
       register: opn3
       failed_when: >
@@ -60,7 +59,7 @@
 
     - name: Enabling 1
       ansibleguy.opnsense.frr_ospf3_general:
-        id: '10.0.1.1'
+        id: 10.0.1.1
       register: opn4
       failed_when: >
         opn4.failed or

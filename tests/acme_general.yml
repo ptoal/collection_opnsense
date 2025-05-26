@@ -1,8 +1,7 @@
 ---
-
 - name: Testing ACME Setting
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'acme_general'
+      target: acme_general
 
   tasks:
     - name: Listing

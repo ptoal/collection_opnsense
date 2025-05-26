@@ -1,8 +1,7 @@
 ---
-
 - name: WebProxy Forward Settings
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,7 +9,7 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'webproxy_forward'
+      target: webproxy_forward
 
   tasks:
     - name: Listing
@@ -28,8 +27,8 @@
 
     - name: Configuring
       ansibleguy.opnsense.webproxy_forward:
-        interfaces: ['lan', 'opt1']
-        interfaces_ftp: ['lan']
+        interfaces: [lan, opt1]
+        interfaces_ftp: [lan]
         port: 3228
         port_ssl: 3229
         ssl_inspection: false
@@ -37,7 +36,7 @@
         ssl_workers: 10
         transparent_ftp: true
         snmp: true
-        snmp_password: 'test'
+        snmp_password: test
       register: opn1
       failed_when: >
         opn1.failed or
@@ -45,8 +44,8 @@
 
     - name: Changing 1
       ansibleguy.opnsense.webproxy_forward:
-        interfaces: ['lan', 'opt1']
-        interfaces_ftp: ['lan']
+        interfaces: [lan, opt1]
+        interfaces_ftp: [lan]
         port: 3238
         port_ssl: 3239
         ssl_inspection: false
@@ -55,7 +54,7 @@
         transparent_ftp: false
         transparent: true
         snmp: true
-        snmp_password: 'test'
+        snmp_password: test
       register: opn2
       failed_when: >
         opn2.failed or
@@ -64,8 +63,8 @@
 
     - name: Changing 1 - nothing changed
       ansibleguy.opnsense.webproxy_forward:
-        interfaces: ['lan', 'opt1']
-        interfaces_ftp: ['lan']
+        interfaces: [lan, opt1]
+        interfaces_ftp: [lan]
         port: 3238
         port_ssl: 3239
         ssl_inspection: false
@@ -74,7 +73,7 @@
         transparent_ftp: false
         transparent: true
         snmp: true
-        snmp_password: 'test'
+        snmp_password: test
       register: opn3
       failed_when: >
         opn3.failed or

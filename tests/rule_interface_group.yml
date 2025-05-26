@@ -1,8 +1,7 @@
 ---
-
 - name: Testing Interface Groups
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   module_defaults:
     group/ansibleguy.opnsense.all:
       firewall: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL') }}"
@@ -10,12 +9,11 @@
       ssl_verify: false
 
     ansibleguy.opnsense.list:
-      target: 'rule_interface_group'
+      target: rule_interface_group
 
   vars:
     if_grp: "{{ lookup('ansible.builtin.env', 'TEST_FIREWALL_RULE_GRP_IF') | default('lan', true) }}"
-    default_grps: ['All OpenVPN interfaces', 'IPsec', 'WireGuard']
-
+    default_grps: [All OpenVPN interfaces, IPsec, WireGuard]
   tasks:
     - name: Listing
       ansibleguy.opnsense.list:
@@ -26,8 +24,8 @@
 
     - name: Removing - does not exist
       ansibleguy.opnsense.rule_interface_group:
-        name: 'ANSIBLE_TEST'
-        state: 'absent'
+        name: ANSIBLE_TEST
+        state: absent
       register: opn_pre2
       failed_when: >
         opn_pre2.failed or
@@ -35,21 +33,21 @@
 
     - name: Adding 1 - failing because of invalid interface (server-side)
       ansibleguy.opnsense.rule_interface_group:
-        name: 'ANSIBLE_TEST'
-        members: 'abc'
+        name: ANSIBLE_TEST
+        members: abc
       register: opn_fail1
       failed_when: not opn_fail1.failed
       when: not ansible_check_mode
 
     - name: Adding 1 - failing because of missing members
       ansibleguy.opnsense.rule_interface_group:
-        name: 'ANSIBLE_TEST'
+        name: ANSIBLE_TEST
       register: opn_fail2
       failed_when: not opn_fail2.failed
 
     - name: Adding 1
       ansibleguy.opnsense.rule_interface_group:
-        name: 'ANSIBLE_TEST'
+        name: ANSIBLE_TEST
         members: "{{ if_grp }}"
       register: opn1
       failed_when: >
@@ -58,7 +56,7 @@
 
     - name: Adding 1 - nothing changed
       ansibleguy.opnsense.rule_interface_group:
-        name: 'ANSIBLE_TEST'
+        name: ANSIBLE_TEST
         members: "{{ if_grp }}"
       register: opn2
       failed_when: >
@@ -76,8 +74,8 @@
 
     - name: Cleanup
       ansibleguy.opnsense.rule_interface_group:
-        name: 'ANSIBLE_TEST'
-        state: 'absent'
+        name: ANSIBLE_TEST
+        state: absent
       when: not ansible_check_mode
 
     - name: Listing
